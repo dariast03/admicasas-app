@@ -1,135 +1,114 @@
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 
-/* import { useForm, Controller } from "react-hook-form"; */
+import { useForm, Controller } from "react-hook-form";
 import useAuth from "../../../../../hooks/useAuth";
 import { IFormLogin } from "../../../../../types/user";
+import { useState } from "react";
 
 const Login = () => {
   const { onLogin, isLoading } = useAuth();
 
-  /*   const {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const {
     control,
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm<IFormLogin>();
+  } = useForm<IFormLogin>({
+    mode: "onChange",
+  });
 
   const onSubmit = (data: IFormLogin) => {
-    console.log(data);
-    return;
-    onLogin(data);
-  }; */
+    onLogin({ ...data, rememberEmail: false });
+  };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", padding: 20 }}>
-      <View style={{ backgroundColor: "white", padding: 20, borderRadius: 10 }}>
-        <View style={{ alignItems: "center", marginBottom: 20 }}>
-          <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10 }}>
-            Bienvenido
-          </Text>
-          {/* <Image source={logo} style={{ height: 150, width: 150, marginBottom: 10 }} /> */}
-          <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-            Inicia sesión con tu cuenta
-          </Text>
+    <View className="flex-1 justify-center p-4">
+      <View className="bg-white p-4 rounded-lg">
+        <View className="items-center mb-4">
+          <Text className="text-2xl font-bold mb-2">Bienvenido</Text>
+          {/* <Image source={logo} className="h-24 w-24 mb-2" /> */}
+          <Text className="text-lg font-bold">Inicia sesión con tu cuenta</Text>
         </View>
 
         <View>
-          <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 5 }}>
-            Email:
-          </Text>
-          <TextInput
-            placeholder="Ingrese su email"
-            /*   {...register("email", { required: "El email es requerido" })} */
-            style={{
-              borderBottomWidth: 1,
-              //   borderColor: errors?.email ? "red" : "black",
-              marginBottom: 10,
-            }}
-          />
-          {/*   {errors?.email && (
-            <Text style={{ color: "red" }}>{errors.email?.message}</Text>
-          )} */}
-        </View>
-
-        <View>
-          <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 5 }}>
-            Contraseña:
-          </Text>
-          <TextInput
-            placeholder="Ingrese su contraseña"
-            secureTextEntry
-            /*    {...register("password", {
-              required: "La contraseña es requerida",
-            })} */
-            /*  style={{
-              borderBottomWidth: 1,
-              borderColor: errors?.password ? "red" : "black",
-              marginBottom: 10,
-            }} */
-          />
-          {/*    {errors?.password && (
-            <Text style={{ color: "red" }}>{errors.password?.message}</Text>
-          )} */}
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 20,
-          }}
-        >
-          {/* <Controller
-            name="rememberEmail"
+          <Text className="text-xl font-bold mb-1">Email:</Text>
+          <Controller
+            name="email"
             control={control}
-            defaultValue={false}
-            render={({ field: { value, onChange } }) => (
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                {          <Checkbox.Android
-                  status={value ? "checked" : "unchecked"}
-                  onPress={() => onChange(!value)}
-                /> }
-                <Text>Recordarme</Text>
-              </View>
+            rules={{
+              required: "Email required",
+            }}
+            render={({ field, formState }) => (
+              <>
+                <TextInput
+                  {...field}
+                  placeholder="Ingrese su email"
+                  value={field.value}
+                  onChangeText={(e) => field.onChange(e)}
+                  className="border-b-2 py-2 px-4 mb-2 w-full"
+                />
+              </>
             )}
-          /> */}
+          />
+          {errors?.email && (
+            <Text style={{ color: "red" }}>{errors.email?.message}</Text>
+          )}
+        </View>
+
+        <View>
+          <Text className="text-xl font-bold mb-1">Contraseña:</Text>
+          <Controller
+            name="password"
+            control={control}
+            rules={{
+              required: "password required",
+            }}
+            render={({ field, formState }) => (
+              <>
+                <TextInput
+                  {...field}
+                  placeholder="Ingrese su pass"
+                  value={field.value}
+                  secureTextEntry
+                  onChangeText={(e) => field.onChange(e)}
+                  className="border-b-2 py-2 px-4 mb-2 w-full"
+                />
+              </>
+            )}
+          />
+          {errors?.password && (
+            <Text style={{ color: "red" }}>{errors.password?.message}</Text>
+          )}
+        </View>
+
+        <View className="flex-row items-center mb-4">
           <TouchableOpacity>
-            <Text style={{ fontWeight: "bold", color: "blue" }}>
+            <Text className="font-bold text-blue-500">
               Olvidaste tu contraseña?
             </Text>
           </TouchableOpacity>
         </View>
 
         <TouchableOpacity
-          style={{
-            backgroundColor: "blue",
-            padding: 10,
-            borderRadius: 5,
-            alignItems: "center",
-          }}
-          //   onPress={handleSubmit(onSubmit)}
-          disabled={isLoading}
+          onPress={handleSubmit(onSubmit)}
+          //    disabled={isLoading}
         >
-          <Text style={{ color: "white", fontSize: 18 }}>Login</Text>
+          <View className="bg-blue-500 p-3 rounded-md items-center">
+            <Text className="text-white text-xl">Login</Text>
+          </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={{
-            backgroundColor: "white",
-            marginTop: 10,
-            padding: 10,
-            borderWidth: 1,
-            borderColor: "gray",
-            borderRadius: 5,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          //  onPress={onLoginWithEmail}
-          disabled={isLoading}
-        >
-          <Text>Login with Google</Text>
-        </TouchableOpacity>
+        <View className="bg-white mt-2 p-3 border-2 border-gray-500 rounded-md flex-row items-center justify-center">
+          <TouchableOpacity
+            // onPress={onLoginWithEmail}
+            disabled={isLoading}
+          >
+            <Text>Login with Google</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

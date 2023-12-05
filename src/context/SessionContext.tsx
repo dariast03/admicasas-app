@@ -1,10 +1,14 @@
 import { createContext, PropsWithChildren, useState } from "react";
 import { useStorageState } from "../hooks/useStorageState";
 import { keysStorage } from "../data";
+import { onAuthStateChanged } from "firebase/auth";
+import { FirebaseAuth } from "../config/firebase";
+import { IUser } from "../types/user";
 
 type TSessionContext = {
-  signIn: () => void;
+  signIn: (user: IUser) => void;
   signOut: () => void;
+  user: IUser;
   session?: string | null;
   isLoading: boolean;
   showWelcomeScreen?: string | null;
@@ -26,11 +30,15 @@ export function SessionProvider(props: PropsWithChildren) {
     setShowWelcomeScreen,
   ] = useStorageState(keysStorage.SAW_WELCOME_SCREEN);
 
+  const [user, setUser] = useState({} as IUser);
+
   return (
     <SessionContext.Provider
       value={{
-        signIn: () => {
+        user,
+        signIn: (user) => {
           setSession("xxx");
+          setUser(user);
         },
         signOut: () => {
           setSession(null);

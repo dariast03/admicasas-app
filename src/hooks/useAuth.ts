@@ -2,10 +2,11 @@ import { useState } from "react";
 import authService from "../services/authService";
 import { IFormLogin } from "../types/user";
 import { User } from "firebase/auth";
+import { useSessionContext } from "./useSessionContext";
 
 const useAuth = () => {
   // const { setLogin, user, status, setLogout, setCondominium } = useAuthStore();
-
+  const { signIn, signOut } = useSessionContext()
   const [isLoading, setIsLoading] = useState(false);
 
   const onLogin = async (data: IFormLogin) => {
@@ -29,7 +30,7 @@ const useAuth = () => {
       const response = await authService.login(data);
 
       if (!response) return;
-      //setLogin(response);
+      signIn(response)
     } finally {
       setIsLoading(false);
     }
@@ -56,11 +57,11 @@ const useAuth = () => {
 
   const onRefresh = async (data: User) => {
     const user = await authService.refresh(data);
-    //setLogin(user);
+    signIn(user)
   };
 
   const onLogout = async () => {
-    // setLogout();
+    signOut();
     await authService.logout();
   };
 
