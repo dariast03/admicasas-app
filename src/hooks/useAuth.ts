@@ -12,11 +12,11 @@ const useAuth = () => {
   const onLogin = async (data: IFormLogin) => {
     setIsLoading(true);
 
-    if (data.rememberEmail) {
-      localStorage.setItem("user-email", data.email);
-    } else {
-      localStorage.removeItem("user-email");
-    }
+    /*     if (data.rememberEmail) {
+          localStorage.setItem("user-email", data.email);
+        } else {
+          localStorage.removeItem("user-email");
+        } */
 
     try {
       /* const response = await toast.promise(authService.login(data), {
@@ -28,7 +28,7 @@ const useAuth = () => {
       }); */
 
       const response = await authService.login(data);
-
+      console.log(response)
       if (!response) return;
       signIn(response)
     } finally {
