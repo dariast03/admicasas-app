@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "302500073375",
+    "project_id": "admicasas-ae666",
+    "storage_bucket": "admicasas-ae666.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302500073375:android:ed97451a8dbc2b3b45f7aa",
+        "android_client_info": {
+          "package_name": "com.admicasas.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "302500073375-qvu5740gtmlec06ai8f13di0fgjl37sd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.admicasas.app",
+            "certificate_hash": "fb4e12a51937d5ae8521a5146f0e59507805188e"
+          }
+        },
+        {
+          "client_id": "302500073375-a27o5b2hma2b2jpieirqnjj59lbdkdr7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEtnMZMyxURHr1yNPiYHzhkGilL9TDhIk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "302500073375-a27o5b2hma2b2jpieirqnjj59lbdkdr7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

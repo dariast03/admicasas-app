@@ -25,9 +25,8 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="myapp"/>
-        <data android:scheme="com.admicasas.com"/>
         <data android:scheme="admicasas-app"/>
+        <data android:scheme="com.admicasas.app"/>
         <data android:scheme="exp+admicasas-app"/>
       </intent-filter>
     </activity>
