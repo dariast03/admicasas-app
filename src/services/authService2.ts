@@ -1,7 +1,6 @@
-import { useState } from "react";
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth';
-//import firestore from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 import { IAccount, IFormLogin, IUser } from "../types/user";
 
 const login = async (data: IFormLogin): Promise<IUser> => {
@@ -22,10 +21,10 @@ const login = async (data: IFormLogin): Promise<IUser> => {
 };
 
 const getAccount = async (id: string) => {
-  /*  const docRef = firestore().doc(`Users/${id}`);
-   const docSnap = await docRef.get();
-   const data = { ...(docSnap.data() as IAccount), id: docSnap.id } as IAccount; */
-  return {} as IAccount;
+  const docRef = firestore().doc(`Users/${id}`);
+  const docSnap = await docRef.get();
+  const data = { ...(docSnap.data() as IAccount), id: docSnap.id } as IAccount;
+  return data;
 };
 
 const refresh = async (user: FirebaseAuthTypes.User): Promise<IUser> => {

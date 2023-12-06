@@ -1,13 +1,15 @@
-import { Slot, Stack } from "expo-router";
-import { onAuthStateChanged } from "firebase/auth";
-import { View, Text } from "react-native";
-import { FirebaseAuth } from "../../config/firebase";
+import { Slot } from "expo-router";
 import { useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+
+const queryClient = new QueryClient();
+
 const Layout = () => {
-  const { onLogin, onLogout, onRefresh } = useAuth();
+  const { onLogout, onRefresh } = useAuth();
 
   /*   useEffect(() => {
     onAuthStateChanged(FirebaseAuth, async (user) => {
@@ -24,9 +26,13 @@ const Layout = () => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
+    return subscriber;
   }, []);
 
-  return <Slot />;
+  return <>
+    <QueryClientProvider client={queryClient}>
+      <Slot />
+    </QueryClientProvider>
+  </>
 };
 export default Layout;
