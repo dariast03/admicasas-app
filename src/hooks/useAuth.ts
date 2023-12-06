@@ -36,24 +36,25 @@ const useAuth = () => {
     }
   };
 
-  /*   const onLoginWithEmail = async () => {
-      //setIsLoading(true);
-  
-      try {
-        const response = await toast.promise(authService.loginWithEmail(), {
-          loading: "Autenticando",
-          success: "Has iniciado sesion correctamente!",
-          error: (e: any) => {
-            return authError[e.message] || "Hubo un error. Contacta con soporte";
-          },
-        });
-  
-        if (!response) return;
-        setLogin(response);
-      } finally {
-        setIsLoading(false);
-      }
-    }; */
+  const onLoginWithEmail = async () => {
+    //setIsLoading(true);
+
+    try {
+      /*  const response = await toast.promise(authService.loginWithEmail(), {
+         loading: "Autenticando",
+         success: "Has iniciado sesion correctamente!",
+         error: (e: any) => {
+           return authError[e.message] || "Hubo un error. Contacta con soporte";
+         },
+       }); */
+      const response = await authService.loginWithEmail()
+
+      if (!response) return;
+      signIn(response)
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const onRefresh = async (data: User) => {
     const user = await authService.refresh(data);
@@ -72,7 +73,7 @@ const useAuth = () => {
     onLogin,
     onRefresh,
     onLogout,
-    //  onLoginWithEmail,
+    onLoginWithEmail,
     // setCondominium,
   };
 };

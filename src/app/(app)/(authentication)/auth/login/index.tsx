@@ -3,13 +3,29 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import useAuth from "../../../../../hooks/useAuth";
 import { IFormLogin } from "../../../../../types/user";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import * as WebBrowser from 'expo-web-browser'
+import * as GoogleProvider from 'expo-auth-session/providers/google'
+import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import { FirebaseAuth } from "../../../../../config/firebase";
+import { makeRedirectUri } from "expo-auth-session";
+
+WebBrowser.maybeCompleteAuthSession()
+
 
 const Login = () => {
-  const { onLogin, isLoading } = useAuth();
+  const { onLogin, isLoading, onLoginWithEmail } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [request, response, promptAsync] = GoogleProvider.useAuthRequest({
+    androidClientId: "120549257807-iijnr372hfd885uhf7aksb9nvqia17lb.apps.googleusercontent.com",
+    redirectUri: makeRedirectUri({
+      scheme: 'admicasas-app',
+
+    }),
+  })
 
   const {
     control,
@@ -23,6 +39,15 @@ const Login = () => {
   const onSubmit = (data: IFormLogin) => {
     onLogin({ ...data, rememberEmail: false });
   };
+
+  useEffect(() => {
+    if (response?.type == "success") {
+      const { id_token } = response.params
+      const credential = GoogleAuthProvider.credential(id_token)
+      signInWithCredential(FirebaseAuth, credential)
+
+    }
+  }, [response])
 
   return (
     <View className="flex-1 justify-center p-4">
@@ -94,7 +119,7 @@ const Login = () => {
 
         <TouchableOpacity
           onPress={handleSubmit(onSubmit)}
-          //    disabled={isLoading}
+        //    disabled={isLoading}
         >
           <View className="bg-blue-500 p-3 rounded-md items-center">
             <Text className="text-white text-xl">Login</Text>
@@ -103,8 +128,9 @@ const Login = () => {
 
         <View className="bg-white mt-2 p-3 border-2 border-gray-500 rounded-md flex-row items-center justify-center">
           <TouchableOpacity
-            // onPress={onLoginWithEmail}
-            disabled={isLoading}
+            //     onPress={promptAsync}
+            onPress={() => promptAsync()}
+          //   disabled={isLoading}
           >
             <Text>Login with Google</Text>
           </TouchableOpacity>

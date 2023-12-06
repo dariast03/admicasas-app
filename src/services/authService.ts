@@ -64,6 +64,9 @@ const login = async (data: IFormLogin): Promise<IUser> => {
 };
  */
 const getAccount = async (id: string) => {
+  console.log({
+    id
+  });
   const docRef = doc(FirebaseDB, "Users", id + "");
   const docSnap = await getDoc(docRef);
   const data = { ...(docSnap.data() as IAccount), id: docSnap.id } as IAccount;
@@ -96,7 +99,7 @@ const logout = async () => {
 //     }
 // }
 
-const loginWithEmail = async () => {
+const loginWithEmail = async (): Promise<IUser> => {
   try {
     const googleProvider = new GoogleAuthProvider();
     const response = await signInWithPopup(FirebaseAuth, googleProvider);
