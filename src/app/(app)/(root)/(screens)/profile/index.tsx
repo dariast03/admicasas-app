@@ -1,12 +1,15 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, Button } from "react-native";
+import React from "react";
+import { useSessionContext } from "../../../../../hooks/useSessionContext";
 
 const Profile = () => {
-    return (
-        <View>
-            <Text>Profile</Text>
-        </View>
-    )
-}
+  const { signOut, user } = useSessionContext();
+  return (
+    <View>
+      <Text>{user.email}</Text>
+      <Button onPress={signOut} title="LOGOUT" />
+    </View>
+  );
+};
 
-export default Profile
+export default Profile;

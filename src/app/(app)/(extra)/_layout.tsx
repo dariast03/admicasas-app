@@ -4,14 +4,19 @@ import { useStorageState } from "../../../hooks/useStorageState";
 import { Text } from "../../../components/Themed";
 
 export default function UnprotectedLayout() {
-  const { session, isLoading, isLoadingShowWelcomeScreen, showWelcomeScreen } =
-    useSessionContext();
+  const {
+    session,
+    isLoading,
+    isLoadingShowWelcomeScreen,
+    showWelcomeScreen,
+    user,
+  } = useSessionContext();
 
   if (isLoading || isLoadingShowWelcomeScreen) {
     return <Text>Loading...</Text>;
   }
 
-  if (showWelcomeScreen == "true") {
+  if (showWelcomeScreen == "true" && user?.account?.idcondominium) {
     return <Redirect href="/" />;
   }
 

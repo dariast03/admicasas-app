@@ -1,7 +1,7 @@
 import { useState } from "react";
 //import authService from "../services/authService";
-import authService2 from "../services/authService2";
-import { IFormLogin } from "../types/user";
+import authService from "../services/authService";
+import { IFormLogin, IFormRegister } from "../types/user";
 import { User } from "firebase/auth";
 import { useSessionContext } from "./useSessionContext";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
@@ -29,7 +29,34 @@ const useAuth = () => {
         },
       }); */
 
-      const response = await authService2.login(data);
+      const response = await authService.login(data);
+
+      if (!response) return;
+      signIn(response)
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onRegister = async (data: IFormRegister) => {
+    setIsLoading(true);
+
+    /*     if (data.rememberEmail) {
+          localStorage.setItem("user-email", data.email);
+        } else {
+          localStorage.removeItem("user-email");
+        } */
+
+    try {
+      /* const response = await toast.promise(authService.login(data), {
+        loading: "Autenticando",
+        success: "Has iniciado sesion correctamente!",
+        error: (e: any) => {
+          return authError[e.message] || "Hubo un error. Contacta con soporte";
+        },
+      }); */
+
+      const response = await authService.register(data);
 
       if (!response) return;
       signIn(response)
@@ -59,13 +86,13 @@ const useAuth = () => {
   };
 
   const onRefresh = async (data: FirebaseAuthTypes.User) => {
-    const user = await authService2.refresh(data);
+    const user = await authService.refresh(data);
     signIn(user)
   };
 
   const onLogout = async () => {
     signOut();
-    await authService2.logout();
+    await authService.logout();
   };
 
   return {
@@ -73,6 +100,7 @@ const useAuth = () => {
     //  status,
     isLoading,
     onLogin,
+    onRegister,
     onRefresh,
     onLogout,
     onLoginWithEmail,

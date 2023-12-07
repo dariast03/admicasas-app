@@ -2,7 +2,7 @@ import { View, Text, TextInput, TouchableOpacity, Button } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
 import useAuth from "../../../../../hooks/useAuth";
-import { IFormLogin } from "../../../../../types/user";
+import { IFormLogin, IFormRegister } from "../../../../../types/user";
 import { useState } from "react";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
@@ -15,38 +15,25 @@ import auth from "@react-native-firebase/auth";
 import { Link } from "expo-router";
 
 async function onGoogleButtonPress() {
-  // Check if your device supports Google Play
   await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-  // Get the users ID token
-
-  console.log("xddd");
   const { idToken } = await GoogleSignin.signIn();
-  console.log(idToken);
-
-  // Create a Google credential with the token
   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-  // Sign-in the user with the credential
   return auth().signInWithCredential(googleCredential);
 }
 
 const Login = () => {
-  const { onLogin, isLoading, onLoginWithEmail } = useAuth();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { onRegister, isLoading } = useAuth();
 
   const {
     control,
     handleSubmit,
-    register,
     formState: { errors },
-  } = useForm<IFormLogin>({
+  } = useForm<IFormRegister>({
     mode: "onChange",
   });
 
-  const onSubmit = (data: IFormLogin) => {
-    onLogin({ ...data, rememberEmail: false });
+  const onSubmit = (data: IFormRegister) => {
+    onRegister({ ...data, rememberEmail: false });
   };
 
   return (
@@ -56,6 +43,29 @@ const Login = () => {
           <Text className="text-2xl font-bold mb-2">Bienvenido</Text>
           {/* <Image source={logo} className="h-24 w-24 mb-2" /> */}
           <Text className="text-lg font-bold">Inicia sesión con tu cuenta</Text>
+        </View>
+
+        <View>
+          <Text className="text-xl font-bold mb-1">FullName:</Text>
+          <Controller
+            name="name"
+            control={control}
+            rules={{
+              required: "Name is required",
+            }}
+            render={({ field, fieldState: { error } }) => (
+              <>
+                <TextInput
+                  {...field}
+                  placeholder="Ingrese su nombre "
+                  onChangeText={(e) => field.onChange(e)}
+                  className="border-b-2 py-2 px-4 mb-2 w-full"
+                />
+
+                {error && <Text style={{ color: "red" }}>{error.message}</Text>}
+              </>
+            )}
+          />
         </View>
 
         <View>
@@ -71,7 +81,6 @@ const Login = () => {
                 <TextInput
                   {...field}
                   placeholder="Ingrese su email"
-                  value={field.value}
                   onChangeText={(e) => field.onChange(e)}
                   className="border-b-2 py-2 px-4 mb-2 w-full"
                 />
@@ -96,7 +105,6 @@ const Login = () => {
                 <TextInput
                   {...field}
                   placeholder="Ingrese su pass"
-                  value={field.value}
                   secureTextEntry
                   onChangeText={(e) => field.onChange(e)}
                   className="border-b-2 py-2 px-4 mb-2 w-full"
@@ -117,10 +125,7 @@ const Login = () => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity
-          onPress={handleSubmit(onSubmit)}
-          //    disabled={isLoading}
-        >
+        <TouchableOpacity onPress={handleSubmit(onSubmit)} disabled={isLoading}>
           <View className="bg-blue-500 p-3 rounded-md items-center">
             <Text className="text-white text-xl">Login</Text>
           </View>
@@ -143,10 +148,10 @@ const Login = () => {
 
         <View className="items-center justify-center m-10">
           <View className="flex-row gap-2">
-            <Text>No tienes una cuenta?</Text>
-            <Link href={"/auth/register/"} asChild>
+            <Text>Ya tienes una cuenta?</Text>
+            <Link href={"/auth/login/"} asChild>
               <TouchableOpacity>
-                <Text className="text-green-400 font-bold">Registrate</Text>
+                <Text className="text-green-400 font-bold">Inicia sesion</Text>
               </TouchableOpacity>
             </Link>
           </View>

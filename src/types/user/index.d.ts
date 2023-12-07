@@ -20,12 +20,6 @@ export interface IUser {
   account: IAccount;
 }
 
-export interface IFormLogin {
-  email: string;
-  password: string;
-  rememberEmail: boolean;
-}
-
 export interface IUserAccount {
   id: string;
   email: string;
@@ -36,4 +30,17 @@ export interface IUserAccount {
   idcondominium: string;
   idcompany: string;
   condominiums: [];
+}
+
+export interface IFormLogin {
+  email: string;
+  password: string;
+  rememberEmail: boolean;
+}
+
+export interface IFormRegister {
+  name: string;
+  email: string;
+  password: string;
+  rememberEmail: boolean;
 }

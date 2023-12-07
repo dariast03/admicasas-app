@@ -5,8 +5,13 @@ import { Text } from "../../../components/Themed";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function UnprotectedLayout() {
-  const { session, isLoading, isLoadingShowWelcomeScreen, showWelcomeScreen } =
-    useSessionContext();
+  const {
+    session,
+    isLoading,
+    isLoadingShowWelcomeScreen,
+    showWelcomeScreen,
+    user,
+  } = useSessionContext();
 
   if (isLoading || isLoadingShowWelcomeScreen) {
     return <Text>Loading...</Text>;
@@ -19,21 +24,27 @@ export default function UnprotectedLayout() {
     return <Redirect href="/auth/login/" />;
   }
 
-  return <>
-    <Stack>
-      <Stack.Screen
-        name="(drawer)"
-        options={{
-          headerShown: false
-        }}
-      />
+  if (!user.account?.idcondominium) {
+    return <Redirect href="/configurationcondominium/" />;
+  }
 
-      <Stack.Screen
-        name="(screens)"
-        options={{
-          headerShown: false
-        }}
-      />
-    </Stack>
-  </>
+  return (
+    <>
+      <Stack>
+        <Stack.Screen
+          name="(drawer)"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="(screens)"
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack>
+    </>
+  );
 }
