@@ -1,50 +1,35 @@
-import { View, Text } from 'react-native';
-import { Drawer } from 'expo-router/drawer';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { useSessionContext } from '../../../../hooks/useSessionContext';
-import { Redirect } from 'expo-router';
+import { View, Text } from "react-native";
+import { Drawer } from "expo-router/drawer";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { useSessionContext } from "../../../../hooks/useSessionContext";
+import { Redirect } from "expo-router";
 
 const LayoutDrawer = () => {
-
-  const { session, isLoading, isLoadingShowWelcomeScreen, showWelcomeScreen } =
-    useSessionContext();
-
-  if (isLoading || isLoadingShowWelcomeScreen) {
-    return <Text>Loading...</Text>;
-  }
-
-  if (!showWelcomeScreen) {
-    return <Redirect href="/welcome/" />;
-  }
-  if (!session) {
-    return <Redirect href="/auth/login/" />;
-  }
-
-
   return (
-    <Drawer screenOptions={{
-      swipeEnabled: false,
-      drawerType: "slide",
-      drawerActiveTintColor: '#000',
-      drawerInactiveTintColor: '#9e9d9d',
-      drawerLabelStyle: {
-        marginLeft: -25,
-        fontFamily: 'LatoRegular',
-        fontSize: 15,
-      },
-      headerTintColor: "red"
-    }}
+    <Drawer
+      screenOptions={{
+        swipeEnabled: false,
+        drawerType: "slide",
+        drawerActiveTintColor: "#000",
+        drawerInactiveTintColor: "#9e9d9d",
+        drawerLabelStyle: {
+          marginLeft: -25,
+          fontFamily: "LatoRegular",
+          fontSize: 15,
+        },
+        headerTintColor: "red",
+      }}
 
-    // drawerContent={(x) => <CustomDrawer {...x} />}
+      // drawerContent={(x) => <CustomDrawer {...x} />}
     >
       <Drawer.Screen
         name="(tabs)"
         options={{
-          title: 'Inicio',
+          title: "Inicio",
           headerShown: false,
           drawerIcon: ({ color }) => (
-            <Ionicons name='home-outline' size={20} color={color} />
-          )
+            <Ionicons name="home-outline" size={20} color={color} />
+          ),
         }}
       />
 
@@ -78,8 +63,8 @@ const LayoutDrawer = () => {
           },
 
           drawerIcon: ({ color }) => (
-            <Ionicons name='settings-outline' size={20} color={color} />
-          )
+            <Ionicons name="settings-outline" size={20} color={color} />
+          ),
         }}
       />
 

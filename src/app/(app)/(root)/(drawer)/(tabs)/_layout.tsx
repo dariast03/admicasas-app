@@ -1,18 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import { MaterialIcons } from '@expo/vector-icons';
-import { Animated, useColorScheme } from 'react-native';
-import { MaterialTopTabs } from '../../../../../navigator/top-tabs';
-import TopBar from '../../../../../layout/TopBar';
-import DefaultLayout from '../../../../../layout/DefaultLayout';
-import LayoutWithTopBar from '../../../../../layout/LayoutWithTopBar';
+import { StatusBar } from "expo-status-bar";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Animated, useColorScheme } from "react-native";
+import { MaterialTopTabs } from "../../../../../navigator/top-tabs";
+import TopBar from "../../../../../layout/TopBar";
+import DefaultLayout from "../../../../../layout/DefaultLayout";
+import LayoutWithTopBar from "../../../../../layout/LayoutWithTopBar";
 
-
-
-const av = new Animated.Value(0)
-av.addListener(() => { return });
+const av = new Animated.Value(0);
+av.addListener(() => {
+  return;
+});
 
 export default function Layout() {
-
   return (
     <>
       <StatusBar
@@ -50,14 +49,15 @@ export default function Layout() {
                : COLORS.light.background, */
 
             // API Reference: https://reactnavigation.org/docs/material-top-tab-navigator#options
-          }}>
+          }}
+        >
           <MaterialTopTabs.Screen
             name="index"
             options={{
-              title: 'Inicio',
+              title: "Inicio",
               tabBarIcon: ({ color }) => (
                 <MaterialIcons name="home" color={color} size={20} />
-              )
+              ),
             }}
           />
           {/* 
@@ -81,7 +81,7 @@ export default function Layout() {
           <MaterialTopTabs.Screen
             name="community"
             options={{
-              title: 'Comunidad',
+              title: "Comunidad",
               tabBarIcon: ({ color }) => (
                 <MaterialIcons name="unarchive" color={color} size={20} />
               ),
@@ -91,18 +91,17 @@ export default function Layout() {
           <MaterialTopTabs.Screen
             name="payments"
             options={{
-              title: 'Pagos',
+              title: "Pagos",
               tabBarIcon: ({ color }) => (
                 <MaterialIcons name="donut-small" color={color} size={20} />
               ),
             }}
           />
 
-
           <MaterialTopTabs.Screen
             name="reservations"
             options={{
-              title: 'Reservas',
+              title: "Reservas",
               tabBarIcon: ({ color }) => (
                 <MaterialIcons name="no-drinks" color={color} size={20} />
               ),
@@ -118,8 +117,7 @@ export default function Layout() {
               ),
             }}
           /> 
-       
-        
+
         */}
         </MaterialTopTabs>
       </LayoutWithTopBar>
