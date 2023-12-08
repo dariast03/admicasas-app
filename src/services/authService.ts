@@ -26,13 +26,13 @@ const register = async (data: IFormRegister) => {
   const { email, password, name } = data;
 
   try {
-    // const response = await auth().createUserWithEmailAndPassword(
-    //   email,
-    //   password
-    // );
-    // const user = response.user;
+    const response = await auth().createUserWithEmailAndPassword(
+      email,
+      password
+    );
+    const user = response.user;
 
-    const { user } = await auth().signInAnonymously();
+    // const { user } = await auth().signInAnonymously();
 
     firestore()
       .collection("Users")

@@ -4,6 +4,7 @@ const ConfigurationCondominium = () => {
   const { signOut, user } = useSessionContext();
   return (
     <View>
+      <Text>{user.email}</Text>
       <Text>No tienes un condominio asignado, busca uno</Text>
       <View>
         <Button onPress={signOut} title="LOGOUT" />
