@@ -40,14 +40,14 @@ export const useAnnouncement = (props: HookProps) => {
     enabled: query?.includes("announcementsQuery"),
   });
 
-  // const announcementQuery = useQuery({
-  //     queryKey: ["announcements", id],
-  //     queryFn: () => announcementService.getData(id || ""),
-  //     enabled: !!id,
-  // });
+  const announcementQuery = useQuery({
+    queryKey: ["announcements", id],
+    queryFn: () => announcementService.getData(id || ""),
+    enabled: !!id,
+  });
 
   return {
     announcementsQuery,
-    // announcementQuery,
+    announcementQuery,
   };
 };

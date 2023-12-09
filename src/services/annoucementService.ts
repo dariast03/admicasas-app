@@ -87,21 +87,32 @@ const getAllData = async (
   }
 };
 
-const getAll = async () => {
-  try {
-    const querySnapshot = await firestore().collection("announcements").get();
-    const data: IAnnouncement[] = querySnapshot.docs.map((doc) => ({
-      ...(doc.data() as IAnnouncement),
-      id: doc.id,
-    }));
-
-    return data;
-  } catch (e) {
-    console.log(e);
-  }
+const getData = async (id: string) => {
+  const docRef = firestore().collection("Announcements").doc(id);
+  const docSnap = await docRef.get();
+  const data = {
+    ...(docSnap.data() as IAnnouncement),
+    id: docSnap.id,
+  } as IAnnouncement;
+  return data;
 };
 
+// const getData = async (id: string) => {
+//   const docRef = doc("Announcements", id + "");
+//   const docSnap = await getDoc(docRef);
+
+//   const data = docSnap.data() as IAnnouncement;
+//   return {
+//       ...data,
+//       //@ts-ignore
+//       start: new Date(data.start.toDate()),
+//       //@ts-ignore
+//       end: new Date(data.end.toDate()),
+//       id: docSnap.id,
+//   };
+// };
+
 export default {
-  getAll,
   getAllData,
+  getData,
 };
