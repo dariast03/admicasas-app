@@ -7,7 +7,7 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 
 const LayoutWithTopBar: React.FC<React.PropsWithChildren> = ({ children }) => {
     return (
-        <DefaultLayout>
+        <DefaultLayout withSafeArea>
             <View className='bg-green-300 flex-row justify-between items-center p-2'>
                 <DrawerToggleButton tintColor="#fff" pressColor='red' />
 
