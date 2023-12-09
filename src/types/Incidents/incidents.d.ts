@@ -3,6 +3,6 @@ export interface IIncident {
   idhousing: string;
   description: string;
   date: Date;
-  state: string;
+  state: "Pendiente" | "En proceso" | "Resuelto" | "Rechazado";
   image: string;
 }
