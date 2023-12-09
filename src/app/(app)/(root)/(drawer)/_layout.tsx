@@ -3,6 +3,7 @@ import { Drawer } from "expo-router/drawer";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useSessionContext } from "../../../../hooks/useSessionContext";
 import { Redirect } from "expo-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const LayoutDrawer = () => {
   return (

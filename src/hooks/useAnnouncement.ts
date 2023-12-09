@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import announcementService from "../services/annoucementService";
 import { IAnnouncement } from "../types/announcement/announcement";
@@ -36,7 +36,7 @@ export const useAnnouncement = (props: HookProps) => {
   const announcementsQuery = useQuery({
     queryKey: ["announcements", params.idcondominium],
     queryFn: () => announcementService.getAllData(params),
-    // staleTime: 1000 * 60 * 60,
+    //staleTime: 1000 * 60 * 60,
     enabled: query?.includes("announcementsQuery"),
   });
 

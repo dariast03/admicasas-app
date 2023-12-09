@@ -1,29 +1,60 @@
 import React from "react";
-import { View, Text, FlatList } from "react-native";
-import { useAnnouncement } from "../../../../../hooks/useAnnouncement";
-import { useSessionContext } from "../../../../../hooks/useSessionContext";
+import {
+  View,
+  Text,
+  FlatList,
+  useWindowDimensions,
+  TouchableOpacity,
+} from "react-native";
+
+import { Image } from "expo-image";
+import { useSessionContext } from "@/hooks/useSessionContext";
+import { useAnnouncement } from "@/hooks/useAnnouncement";
+import { IAnnouncement } from "@/types/announcement/announcement";
 
 type Props = {
-  text: string;
+  data: IAnnouncement;
 };
 
-const Card = ({ text }: Props) => (
-  <View className={`bg-white p-5 m-2 rounded-lg`}>
-    <Text>{text}</Text>
-  </View>
-);
-const { user } = useSessionContext();
-const { announcementsQuery } = useAnnouncement({
-  params: {
-    idcondominium: "HV2WHtWT2yeZm2QeQp6b",
-  },
-});
+const Card = ({ data }: Props) => {
+  const { width } = useWindowDimensions();
+  return (
+    <TouchableOpacity>
+      <View className="w-full bg-white border border-gray-200 rounded-2xl overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700">
+        <View>
+          <Image
+            source={data.urlimg}
+            style={{ maxWidth: width, height: 200 }}
+          />
+        </View>
+        <View className="p-5">
+          <View>
+            <Text className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              {data.description}
+            </Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
 const Home = () => {
+  const { user } = useSessionContext();
+  const { announcementsQuery } = useAnnouncement({
+    query: ["announcementsQuery"],
+    params: {
+      idcondominium: user?.account?.idcondominium,
+    },
+  });
   return (
     <FlatList
+      contentContainerClassName="p-5"
       data={announcementsQuery.data}
-      renderItem={({ item }) => <Card text={item.description} />}
+      renderItem={({ item }) => <Card data={item} />}
+      ItemSeparatorComponent={() => <View className="mb-5" />}
       keyExtractor={(item) => item.id || ""}
+      ListEmptyComponent={() => <Text>No hay anuncios</Text>}
     />
   );
 };

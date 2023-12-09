@@ -58,8 +58,8 @@ const useAuth = () => {
 
       const response = await authService.register(data);
 
-      //if (!response) return;
-      //signIn(response)
+      if (!response) return;
+      signIn(response);
     } finally {
       setIsLoading(false);
     }

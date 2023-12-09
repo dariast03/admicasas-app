@@ -30,21 +30,24 @@ const register = async (data: IFormRegister) => {
       email,
       password
     );
+
     const user = response.user;
 
     // const { user } = await auth().signInAnonymously();
 
-    firestore()
+    await firestore()
       .collection("Users")
       .doc(user.uid)
       .set({ rol: "propietario", email, name });
+    // auth().signOut();
 
-    // return {
-    //   id: user.uid,
-    //   email: user.email || "",
-    //   displayName: user.displayName || "",
-    //   account: await getAccount(user.uid),
-    // };
+    // auth().signInWithCustomToken(await user.getIdToken());
+    return {
+      id: user.uid,
+      email: user.email || "",
+      displayName: user.displayName || "",
+      account: await getAccount(user.uid),
+    };
   } catch (error: any) {
     throw new Error(error.code);
   }
