@@ -1,7 +1,7 @@
 import { Redirect, Stack } from "expo-router";
 import { useSessionContext } from "../../../hooks/useSessionContext";
 import { useStorageState } from "../../../hooks/useStorageState";
-import { Text } from "../../../components/Themed";
+import { Text } from "react-native";
 
 export default function UnprotectedLayout() {
   const { session, isLoading, isLoadingShowWelcomeScreen, showWelcomeScreen } =

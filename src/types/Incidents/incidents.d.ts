@@ -1,8 +1,8 @@
 export interface IIncident {
-  id: string;
+  id?: string;
   idhousing: string;
   description: string;
   date: Date;
   state: "Pendiente" | "En proceso" | "Resuelto" | "Rechazado";
-  image: string;
+  urlimg: string;
 }

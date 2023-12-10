@@ -1,14 +1,14 @@
+import { IIncident } from "@/types/Incidents/incidents";
 import firestore from "@react-native-firebase/firestore";
-import { IArea } from "../types/area/area";
 
-const FirestoreKey = "Area";
+const FirestoreKey = "Incidents";
 
 const getAllData = async () => {
   try {
     const dataRef = firestore().collection(FirestoreKey);
     const querySnapshot = await dataRef.get();
     const data = querySnapshot.docs.map((doc) => ({
-      ...(doc.data() as IArea),
+      ...(doc.data() as IIncident),
       id: doc.id,
     }));
 
@@ -22,7 +22,10 @@ const getData = async (id: string) => {
   try {
     const docRef = firestore().collection(FirestoreKey).doc(id);
     const docSnap = await docRef.get();
-    const data = { ...(docSnap.data() as IArea), id: docSnap.id } as IArea;
+    const data = {
+      ...(docSnap.data() as IIncident),
+      id: docSnap.id,
+    } as IIncident;
     return data;
   } catch (e) {
     console.log(e);
@@ -55,8 +58,8 @@ const getDataQuery = async (
     }
 
     const querySnapshot = await queryRef.get();
-    const data: IArea[] = querySnapshot.docs.map((doc) => ({
-      ...(doc.data() as IArea),
+    const data: IIncident[] = querySnapshot.docs.map((doc) => ({
+      ...(doc.data() as IIncident),
       id: doc.id,
     }));
 
@@ -66,7 +69,7 @@ const getDataQuery = async (
   }
 };
 
-const insertData = async (data: IArea) => {
+const insertData = async (data: IIncident) => {
   try {
     const doc = await firestore().collection(FirestoreKey).add(data);
     return doc.id;
@@ -85,7 +88,7 @@ const deleteData = async (id: string) => {
   }
 };
 
-const updateData = async (data: IArea) => {
+const updateData = async (data: IIncident) => {
   try {
     const id = data.id;
     delete data.id;

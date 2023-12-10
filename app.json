@@ -12,9 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.admicasas.app"
@@ -33,6 +31,7 @@
       "favicon": "./src/assets/images/favicon.png"
     },
     "plugins": [
+      "@react-native-firebase/app",
       "@react-native-google-signin/google-signin",
       "expo-router",
       [
@@ -47,6 +46,12 @@
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
         }
       ]
     ],
