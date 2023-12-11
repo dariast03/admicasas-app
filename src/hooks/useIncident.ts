@@ -2,16 +2,18 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import incidentService from "@/services/insidentService";
 import { IIncident } from "@/types/Incidents/incidents";
 import storageService, { TFile } from "@/services/storageService";
+import Toast from "react-native-toast-message";
+
+type QueryType = "incidentsQuery" | "incidentQuery";
 
 type Props = {
-  enabled?: boolean;
   id?: string;
-  idcondominium?: string;
   params?: {
-    idcondominium: string;
+    idhousing: string;
     q?: string;
     limitResults?: number;
   };
+  query?: QueryType[];
 };
 
 type PropsCreate = {
@@ -24,37 +26,19 @@ type PropsUpdate = {
   file: TFile;
 };
 
-export const useIncidents = ({
-  id = undefined,
-  idcondominium = "",
-  params,
-}: Props = {}) => {
+export const useIncidents = ({ id, params, query }: Props = {}) => {
   const client = useQueryClient();
 
-  const incidentsAllQuery = useQuery({
-    queryKey: ["incidents"],
-    queryFn: () => incidentService.getAllData(),
-  });
-
-  const incidentsQueryV2 = useQuery({
+  const incidentsQuery = useQuery({
     queryKey: ["incidents", params],
     queryFn: () => {
-      return incidentService.getDataQuery({
+      return incidentService.getAllDataQuery({
         ...params,
-        idcondominium: params?.idcondominium || "",
+        //TODO: FIX IDHOUSING
+        idhousing: "TEST",
       });
     },
-    enabled: !!params?.idcondominium,
-  });
-
-  const incidentsCondominiumQuery = useQuery({
-    queryKey: ["incidents", idcondominium],
-    queryFn: () =>
-      incidentService.getDataQuery({
-        ...params,
-        idcondominium: params?.idcondominium || "",
-      }),
-    enabled: !!idcondominium,
+    enabled: query?.includes("incidentsQuery"),
   });
 
   const incidentQuery = useQuery({
@@ -66,14 +50,10 @@ export const useIncidents = ({
   const incidentCreateMutation = useMutation({
     mutationFn: (data: PropsCreate) => {
       const creation = async () => {
-        /*         if (!data.file?.length) {
-          throw new Error("No se ha seleccionado una imagen");
-        } */
-
-        if (data.file) {
+        if (data.file?.uri) {
           const urlimg = await storageService.onUploadFile(
             data.file,
-            [""],
+            [data.file.name],
             "images"
           );
           await incidentService.insertData({ ...data.data, urlimg });
@@ -97,10 +77,10 @@ export const useIncidents = ({
   const incidentUpdateMutation = useMutation({
     mutationFn: (data: PropsCreate) => {
       const update = async () => {
-        if (data.file) {
+        if (data.file?.uri) {
           const urlimg = await storageService.onUploadFile(
             data.file,
-            [""],
+            [data.file.name],
             "images"
           );
           await incidentService.updateData({ ...data.data, urlimg });
@@ -112,11 +92,21 @@ export const useIncidents = ({
       return update();
     },
     onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: "Exito",
+        text2: "Se ha registrado con exito",
+      });
       client.invalidateQueries({
         queryKey: ["incidents"],
       });
     },
     onError: (error: any) => {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Hubo un error",
+      });
       console.log(error);
     },
   });
@@ -136,9 +126,7 @@ export const useIncidents = ({
   });
 
   return {
-    incidentsAllQuery,
-    incidentsQueryV2,
-    incidentsCondominiumQuery,
+    incidentsQuery,
     incidentQuery,
     incidentCreateMutation,
     incidentUpdateMutation,

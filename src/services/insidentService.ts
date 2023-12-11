@@ -3,48 +3,41 @@ import firestore from "@react-native-firebase/firestore";
 
 const FirestoreKey = "Incidents";
 
-const getAllData = async () => {
-  try {
-    const dataRef = firestore().collection(FirestoreKey);
-    const querySnapshot = await dataRef.get();
-    const data = querySnapshot.docs.map((doc) => ({
-      ...(doc.data() as IIncident),
-      id: doc.id,
-    }));
-
-    return data;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 const getData = async (id: string) => {
   try {
     const docRef = firestore().collection(FirestoreKey).doc(id);
     const docSnap = await docRef.get();
-    const data = {
-      ...(docSnap.data() as IIncident),
+
+    const data = docSnap.data() as IIncident;
+
+    return {
+      ...data,
+      //@ts-ignore
+      date: new Date(data.date.toDate()),
       id: docSnap.id,
-    } as IIncident;
-    return data;
+    };
   } catch (e) {
     console.log(e);
   }
 };
 
 type GetDataQueryParams = {
-  idcondominium: string;
+  idhousing: string;
   q?: string;
   limitResults?: number;
 };
 
-const getDataQuery = async (
-  { idcondominium, q, limitResults }: GetDataQueryParams = { idcondominium: "" }
-) => {
+const getAllDataQuery = async ({
+  idhousing,
+  q,
+  limitResults,
+}: GetDataQueryParams) => {
   try {
     let queryRef = firestore()
       .collection(FirestoreKey)
-      .where("idcondominium", "==", idcondominium);
+      //TODO: FIX IDHOUSING
+      .where("idhousing", "!=", "TEST");
+    // .where("idcondominium", "==", idcondominium);
 
     if (q) {
       queryRef = queryRef
@@ -58,10 +51,16 @@ const getDataQuery = async (
     }
 
     const querySnapshot = await queryRef.get();
-    const data: IIncident[] = querySnapshot.docs.map((doc) => ({
-      ...(doc.data() as IIncident),
-      id: doc.id,
-    }));
+    const data: IIncident[] = querySnapshot.docs.map((doc) => {
+      const data = doc.data() as IIncident;
+
+      return {
+        ...data,
+        //@ts-ignore
+        date: new Date(data.date.toDate()),
+        id: doc.id,
+      };
+    });
 
     return data;
   } catch (e) {
@@ -102,9 +101,8 @@ const updateData = async (data: IIncident) => {
 };
 
 export default {
-  getAllData,
+  getAllDataQuery,
   getData,
-  getDataQuery,
   insertData,
   updateData,
   deleteData,

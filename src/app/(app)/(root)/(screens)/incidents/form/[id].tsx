@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { IIncident } from "@/types/Incidents/incidents";
 import DefaultLayout from "@/layout/DefaultLayout";
@@ -29,6 +29,8 @@ import Dropdown from "@/components/DropDown";
 import { IHousing } from "@/types/housing/housing";
 import { IDropdownRef } from "react-native-element-dropdown";
 import { useIncidents } from "@/hooks/useIncident";
+import { format } from "date-fns";
+import Loader from "@/components/Loader";
 
 const shadow = {
   shadowColor: "#000",
@@ -56,18 +58,25 @@ const housings: Partial<IHousing>[] = [
 const FormIncident = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const isCreate = id == "create";
+  const isEdit = id !== "create";
+  const newId = isEdit ? id : "";
 
-  const { incidentCreateMutation } = useIncidents();
+  const { incidentCreateMutation, incidentQuery, incidentUpdateMutation } =
+    useIncidents({
+      id: newId,
+    });
+
   const {
     control,
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm<IIncident>({
     mode: "onChange",
     defaultValues: {
       date: new Date(),
+      state: "Pendiente",
     },
   });
 
@@ -91,7 +100,6 @@ const FormIncident = () => {
     }
 
     if (!result.canceled) {
-      console.log(result.assets[0].fileName);
       setImage({
         ...result.assets[0],
         fileName: result.assets[0].uri.substring(
@@ -102,36 +110,34 @@ const FormIncident = () => {
     }
   };
 
-  const pickDoc = async () => {
-    // No permissions request is necessary for launching the image library
-    /* await ImagePicker.getCameraPermissionsAsync(); */
-    let result = await DocumentPicker.getDocumentAsync({
-      copyToCacheDirectory: true,
-      multiple: false,
-      type: "image/*",
-    });
-    console.log(result.assets);
-  };
-
   const onSubmit = async (data: any) => {
-    console.log({
-      data,
-      file: {
-        name: image?.fileName || "",
-        uri: image?.uri || "",
-      },
-    });
+    if (isEdit) {
+      await incidentUpdateMutation.mutateAsync({
+        data,
+        file: {
+          name: image?.fileName || "",
+          uri: image?.uri || "",
+        },
+      });
+    } else {
+      await incidentCreateMutation.mutateAsync({
+        data,
+        file: {
+          name: image?.fileName || "",
+          uri: image?.uri || "",
+        },
+      });
+    }
 
-    return;
-
-    await incidentCreateMutation.mutateAsync({
-      data,
-      file: {
-        name: image?.fileName || "",
-        uri: image?.uri || "",
-      },
-    });
+    router.push("/incidents/");
   };
+
+  useEffect(() => {
+    if (incidentQuery.data) {
+      setValue("date", incidentQuery.data.date);
+      reset(incidentQuery.data);
+    }
+  }, [incidentQuery.data]);
 
   return (
     <>
@@ -158,162 +164,174 @@ const FormIncident = () => {
                     </Text>
                   </View>
 
-                  <View className="gap-2">
-                    <View>
-                      <Controller
-                        name="description"
-                        control={control}
-                        rules={{
-                          required: "La descripcion es requerida",
-                        }}
-                        render={({ field, fieldState: { error } }) => (
-                          <>
-                            <InputText
-                              ref={field.ref}
-                              value={field.value}
-                              onChangeText={(e) => field.onChange(e)}
-                              withAsterisk
-                              label="Descripcion"
-                              placeholder="Descripcion del incidente"
-                              error={error?.message}
-                              multiline
-                              numberOfLines={5}
-                            />
-                          </>
-                        )}
-                      />
-                    </View>
-
-                    <View>
-                      <Controller
-                        name="idhousing"
-                        control={control}
-                        rules={{
-                          required: "La vivienda es requerida",
-                        }}
-                        render={({ field, fieldState: { error } }) => {
-                          return (
+                  {!incidentQuery.isLoading ? (
+                    <View className="gap-2">
+                      <View>
+                        <Controller
+                          name="description"
+                          control={control}
+                          rules={{
+                            required: "La descripcion es requerida",
+                          }}
+                          render={({ field, fieldState: { error } }) => (
                             <>
-                              <Dropdown
-                                withAsterisk
-                                placeholder="Selecciona una vivienda"
-                                dropdownRef={ref}
-                                label="Vivienda"
-                                valueField={"id"}
-                                error={error?.message}
-                                labelField={"code"}
+                              <InputText
+                                ref={field.ref}
                                 value={field.value}
-                                data={housings}
-                                onChange={(e) => field.onChange(e.id)}
-                                icon={{
-                                  type: IconType.AntDesign,
-                                  name: "home",
-                                }}
+                                onChangeText={(e) => field.onChange(e)}
+                                withAsterisk
+                                label="Descripcion"
+                                placeholder="Descripcion del incidente"
+                                error={error?.message}
+                                multiline
+                                numberOfLines={5}
                               />
                             </>
-                          );
-                        }}
-                      />
-                    </View>
+                          )}
+                        />
+                      </View>
 
-                    <View>
-                      <Controller
-                        name="date"
-                        control={control}
-                        rules={{
-                          required: "La vivienda es requerida",
-                        }}
-                        render={({ field, fieldState: { error } }) => (
-                          <>
-                            <InputDatePicker
-                              ref={field.ref}
-                              value={field.value.toLocaleDateString()}
-                              onChangeText={(e) => field.onChange(e)}
-                              withAsterisk
-                              icon={{
-                                type: IconType.MaterialCommunityIcons,
-                                name: "clock-outline",
-                              }}
-                              label="Fecha:"
-                              placeholder="Enter your password"
-                              error={error?.message}
-                            />
-                          </>
-                        )}
-                      />
-                    </View>
+                      <View>
+                        <Controller
+                          name="idhousing"
+                          control={control}
+                          rules={{
+                            required: "La vivienda es requerida",
+                          }}
+                          render={({ field, fieldState: { error } }) => {
+                            return (
+                              <>
+                                <Dropdown
+                                  withAsterisk
+                                  placeholder="Selecciona una vivienda"
+                                  dropdownRef={ref}
+                                  label="Vivienda"
+                                  valueField={"id"}
+                                  error={error?.message}
+                                  labelField={"code"}
+                                  value={field.value}
+                                  data={housings}
+                                  onChange={(e) => field.onChange(e.id)}
+                                  icon={{
+                                    type: IconType.AntDesign,
+                                    name: "home",
+                                  }}
+                                />
+                              </>
+                            );
+                          }}
+                        />
+                      </View>
 
-                    <View>
-                      <InputCustom
-                        icon={{
-                          type: IconType.MaterialCommunityIcons,
-                          name: "clock-outline",
-                        }}
-                        label="Imagen:"
-                        value={image ? "Imagen Seleccionada" : ""}
-                        placeholder="Selecciona una imagen"
-                        editable={false}
-                        error={errors.urlimg?.message}
-                        rightContent={
-                          <View className="flex-row">
-                            <Icon
-                              onPress={() => pickImage("library")}
-                              icon={{
-                                type: IconType.MaterialCommunityIcons,
-                                name: "folder-multiple-image",
-                              }}
-                            />
+                      <View>
+                        <Controller
+                          name="date"
+                          control={control}
+                          rules={{
+                            required: "La vivienda es requerida",
+                          }}
+                          render={({ field, fieldState: { error } }) => (
+                            <>
+                              <InputDatePicker
+                                ref={field.ref}
+                                value={format(
+                                  field.value,
+                                  "dd/MM/yyyy HH:mm a"
+                                )}
+                                onChangeText={(e) => field.onChange(e)}
+                                withAsterisk
+                                icon={{
+                                  type: IconType.MaterialCommunityIcons,
+                                  name: "clock-outline",
+                                }}
+                                label="Fecha:"
+                                placeholder="Enter your password"
+                                error={error?.message}
+                              />
+                            </>
+                          )}
+                        />
+                      </View>
 
-                            <Icon
-                              onPress={() => pickImage("camera")}
-                              icon={{
-                                type: IconType.MaterialCommunityIcons,
-                                name: "camera",
-                              }}
+                      <View>
+                        <InputCustom
+                          icon={{
+                            type: IconType.MaterialCommunityIcons,
+                            name: "clock-outline",
+                          }}
+                          label="Imagen:"
+                          value={image ? "Imagen Seleccionada" : ""}
+                          placeholder="Selecciona una imagen"
+                          editable={false}
+                          error={errors.urlimg?.message}
+                          rightContent={
+                            <View className="flex-row">
+                              <Icon
+                                onPress={() => pickImage("library")}
+                                icon={{
+                                  type: IconType.MaterialCommunityIcons,
+                                  name: "folder-multiple-image",
+                                }}
+                              />
+
+                              <Icon
+                                onPress={() => pickImage("camera")}
+                                icon={{
+                                  type: IconType.MaterialCommunityIcons,
+                                  name: "camera",
+                                }}
+                              />
+                            </View>
+                          }
+                        />
+
+                        {image ? (
+                          <View className="items-center justify-center p-4">
+                            <Image
+                              source={image}
+                              style={{ width: 200, height: 200 }}
+                              contentFit="cover"
                             />
                           </View>
+                        ) : (
+                          <>
+                            {incidentQuery.data?.urlimg && (
+                              <View className="items-center justify-center p-4">
+                                <Image
+                                  source={incidentQuery.data?.urlimg}
+                                  style={{ width: 200, height: 200 }}
+                                  contentFit="cover"
+                                />
+                              </View>
+                            )}
+                          </>
+                        )}
+                      </View>
+
+                      <TouchableOpacity
+                        onPress={handleSubmit(onSubmit)}
+                        disabled={
+                          incidentCreateMutation.isPending ||
+                          incidentUpdateMutation.isPending
                         }
-                      />
-
-                      {image && (
-                        <View className="items-center justify-center p-4">
-                          <Image
-                            source={image}
-                            style={{ width: 200, height: 200 }}
-                            contentFit="cover"
-                          />
-                        </View>
-                      )}
-                    </View>
-
-                    {/* <View>
-                      <TouchableOpacity onPress={pickDoc}>
-                        <View className="rounded-xl bg-primario-600 py-4">
+                        style={{
+                          opacity:
+                            incidentCreateMutation.isPending ||
+                            incidentUpdateMutation.isPending
+                              ? 0.8
+                              : 1,
+                        }}
+                      >
+                        <View className="rounded-xl bg-primario-800 p-3">
                           <Text className="text-center text-xl text-white ">
-                            Seleccionar Imagen
+                            {isEdit ? "ACTUALIZAR" : "REGISTRAR"}
                           </Text>
                         </View>
                       </TouchableOpacity>
-
-                      {image && (
-                        <View className="items-center justify-center p-4">
-                          <Image
-                            source={image}
-                            style={{ width: 200, height: 200 }}
-                            contentFit="cover"
-                          />
-                        </View>
-                      )}
-                    </View> */}
-
-                    <TouchableOpacity onPress={handleSubmit(onSubmit)}>
-                      <View className="rounded-xl bg-primario-800 p-3">
-                        <Text className="text-center text-xl text-white ">
-                          REGISTRAR
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
+                    </View>
+                  ) : (
+                    <Loader height={420} />
+                  )}
 
                   {/*  <Button
                     title="Pick an image from camera roll"
