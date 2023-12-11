@@ -1,4 +1,4 @@
-
+/* 
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth, initializeAuth, getReactNativePersistence } from "firebase/auth";
@@ -21,4 +21,4 @@ export const FirebaseAuth = initializeAuth(app, {
 })
 
 
-export const FirebaseDB = getFirestore(app)
+export const FirebaseDB = getFirestore(app) */
