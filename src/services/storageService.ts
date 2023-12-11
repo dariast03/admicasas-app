@@ -1,13 +1,4 @@
-import {
-  ref,
-  getStorage,
-  uploadBytesResumable,
-  getDownloadURL,
-  uploadBytes,
-} from "firebase/storage";
-
-const FirebaseStorage = getStorage();
-const storageRef = ref(FirebaseStorage, "images/");
+import storage from "@react-native-firebase/storage";
 
 type Storage = "images" | "payments";
 
@@ -19,13 +10,13 @@ export type TFile = {
  * Upload a file to Firestore and returns the  selected file's url.
  * @param {string} file - File object.
  * @param {number} extraName - Array of extra names to be concatenated at the beginning of the file name.
- * @param {number} storage - Storage path -> images | payments. default images
+ * @param {number} storageBucket - Storage path -> images | payments. default images
  * @returns {string} - URL of the uploaded file.
  */
 const onUploadFile = async (
   file: TFile,
   extraName: string[],
-  storage: Storage = "images"
+  storageBucket: Storage = "images"
 ): Promise<string> => {
   try {
     const fullFileName = `${extraName.join(
@@ -36,14 +27,11 @@ const onUploadFile = async (
       year: "numeric",
     })}__${file.name.replaceAll(" ", "-")}`.replaceAll("/", "-");
 
-    const response = await fetch(file.uri);
-    const blob = await response.blob();
+    const storageReference = storage().ref(`${storageBucket}/${fullFileName}`);
 
-    const storageReference = ref(storageRef, fullFileName);
+    await storageReference.putFile(file.uri);
 
-    await uploadBytes(storageReference, blob);
-
-    const downloadURL = await getDownloadURL(storageReference);
+    const downloadURL = await storageReference.getDownloadURL();
     return downloadURL;
   } catch (error: any) {
     throw new Error(error.code);
