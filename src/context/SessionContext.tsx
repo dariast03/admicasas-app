@@ -1,8 +1,7 @@
 import { createContext, PropsWithChildren, useState } from "react";
 import { useStorageState } from "../hooks/useStorageState";
 import { keysStorage } from "../data";
-import { onAuthStateChanged } from "firebase/auth";
-import { FirebaseAuth } from "../config/firebase";
+
 import { IUser } from "../types/user";
 
 type TSessionContext = {

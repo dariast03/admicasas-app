@@ -2,7 +2,6 @@ import { useState } from "react";
 //import authService from "../services/authService";
 import authService from "../services/authService";
 import { IFormLogin, IFormRegister } from "../types/user";
-import { User } from "firebase/auth";
 import { useSessionContext } from "./useSessionContext";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
