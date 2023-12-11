@@ -15,8 +15,10 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import Icon, { TIcon } from "./Icon";
 import { Controller } from "react-hook-form";
-import { format, setHours, setMinutes, setSeconds } from "date-fns";
+import { parse, setHours, setMinutes, setSeconds } from "date-fns";
 import { useColorScheme } from "nativewind";
+
+import { utcToZonedTime, format } from "date-fns-tz";
 
 type Props = {
   label: string;
@@ -125,10 +127,16 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
   ({ label, icon, error, password, withAsterisk, ...props }, ref) => {
     const isDark = useColorScheme().colorScheme === "dark";
 
+    const parseFecha = (dateString: string) => {
+      const dateValue = dateString;
+      const dateSplit = dateValue.split(" ")[0].split("/");
+      return new Date(`${dateSplit[2]}-${dateSplit[1]}-${dateSplit[0]}`);
+    };
+
     const [showDate, setShowDate] = useState(false);
     const [showTime, setShowTime] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState(parseFecha(props.value || ""));
 
     const showDatePicker = () => {
       setShowDate(true);
@@ -157,6 +165,8 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
       if (!selectedDate || event.type == "dismissed") return hideDateTime();
       hideDate();
       setDate(selectedDate);
+      //@ts-ignore
+      props.onChangeText && props.onChangeText(selectedDate);
     };
 
     const handleDateTimeChange = (
@@ -168,7 +178,16 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
       const hours = selectedDate.getHours();
       const minutes = selectedDate.getMinutes();
       const seconds = selectedDate.getSeconds();
-      setDate(setSeconds(setMinutes(setHours(date, hours), minutes), seconds));
+
+      /*       const dateValue = props.value || "";
+      const dateSplit = dateValue.split(" ")[0].split("/");
+      const date = new Date(`${dateSplit[2]}-${dateSplit[1]}-${dateSplit[0]}`); */
+      console.log(date);
+      props.onChangeText &&
+        props.onChangeText(
+          //@ts-ignore
+          setSeconds(setMinutes(setHours(date, hours), minutes), seconds)
+        );
     };
 
     return (
@@ -186,7 +205,7 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
           onBlur={() => setIsFocused(false)}
           className="text-primario-600 dark:text-primario-100 flex-1"
           {...props}
-          value={format(date, "dd/MM/yyyy HH:mm a")}
+          //   value={format(date, "dd/MM/yyyy HH:mm a")}
         />
 
         <MaterialCommunityIcons
