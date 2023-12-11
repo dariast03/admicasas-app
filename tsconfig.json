@@ -3,14 +3,9 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*":["./src/*"]
-    }
+      "@/*": ["./src/*"]
+    },
+    "lib": ["ES2021.String"]
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-    
-  ]
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
 }
