@@ -1,3 +1,4 @@
+import Colors from "@/constants/Colors";
 import { Stack } from "expo-router";
 
 export default function UnprotectedLayout() {
@@ -8,6 +9,18 @@ export default function UnprotectedLayout() {
           name="areas/[id]"
           options={{
             headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="annoucement/[id]"
+          options={{
+            headerShadowVisible: false,
+            title: "Anuncios",
+            headerStyle: {
+              backgroundColor: Colors.primario[600],
+            },
+            headerTintColor: "white",
           }}
         />
 

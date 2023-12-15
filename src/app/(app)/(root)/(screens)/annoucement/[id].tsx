@@ -2,8 +2,17 @@ import { useAnnouncement } from "@/hooks/useAnnouncement";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { Image } from "expo-image";
 import { Redirect, useLocalSearchParams } from "expo-router";
-import { Text, View, useWindowDimensions } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import { useSessionContext } from "../../../../../hooks/useSessionContext";
+import { MaterialIcons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Icon, { IconType } from "@/components/Icon";
 
 const DetailAnnocenment = () => {
   const { id } = useLocalSearchParams();
@@ -19,56 +28,88 @@ const DetailAnnocenment = () => {
 
   if (announcementQuery.isLoading) return <Text>CARGANDO AREA</Text>;
   if (announcementQuery.isError) return <Text>ERROR AREA</Text>;
-  return (
-    // <DefaultLayout>
-    //   <View style={{ alignItems: "center" }}>
-    //     <Image
-    //       source={announcementQuery.data?.urlimg}
-    //       style={{ width: width * 0.9, height: 300 }}
-    //     />
-    //   </View>
 
-    //   <View className="bg-white flex-1 rounded-3xl -mt-10 p-4">
-    //     <Text className="font-bold uppercase text-2xl">
-    //       {announcementQuery.data?.description}
-    //     </Text>
-    //     <Text className="">{announcementQuery.data?.description}</Text>
-    //   </View>
-    // </DefaultLayout>
+  return (
     <DefaultLayout>
-      <View className="absolute z-10 flex w-full justify-center items-center">
-        <View
-          className="rounded-lg overflow-hidden bg-white pt-4"
-          style={{
-            shadowColor: "#000000",
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.17,
-            shadowRadius: 2.54,
-            elevation: 3,
-          }}
-        >
-          <Image
-            source={announcementQuery.data?.urlimg}
-            style={{ width: width * 0.5, height: 150 }}
-          />
-          <Text className="text-gray-400 text-center">Toca para ampliar</Text>
-        </View>
-        <View className="w-full p-2">
-          <View className="flex w-full justify-start p-4 bg-green-300 rounded-md">
-            <Text className="font-bold text-2xl uppercase ">
-              {announcementQuery.data?.description}
-            </Text>
-            <Text className="">{announcementQuery.data?.description}</Text>
+      <ScrollView>
+        <View className=" p-5">
+          <View
+            className="bg-white rounded-t-2xl overflow-hidden "
+            style={styles.shadowCard}
+          >
+            <Image
+              style={{ width, height: 200 }}
+              source={announcementQuery.data?.urlimg}
+            />
+            <View className="flex-row justify-start px-4 py-3 bg-indigo-600">
+              <Icon
+                color={"white"}
+                icon={{
+                  type: IconType.MatetrialIcon,
+                  name: "payment",
+                }}
+              />
+              <Text className="mx-3 text-white font-semibold text-lg">
+                COBRO
+              </Text>
+            </View>
+            <View className="py-4 px-6">
+              <Text className="text-2xl font-semibold text-gray-800">
+                {announcementQuery.data?.title}
+              </Text>
+              <Text className="py-2 text-lg text-gray-700">
+                {announcementQuery.data?.description}
+              </Text>
+              <View className="flex-row items-center mt-4 text-gray-700">
+                <Icon
+                  icon={{
+                    type: IconType.MaterialCommunityIcons,
+                    name: "clock-time-three-outline",
+                  }}
+                />
+                <Text className="px-2 text-sm">
+                  {announcementQuery.data?.start?.toLocaleDateString()}
+                </Text>
+              </View>
+              <View className="flex-row  items-center mt-4 text-gray-700">
+                <Icon
+                  icon={{
+                    type: IconType.MaterialCommunityIcons,
+                    name: "clock-time-nine-outline",
+                  }}
+                />
+                <Text className="px-2 text-sm">
+                  {announcementQuery.data?.start?.toLocaleDateString()}
+                </Text>
+              </View>
+            </View>
+            <View className="p-5">
+              <View className="rounded-xl bg-indigo-600 p-3">
+                <TouchableOpacity className="items-center">
+                  <Text className="text-white text-center text-xl font-bold">
+                    PAGAR
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </View>
-      </View>
-
-      <View className="mt-10 bg-white flex-1 rounded-t-2xl"></View>
+      </ScrollView>
     </DefaultLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  shadowCard: {
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5.62,
+    elevation: 7,
+  },
+});
 
 export default DetailAnnocenment;

@@ -80,7 +80,7 @@ const getAllData = async (
       ...(doc.data() as IAnnouncement),
       id: doc.id,
     }));
-    console.log(data);
+
     return data;
   } catch (e) {
     console.log(e);
@@ -90,11 +90,18 @@ const getAllData = async (
 const getData = async (id: string) => {
   const docRef = firestore().collection("Announcements").doc(id);
   const docSnap = await docRef.get();
-  const data = {
-    ...(docSnap.data() as IAnnouncement),
+  //const data = docSnap.data() as IAnnouncement;
+
+  const data = docSnap.data() as IAnnouncement;
+  console.log(data);
+  return {
+    ...data,
+    //@ts-ignore
+    start: new Date(data.start.toDate()),
+    //@ts-ignore
+    end: new Date(data.end.toDate()),
     id: docSnap.id,
-  } as IAnnouncement;
-  return data;
+  };
 };
 
 // const getData = async (id: string) => {

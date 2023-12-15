@@ -6,6 +6,7 @@ import TopBar from "../../../../../layout/TopBar";
 import DefaultLayout from "../../../../../layout/DefaultLayout";
 import LayoutWithTopBar from "../../../../../layout/LayoutWithTopBar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Colors from "@/constants/Colors";
 
 const av = new Animated.Value(0);
 av.addListener(() => {
@@ -19,8 +20,7 @@ export default function Layout() {
         <StatusBar
           backgroundColor={
             /*  isDarkMode ? COLORS.dark.secondary : COLORS.light.background */
-
-            "red"
+            Colors.primario[600]
           }
           style="light"
         />

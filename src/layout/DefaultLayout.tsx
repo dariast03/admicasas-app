@@ -15,7 +15,7 @@ const DefaultLayout: React.FC<React.PropsWithChildren<Props>> = ({
     <>
       {withSafeArea ? (
         <SafeAreaView className="flex-1">
-          <View className="h-full bg-white dark:bg-primario-950">
+          <View className="h-full bg-white dark:bg-primario-600">
             {children}
           </View>
         </SafeAreaView>

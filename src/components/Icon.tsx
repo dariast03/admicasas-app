@@ -65,8 +65,8 @@ const Icon = ({ icon, ...props }: TIcon) => {
         <MaterialIcons
           name={icon.name}
           size={20}
+          color={isDark ? Colors.primario[100] : Colors.primario[600]}
           style={{
-            color: isDark ? Colors.primario[100] : Colors.primario[600],
             fontSize: 22,
             marginRight: 10,
           }}
@@ -104,8 +104,8 @@ const Icon = ({ icon, ...props }: TIcon) => {
         <MaterialCommunityIcons
           name={icon.name}
           size={20}
+          color={isDark ? Colors.primario[100] : Colors.primario[600]}
           style={{
-            color: isDark ? Colors.primario[100] : Colors.primario[600],
             fontSize: 22,
             marginRight: 10,
           }}
