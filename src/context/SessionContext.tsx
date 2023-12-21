@@ -13,6 +13,7 @@ type TSessionContext = {
   showWelcomeScreen?: string | null;
   isLoadingShowWelcomeScreen: boolean;
   handleShowWelcomeScreen: (value: string | null) => void;
+  updateCompanyCondominium: (idcompany: string, idcondominium: string) => void;
 };
 
 export const SessionContext = createContext<TSessionContext>(
@@ -30,6 +31,16 @@ export function SessionProvider(props: PropsWithChildren) {
   ] = useStorageState(keysStorage.SAW_WELCOME_SCREEN);
 
   const [user, setUser] = useState({} as IUser);
+
+  const updateCompanyCondominium = (
+    idcompany: string,
+    idcondominium: string
+  ) => {
+    setUser((prev) => ({
+      ...prev,
+      account: { ...prev.account, idcompany, idcondominium },
+    }));
+  };
 
   return (
     <SessionContext.Provider
@@ -49,6 +60,7 @@ export function SessionProvider(props: PropsWithChildren) {
         isLoading,
         isLoadingShowWelcomeScreen,
         showWelcomeScreen,
+        updateCompanyCondominium,
       }}
     >
       {props.children}

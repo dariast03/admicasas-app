@@ -26,8 +26,12 @@ const Layout = () => {
   }
 
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
+    try {
+      const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+      return subscriber;
+    } catch {
+      console.log("error");
+    }
   }, []);
 
   useEffect(() => {

@@ -21,7 +21,7 @@ const Card = ({ data }: Props) => {
   const { width } = useWindowDimensions();
   return (
     <Link href={`/annoucement/${data.id}`} asChild>
-      <TouchableOpacity>
+      {/* <TouchableOpacity>
         <View className="w-full bg-white border border-gray-200 rounded-2xl overflow-hidden shadow dark:bg-gray-800 dark:border-gray-700">
           <View>
             <Image
@@ -32,6 +32,33 @@ const Card = ({ data }: Props) => {
           <View className="p-5">
             <View>
               <Text className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {data.title}
+              </Text>
+              <Text className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {data.description}
+              </Text>
+            </View>
+          </View>
+        </View>
+        
+      </TouchableOpacity> */}
+      <TouchableOpacity>
+        <View className="w-full bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-lg dark:bg-gray-800 dark:border-gray-700">
+          <View>
+            <Image
+              source={data.urlimg}
+              style={{
+                maxWidth: width,
+                height: 200,
+              }}
+            />
+          </View>
+          <View className="p-5">
+            <View>
+              <Text className="mb-1 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {data.title}
+              </Text>
+              <Text className="text-sm font-light tracking-tight text-gray-700 dark:text-gray-300">
                 {data.description}
               </Text>
             </View>
