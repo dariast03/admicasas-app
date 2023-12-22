@@ -4,6 +4,7 @@ import { IAnnouncement } from "../types/announcement/announcement";
 
 type GetAllDataQueryParams = {
   idcondominium: string;
+  idhousing?: string;
   q?: string;
   limitResults?: number;
 };
@@ -52,7 +53,7 @@ type GetAllDataQueryParams = {
 // };
 
 const getAllData = async (
-  { idcondominium, q, limitResults }: GetAllDataQueryParams = {
+  { idcondominium, q, limitResults, idhousing }: GetAllDataQueryParams = {
     idcondominium: "",
   }
 ) => {
@@ -76,12 +77,20 @@ const getAllData = async (
     }
 
     const querySnapshot = await queryRef.get();
-    const data: IAnnouncement[] = querySnapshot.docs.map((doc) => ({
-      ...(doc.data() as IAnnouncement),
-      id: doc.id,
-    }));
-
-    return data;
+    const data: IAnnouncement[] = querySnapshot.docs.map((doc) => {
+      const dataFilter = doc.data() as IAnnouncement;
+      //const datf = dataFilter(announcement => announcement.idhousings.includes(idhousing));
+      return {
+        ...(doc.data() as IAnnouncement),
+        id: doc.id,
+      };
+    });
+    const dataFilter = data.filter(
+      (announcement) =>
+        (announcement.idcondominiums && !announcement.idhousings) ||
+        announcement.idhousings.includes(idhousing || "")
+    );
+    return dataFilter;
   } catch (e) {
     console.log(e);
   }

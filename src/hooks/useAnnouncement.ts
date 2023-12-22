@@ -9,6 +9,7 @@ type HookProps = {
   id?: string;
   params: {
     idcondominium: string;
+    idhousing: string;
     q?: string;
     limitResults?: number;
   };

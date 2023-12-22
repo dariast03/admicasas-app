@@ -7,15 +7,18 @@ import { useState } from "react";
 import { useCondominiums } from "@/hooks/useCondominiums";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useUsers } from "@/hooks/useUsers";
-import { router } from "expo-router";
-import useAuth from "@/hooks/useAuth";
+import { useHousing } from "@/hooks/useHousing";
 
 const ConfigurationCondominium = () => {
   const { user, updateCompanyCondominium } = useSessionContext();
   const { companiesQuery } = useCompanies();
   const [companies, setCompanies] = useState("");
   const [condominium, setCondominium] = useState("");
+  const [housing, setHousing] = useState("");
   const { condominiumsQuery } = useCondominiums({ idcompany: companies });
+  const { housingsQuery } = useHousing({
+    params: { idcondominium: condominium, idproprietary: user.id },
+  });
   const { userUpdateMutation } = useUsers();
   const [errorCompany, setErrorCompany] = useState("");
   const [errorCondominium, setErrorCondominium] = useState("");
@@ -38,7 +41,6 @@ const ConfigurationCondominium = () => {
 
     await userUpdateMutation.mutateAsync({ data });
     updateCompanyCondominium(companies, condominium);
-    //router.push("/(app)/(root)/(drawer)/(tabs)/");
   };
 
   return (
@@ -79,6 +81,24 @@ const ConfigurationCondominium = () => {
             value={condominium}
             data={condominiumsQuery.data || []}
             onChange={(e) => setCondominium(e.id)}
+            icon={{
+              type: IconType.AntDesign,
+              name: "home",
+            }}
+          />
+        )}
+      </View>
+      <View className="my-2">
+        {condominium && (
+          <Dropdown
+            withAsterisk
+            placeholder="Selecciona una vivienda"
+            label="Viviend"
+            valueField={"id"}
+            labelField={"name"}
+            value={housing}
+            data={housingsQuery.data || []}
+            onChange={(e) => setHousing(e.id)}
             icon={{
               type: IconType.AntDesign,
               name: "home",

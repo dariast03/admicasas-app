@@ -75,6 +75,7 @@ const Home = () => {
     query: ["announcementsQuery"],
     params: {
       idcondominium: user?.account?.idcondominium,
+      idhousing: "ULXoJgbt79bkaGfEqypm",
     },
   });
   return (

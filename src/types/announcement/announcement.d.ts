@@ -9,5 +9,6 @@ interface IAnnouncement {
   urlimg: string;
   idcondominiums: string[];
   condominiums?: ICondominium[];
+  idhousings: string[];
   title: string;
 }
