@@ -35,7 +35,7 @@ export const useAnnouncement = (props: HookProps) => {
   const { params, id = undefined, query } = props;
 
   const announcementsQuery = useQuery({
-    queryKey: ["announcements", params.idcondominium],
+    queryKey: ["announcements", params.idcondominium, params.idhousing],
     queryFn: () => announcementService.getAllData(params),
     //staleTime: 1000 * 60 * 60,
     enabled: query?.includes("announcementsQuery"),

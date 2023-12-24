@@ -2,7 +2,7 @@ import { IHousing } from "@/types/housing/housing";
 import firestore from "@react-native-firebase/firestore";
 
 type GetDataQueryParams = {
-  idcondominium: string;
+  idcondominium?: string;
   idproprietary?: string;
   q?: string;
   limitResults?: number;
@@ -13,9 +13,14 @@ const getAllData = async ({
   idproprietary,
 }: GetDataQueryParams) => {
   try {
-    let dataRef = firestore()
-      .collection("Housing")
-      .where("idcondominium", "==", idcondominium);
+    if (!idproprietary && !idproprietary)
+      throw new Error("Enviar al menos idcondominum o idpropietary");
+
+    let dataRef = firestore().collection("Housing").orderBy("code");
+
+    if (idcondominium) {
+      dataRef = dataRef.where("idcondominium", "==", idcondominium);
+    }
 
     if (idproprietary) {
       dataRef = dataRef.where("idproprietary", "==", idproprietary);
@@ -28,8 +33,9 @@ const getAllData = async ({
     }));
 
     return data;
-  } catch (e) {
+  } catch (e: any) {
     console.log(e);
+    throw new Error(e);
   }
 };
 

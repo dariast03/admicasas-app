@@ -16,7 +16,7 @@ type Props = {
   error?: string;
   password?: boolean;
   withAsterisk?: boolean;
-
+  disabled?: boolean;
   //
   /*   type?: "text" | "calendar";
   mode?: AndroidNativeProps["mode"];
@@ -30,6 +30,7 @@ type InputBase = {
   error?: string;
   icon?: TIcon["icon"];
   withAsterisk?: boolean;
+  disabled?: boolean;
 };
 
 const InputBase: React.FC<React.PropsWithChildren<InputBase>> = ({
@@ -38,17 +39,18 @@ const InputBase: React.FC<React.PropsWithChildren<InputBase>> = ({
   label,
   icon,
   withAsterisk,
+  disabled,
   children,
 }) => {
   const isDark = useColorScheme().colorScheme === "dark";
   return (
-    <View>
+    <View className="">
       <Text className="mb-1 text-md  font-bold">
         {label} {withAsterisk && <Text className="text-red-400">*</Text>}
       </Text>
       <View
         className={clsx([
-          "bg-primario-100 dark:bg-primario-500 flex-row p-3  border-[0.5px]  rounded-lg items-center",
+          "bg-primario-100 dark:bg-primario-500 flex-row p-3  border-[0.5px]  rounded-lg items-center overflow-hidden",
           {
             "border-red-500": error,
             "border-primario-700 dark:border-primario-950 ":
@@ -69,6 +71,10 @@ const InputBase: React.FC<React.PropsWithChildren<InputBase>> = ({
           />
         )}
         {children}
+
+        {disabled && (
+          <View className="absolute top-0 right-0 bottom-0 left-0 bg-white/40"></View>
+        )}
       </View>
 
       {error && <Text className="text-red-400">{error}</Text>}
@@ -77,7 +83,7 @@ const InputBase: React.FC<React.PropsWithChildren<InputBase>> = ({
 };
 
 export const InputText = forwardRef<TextInput, Props>(
-  ({ label, icon, error, password, withAsterisk, ...props }, ref) => {
+  ({ label, icon, error, password, withAsterisk, disabled, ...props }, ref) => {
     const [hidePassword, setHidePassword] = useState(password);
     const [isFocused, setIsFocused] = useState(false);
 
@@ -90,6 +96,7 @@ export const InputText = forwardRef<TextInput, Props>(
         error={error}
         icon={icon}
         withAsterisk={withAsterisk}
+        disabled={disabled}
       >
         <TextInput
           ref={ref}
@@ -114,7 +121,7 @@ export const InputText = forwardRef<TextInput, Props>(
 );
 
 export const InputDatePicker = forwardRef<TextInput, Props>(
-  ({ label, icon, error, password, withAsterisk, ...props }, ref) => {
+  ({ label, icon, error, password, withAsterisk, disabled, ...props }, ref) => {
     const isDark = useColorScheme().colorScheme === "dark";
 
     const parseFecha = (dateString: string) => {
@@ -187,6 +194,7 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
         error={error}
         icon={icon}
         withAsterisk={withAsterisk}
+        disabled={disabled}
       >
         <TextInput
           ref={ref}
@@ -234,11 +242,16 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
 );
 
 export const InputCustom = forwardRef<TextInput, Props & { rightContent: any }>(
-  ({ label, icon, error, rightContent, ...props }, ref) => {
+  ({ label, icon, error, rightContent, disabled, ...props }, ref) => {
     const [isFocused, setIsFocused] = useState(false);
 
     return (
-      <InputBase label={label} isFocused={isFocused} error={error}>
+      <InputBase
+        label={label}
+        isFocused={isFocused}
+        error={error}
+        disabled={disabled}
+      >
         <TextInput
           ref={ref}
           onFocus={() => setIsFocused(true)}

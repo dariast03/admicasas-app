@@ -34,8 +34,7 @@ export const useIncidents = ({ id, params, query }: Props = {}) => {
     queryFn: () => {
       return incidentService.getAllDataQuery({
         ...params,
-        //TODO: FIX IDHOUSING
-        idhousing: "TEST",
+        idhousing: params?.idhousing || "",
       });
     },
     enabled: query?.includes("incidentsQuery"),
@@ -56,9 +55,17 @@ export const useIncidents = ({ id, params, query }: Props = {}) => {
             [data.file.name],
             "images"
           );
-          await incidentService.insertData({ ...data.data, urlimg });
+          await incidentService.insertData({
+            ...data.data,
+            urlimg,
+            state: "Pendiente",
+          });
         } else {
-          await incidentService.insertData({ ...data.data, urlimg: "" });
+          await incidentService.insertData({
+            ...data.data,
+            urlimg: "",
+            state: "Pendiente",
+          });
         }
       };
 

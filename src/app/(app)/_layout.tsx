@@ -6,6 +6,7 @@ import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { AppProvider } from "@/context/AppContext";
 
 const queryClient = new QueryClient();
 
@@ -44,7 +45,9 @@ const Layout = () => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <Slot />
+        <AppProvider>
+          <Slot />
+        </AppProvider>
       </QueryClientProvider>
     </>
   );

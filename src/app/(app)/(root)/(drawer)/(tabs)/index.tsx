@@ -12,6 +12,10 @@ import { useSessionContext } from "@/hooks/useSessionContext";
 import { useAnnouncement } from "@/hooks/useAnnouncement";
 import { IAnnouncement } from "@/types/announcement/announcement";
 import { Link } from "expo-router";
+import { useHousing } from "@/hooks/useHousing";
+import Dropdown from "@/components/DropDown";
+import { useAppContext } from "@/hooks/useAppContext";
+import Loader from "@/components/Loader";
 
 type Props = {
   data: IAnnouncement;
@@ -71,22 +75,67 @@ const Card = ({ data }: Props) => {
 
 const Home = () => {
   const { user } = useSessionContext();
+  const { isLoadingSelectedHousing, selectedHousing, updateHousing } =
+    useAppContext();
+
   const { announcementsQuery } = useAnnouncement({
     query: ["announcementsQuery"],
     params: {
       idcondominium: user?.account?.idcondominium,
-      idhousing: "ULXoJgbt79bkaGfEqypm",
+      idhousing: selectedHousing,
     },
   });
+
+  const { housingsByPropietaryQuery } = useHousing({
+    params: {
+      idproprietary: user.id,
+    },
+  });
+
   return (
-    <FlatList
-      contentContainerClassName="p-5"
-      data={announcementsQuery.data}
-      renderItem={({ item }) => <Card data={item} />}
-      ItemSeparatorComponent={() => <View className="mb-5" />}
-      keyExtractor={(item) => item.id || ""}
-      ListEmptyComponent={() => <Text>No hay anuncios</Text>}
-    />
+    <>
+      <FlatList
+        data={null}
+        renderItem={() => null}
+        contentContainerClassName="p-5"
+        ListHeaderComponent={
+          <>
+            <View className="mb-5">
+              <Dropdown
+                placeholder="Seleccionar vivienda"
+                label="Selector global de vivienda para ir probando"
+                valueField={"id"}
+                value={selectedHousing}
+                labelField={"code"}
+                data={housingsByPropietaryQuery.data || []}
+                onChange={(e) => updateHousing(e.id)}
+                disabled={
+                  isLoadingSelectedHousing ||
+                  housingsByPropietaryQuery.isLoading
+                }
+                disable={housingsByPropietaryQuery.isLoading}
+              />
+            </View>
+
+            <FlatList
+              data={announcementsQuery.data}
+              renderItem={({ item }) => <Card data={item} />}
+              ItemSeparatorComponent={() => <View className="mb-5" />}
+              keyExtractor={(item) => item.id || ""}
+              ListEmptyComponent={() => (
+                <>
+                  {announcementsQuery.isLoading ? (
+                    <Loader />
+                  ) : (
+                    <Text>No hay anuncios</Text>
+                  )}
+                </>
+              )}
+            />
+          </>
+        }
+      />
+    </>
   );
 };
 

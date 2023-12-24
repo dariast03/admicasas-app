@@ -30,6 +30,9 @@ export function SessionProvider(props: PropsWithChildren) {
     setShowWelcomeScreen,
   ] = useStorageState(keysStorage.SAW_WELCOME_SCREEN);
 
+  const [[isLoadingSelectedHousing, selectedHousing], setSelectedHousing] =
+    useStorageState(keysStorage.SELECTER_HOUSING);
+
   const [user, setUser] = useState({} as IUser);
 
   const updateCompanyCondominium = (

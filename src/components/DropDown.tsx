@@ -16,6 +16,7 @@ type Props = {
   error?: string;
   withAsterisk?: boolean;
   dropdownRef?: React.RefObject<IDropdownRef>;
+  disabled?: boolean;
 } & DropdownProps<any>;
 
 const Dropdown: React.FC<Props> = ({
@@ -24,6 +25,7 @@ const Dropdown: React.FC<Props> = ({
   error,
   withAsterisk,
   dropdownRef,
+  disabled,
   ...props
 }) => {
   const [isFocus, setIsFocus] = useState(false);
@@ -38,62 +40,67 @@ const Dropdown: React.FC<Props> = ({
         {label} {withAsterisk && <Text className="text-red-400">*</Text>}
       </Text>
 
-      <RNDropdown
-        ref={dropdownRef}
-        placeholder="Selecciona un item"
-        {...props}
-        onChange={(item) => {
-          props.onChange && props.onChange(item);
-          setIsFocus(false);
-        }}
-        style={[
-          styles.dropdown,
-          isError && { borderColor: "red" },
-          isFocus && { borderColor: Colors.primario[700] },
-          isDark
-            ? { backgroundColor: Colors.primario[500] }
-            : { backgroundColor: Colors.primario[100] },
-        ]}
-        placeholderStyle={[
-          styles.placeholderStyle,
-          isDark
-            ? { color: Colors.primario[100] }
-            : { color: Colors.primario[600] },
-        ]}
-        selectedTextStyle={[
-          styles.selectedTextStyle,
-          isDark
-            ? { color: Colors.primario[100] }
-            : { color: Colors.primario[600] },
-        ]}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        maxHeight={300}
-        searchPlaceholder="Buscar..."
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
-        renderLeftIcon={() => (
-          <>
-            {icon && (
-              <Icon
-                icon={icon}
-                style={{
-                  color: isDark ? Colors.primario[100] : Colors.primario[600],
-                  fontSize: 22,
-                  marginRight: 10,
-                }}
-              />
-            )}
+      <View>
+        <RNDropdown
+          ref={dropdownRef}
+          placeholder="Selecciona un item"
+          {...props}
+          onChange={(item) => {
+            props.onChange && props.onChange(item);
+            setIsFocus(false);
+          }}
+          style={[
+            styles.dropdown,
+            isError && { borderColor: "red" },
+            isFocus && { borderColor: Colors.primario[700] },
+            isDark
+              ? { backgroundColor: Colors.primario[500] }
+              : { backgroundColor: Colors.primario[100] },
+          ]}
+          placeholderStyle={[
+            styles.placeholderStyle,
+            isDark
+              ? { color: Colors.primario[100] }
+              : { color: Colors.primario[600] },
+          ]}
+          selectedTextStyle={[
+            styles.selectedTextStyle,
+            isDark
+              ? { color: Colors.primario[100] }
+              : { color: Colors.primario[600] },
+          ]}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          maxHeight={300}
+          searchPlaceholder="Buscar..."
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          renderLeftIcon={() => (
+            <>
+              {icon && (
+                <Icon
+                  icon={icon}
+                  style={{
+                    color: isDark ? Colors.primario[100] : Colors.primario[600],
+                    fontSize: 22,
+                    marginRight: 10,
+                  }}
+                />
+              )}
 
-            {/* <AntDesign
+              {/* <AntDesign
             style={styles.icon}
             color={isDark ? Colors.primario[100] : Colors.primario[600]}
             name="Safety"
             size={20}
           /> */}
-          </>
+            </>
+          )}
+        />
+        {disabled && (
+          <View className="absolute top-0 right-0 bottom-0 left-0 bg-white/40"></View>
         )}
-      />
+      </View>
 
       {error && <Text className="text-red-400">{error}</Text>}
     </View>
@@ -103,7 +110,10 @@ const Dropdown: React.FC<Props> = ({
 export default Dropdown;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    overflow: "hidden",
+    position: "relative",
+  },
   dropdown: {
     padding: 8,
     borderColor: "gray",

@@ -2,7 +2,6 @@ import { IUserAccount } from "../types/user";
 import firestore from "@react-native-firebase/firestore";
 
 const updateData = async (data: Partial<IUserAccount>) => {
-  console.log("data", data);
   try {
     const id = data.id;
     delete data.id;

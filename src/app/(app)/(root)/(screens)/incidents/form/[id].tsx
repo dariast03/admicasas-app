@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   StyleSheet,
+  Alert,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
@@ -31,6 +32,11 @@ import { IDropdownRef } from "react-native-element-dropdown";
 import { useIncidents } from "@/hooks/useIncident";
 import { format } from "date-fns";
 import Loader from "@/components/Loader";
+import { useHousing } from "@/hooks/useHousing";
+import { useSessionContext } from "@/hooks/useSessionContext";
+import { useAppContext } from "@/hooks/useAppContext";
+import AlertCard from "@/components/AlertCard";
+import { statusColorIncident } from "@/data/statusColorIncident";
 
 const shadow = {
   shadowColor: "#000",
@@ -57,6 +63,8 @@ const housings: Partial<IHousing>[] = [
 
 const FormIncident = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { user } = useSessionContext();
+  const { selectedHousing } = useAppContext();
 
   const isEdit = id !== "create";
   const newId = isEdit ? id : "";
@@ -66,17 +74,26 @@ const FormIncident = () => {
       id: newId,
     });
 
+  const { housingsByPropietaryQuery } = useHousing({
+    params: {
+      idproprietary: user.id,
+    },
+  });
+
   const {
     control,
     handleSubmit,
     formState: { errors },
     setValue,
     reset,
+    watch,
+    getValues,
   } = useForm<IIncident>({
     mode: "onChange",
     defaultValues: {
       date: new Date(),
       state: "Pendiente",
+      idhousing: selectedHousing || "",
     },
   });
 
@@ -132,12 +149,27 @@ const FormIncident = () => {
     router.push("/incidents/");
   };
 
+  const isStatusDifferentPending =
+    isEdit && incidentQuery.data && incidentQuery.data.state !== "Pendiente";
+
   useEffect(() => {
     if (incidentQuery.data) {
       setValue("date", incidentQuery.data.date);
       reset(incidentQuery.data);
     }
   }, [incidentQuery.data]);
+
+  useEffect(() => {
+    const idHousing = getValues("idhousing");
+    if (idHousing) {
+      const housing = housingsByPropietaryQuery.data?.find(
+        (x) => x.id == idHousing
+      );
+      if (housing) {
+        setValue("idcondominium", housing.idcondominium);
+      }
+    }
+  }, [watch("idhousing")]);
 
   return (
     <>
@@ -164,6 +196,28 @@ const FormIncident = () => {
                     </Text>
                   </View>
 
+                  <View className="mb-4">
+                    {incidentQuery.data &&
+                      incidentQuery.data.state === "Pendiente" && (
+                        <AlertCard
+                          value={
+                            "Tu solicitud se encuentra en revisión. Aun puedes editar la informacion proporcionada"
+                          }
+                          severity={"warning"}
+                        />
+                      )}
+
+                    {incidentQuery.data &&
+                      incidentQuery.data.state !== "Pendiente" && (
+                        <AlertCard
+                          value={incidentQuery.data.message}
+                          severity={
+                            statusColorIncident[incidentQuery.data.state]
+                          }
+                        />
+                      )}
+                  </View>
+
                   {!incidentQuery.isLoading ? (
                     <View className="gap-2">
                       <View>
@@ -185,6 +239,8 @@ const FormIncident = () => {
                                 error={error?.message}
                                 multiline
                                 numberOfLines={5}
+                                disabled={isStatusDifferentPending}
+                                editable={!isStatusDifferentPending}
                               />
                             </>
                           )}
@@ -210,12 +266,20 @@ const FormIncident = () => {
                                   error={error?.message}
                                   labelField={"code"}
                                   value={field.value}
-                                  data={housings}
+                                  data={housingsByPropietaryQuery.data || []}
                                   onChange={(e) => field.onChange(e.id)}
                                   icon={{
                                     type: IconType.AntDesign,
                                     name: "home",
                                   }}
+                                  disabled={
+                                    isStatusDifferentPending ||
+                                    housingsByPropietaryQuery.isLoading
+                                  }
+                                  disable={
+                                    isStatusDifferentPending ||
+                                    housingsByPropietaryQuery.isLoading
+                                  }
                                 />
                               </>
                             );
@@ -247,6 +311,8 @@ const FormIncident = () => {
                                 label="Fecha:"
                                 placeholder="Enter your password"
                                 error={error?.message}
+                                disabled={isStatusDifferentPending}
+                                editable={!isStatusDifferentPending}
                               />
                             </>
                           )}
@@ -264,6 +330,7 @@ const FormIncident = () => {
                           placeholder="Selecciona una imagen"
                           editable={false}
                           error={errors.urlimg?.message}
+                          disabled={isStatusDifferentPending}
                           rightContent={
                             <View className="flex-row">
                               <Icon
@@ -308,26 +375,29 @@ const FormIncident = () => {
                         )}
                       </View>
 
-                      <TouchableOpacity
-                        onPress={handleSubmit(onSubmit)}
-                        disabled={
-                          incidentCreateMutation.isPending ||
-                          incidentUpdateMutation.isPending
-                        }
-                        style={{
-                          opacity:
+                      {((isEdit && incidentQuery.data?.state === "Pendiente") ||
+                        !isEdit) && (
+                        <TouchableOpacity
+                          onPress={handleSubmit(onSubmit)}
+                          disabled={
                             incidentCreateMutation.isPending ||
                             incidentUpdateMutation.isPending
-                              ? 0.8
-                              : 1,
-                        }}
-                      >
-                        <View className="rounded-xl bg-primario-800 p-3">
-                          <Text className="text-center text-xl text-white ">
-                            {isEdit ? "ACTUALIZAR" : "REGISTRAR"}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
+                          }
+                          style={{
+                            opacity:
+                              incidentCreateMutation.isPending ||
+                              incidentUpdateMutation.isPending
+                                ? 0.8
+                                : 1,
+                          }}
+                        >
+                          <View className="rounded-xl bg-primario-800 p-3">
+                            <Text className="text-center text-xl text-white ">
+                              {isEdit ? "ACTUALIZAR" : "REGISTRAR"}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      )}
                     </View>
                   ) : (
                     <Loader height={420} />
@@ -349,30 +419,5 @@ const FormIncident = () => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  inner: {
-    padding: 24,
-    flex: 1,
-    justifyContent: "space-around",
-  },
-  header: {
-    fontSize: 36,
-    marginBottom: 48,
-  },
-  textInput: {
-    height: 40,
-    borderColor: "#000000",
-    borderBottomWidth: 1,
-    marginBottom: 36,
-  },
-  btnContainer: {
-    backgroundColor: "white",
-    marginTop: 12,
-  },
-});
 
 export default FormIncident;

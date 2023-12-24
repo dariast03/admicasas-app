@@ -102,7 +102,6 @@ const getData = async (id: string) => {
   //const data = docSnap.data() as IAnnouncement;
 
   const data = docSnap.data() as IAnnouncement;
-  console.log(data);
   return {
     ...data,
     //@ts-ignore

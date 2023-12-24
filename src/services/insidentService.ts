@@ -35,8 +35,7 @@ const getAllDataQuery = async ({
   try {
     let queryRef = firestore()
       .collection(FirestoreKey)
-      //TODO: FIX IDHOUSING
-      .where("idhousing", "!=", "TEST");
+      .where("idhousing", "==", idhousing);
     // .where("idcondominium", "==", idcondominium);
 
     if (q) {

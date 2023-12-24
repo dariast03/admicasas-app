@@ -5,7 +5,7 @@ type Props = {
   enabled?: boolean;
   id?: string;
   params?: {
-    idcondominium: string;
+    idcondominium?: string;
     idproprietary?: string;
     q?: string;
     limitResults?: number;
@@ -26,7 +26,17 @@ export const useHousing = ({ id = undefined, params }: Props = {}) => {
     enabled: !!params?.idcondominium,
   });
 
+  const housingsByPropietaryQuery = useQuery({
+    queryKey: ["housing", params?.idproprietary],
+    queryFn: () =>
+      housingService.getAllData({
+        ...params,
+        idproprietary: params?.idproprietary || "",
+      }),
+    enabled: !!params?.idproprietary,
+  });
   return {
     housingsQuery,
+    housingsByPropietaryQuery,
   };
 };
