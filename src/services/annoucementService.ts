@@ -1,6 +1,7 @@
 import firestore from "@react-native-firebase/firestore";
 
 import { IAnnouncement } from "../types/announcement/announcement";
+import chargerService from "./chargerService";
 
 type GetAllDataQueryParams = {
   idcondominium: string;
@@ -102,8 +103,13 @@ const getData = async (id: string) => {
   //const data = docSnap.data() as IAnnouncement;
 
   const data = docSnap.data() as IAnnouncement;
+
   return {
     ...data,
+    charge:
+      data.type === "charge"
+        ? await chargerService.getData(data.idcharge || "")
+        : undefined,
     //@ts-ignore
     start: new Date(data.start.toDate()),
     //@ts-ignore

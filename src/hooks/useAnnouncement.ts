@@ -9,9 +9,9 @@ type HookProps = {
   id?: string;
   params: {
     idcondominium: string;
-    idhousing: string;
-    q?: string;
-    limitResults?: number;
+    //idhousing: string;
+    // q?: string;
+    // limitResults?: number;
   };
   query?: QueryType[];
 };
@@ -35,7 +35,7 @@ export const useAnnouncement = (props: HookProps) => {
   const { params, id = undefined, query } = props;
 
   const announcementsQuery = useQuery({
-    queryKey: ["announcements", params.idcondominium, params.idhousing],
+    queryKey: ["announcements", params.idcondominium],
     queryFn: () => announcementService.getAllData(params),
     //staleTime: 1000 * 60 * 60,
     enabled: query?.includes("announcementsQuery"),

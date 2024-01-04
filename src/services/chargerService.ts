@@ -1,5 +1,5 @@
-// import firestore from "@react-native-firebase/firestore";
-// import { ICharge } from "@/types/charges/charges";
+import firestore from "@react-native-firebase/firestore";
+import { ICharge } from "@/types/charges/charges";
 
 //   type GetDataQueryParams = {
 //     idcondominium: string;
@@ -7,21 +7,21 @@
 //     limitResults?: number;
 //   };
 
-//   const getData = async (id: string) => {
-//     const docRef = firestore().collection("Charges").doc(id);
-//     const docSnap = await docRef.get();
+const getData = async (id: string) => {
+  const docRef = firestore().collection("Charges").doc(id);
+  const docSnap = await docRef.get();
 
-//     const data = docSnap.data() as ICharge;
+  const data = docSnap.data() as ICharge;
 
-//     return {
-//       ...data,
-//       //@ts-ignore
-//       start: new Date(data.start.toDate()),
-//       //@ts-ignore
-//       end: new Date(data.end.toDate()),
-//       id: docSnap.id,
-//     };
-//   };
+  return {
+    ...data,
+    //@ts-ignore
+    start: new Date(data.start.toDate()),
+    //@ts-ignore
+    end: new Date(data.end.toDate()),
+    id: docSnap.id,
+  };
+};
 
 //   const getData = async (id: string) => {
 //     const docRef = doc(FirebaseDB, "Charges", id + "");
@@ -46,8 +46,6 @@
 //     };
 //   };
 
-//   export default {
-
-//     getData,
-
-//   };
+export default {
+  getData,
+};

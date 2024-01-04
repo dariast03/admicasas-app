@@ -11,4 +11,6 @@ interface IAnnouncement {
   condominiums?: ICondominium[];
   idhousings: string[];
   title: string;
+  type: string;
+  idcharge?: string;
 }
