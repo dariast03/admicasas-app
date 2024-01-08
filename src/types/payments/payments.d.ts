@@ -4,6 +4,6 @@ export interface IPayments {
   iduser?: string;
   idcharge?: string;
   date: Date;
-  state: "Pendiente" | "Aprobado" | "Completado" | "Rechazado";
+  state: "Pendiente" | "Aprobado" | "Rechazado";
   urlimg: string;
 }

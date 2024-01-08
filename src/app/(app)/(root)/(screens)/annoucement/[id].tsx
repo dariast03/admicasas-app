@@ -22,6 +22,7 @@ import RNFetchBlob from "rn-fetch-blob";
 import { usePayments } from "@/hooks/usePayments";
 import { IPayments } from "@/types/payments/payments";
 import { InputCustom } from "@/components/CustomInput";
+import { ButtonLoader } from "@/components/ButtonLoader";
 
 const DetailAnnocenment = () => {
   const { id } = useLocalSearchParams();
@@ -30,14 +31,17 @@ const DetailAnnocenment = () => {
   const { width } = useWindowDimensions();
   const { user } = useSessionContext();
 
-  const { paymentCreateMutation } = usePayments({
-    id: id + "",
-    params: { idcondominium: user?.account?.idcondominium },
-  });
-
   const { announcementQuery } = useAnnouncement({
     id: id + "",
-    params: { idcondominium: user?.account?.idcondominium },
+    params: { idcondominium: user?.account?.idcondominium, iduser: user.id },
+  });
+
+  const { paymentCreateMutation, paymentQuery } = usePayments({
+    id: id + "",
+    params: {
+      idcharge: announcementQuery.data?.idcharge || "",
+      iduser: user.id,
+    },
   });
 
   const [image, setImage] = useState<ImagePicker.ImagePickerAsset | null>(null);
@@ -267,8 +271,7 @@ const DetailAnnocenment = () => {
             </View>
 
             <View className="p-5">
-              <View className="rounded-xl bg-indigo-600 p-3">
-                {/* <TouchableOpacity className="items-center">
+              {/* <TouchableOpacity className="items-center">
                   <Text
                     className="text-white text-center text-xl font-bold"
                     onPress={() => pickImage()}
@@ -276,22 +279,41 @@ const DetailAnnocenment = () => {
                     Cargar
                   </Text>
                 </TouchableOpacity> */}
-                <TouchableOpacity
-                  className="items-center"
-                  disabled={paymentCreateMutation.isPending}
-                >
-                  <Text
-                    className="text-white text-center text-xl font-bold"
-                    onPress={() => {
-                      if (!paymentCreateMutation.isPending) {
-                        onSubmit({} as IPayments);
-                      }
-                    }}
-                  >
+              {/* <TouchableOpacity
+                className="items-center"
+                disabled={true}
+                onPress={() => {
+                  if (!paymentCreateMutation.isPending) {
+                    onSubmit({} as IPayments);
+                  }
+                }}
+                style={{
+                  opacity: paymentQuery.data?.state === "Pendiente" ? 0.5 : 1,
+                }}
+              >
+                <View className="rounded-xl bg-indigo-600 p-3">
+                  <Text className="text-white text-center text-xl font-bold">
                     {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"}
                   </Text>
-                </TouchableOpacity>
-              </View>
+                </View>
+              </TouchableOpacity> */}
+              <ButtonLoader
+                className="items-center"
+                disabled={paymentQuery.data?.state === "Pendiente"}
+                onPress={() => {
+                  if (!paymentCreateMutation.isPending) {
+                    onSubmit({} as IPayments);
+                  }
+                }}
+                style={{
+                  opacity: paymentQuery.data?.state === "Pendiente" ? 0.5 : 1,
+                }}
+                loading={paymentCreateMutation.isPending}
+              >
+                <Text className="text-white text-center text-xl font-bold">
+                  {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"}
+                </Text>
+              </ButtonLoader>
             </View>
           </View>
         </View>
@@ -302,7 +324,7 @@ const DetailAnnocenment = () => {
 
 const styles = StyleSheet.create({
   shadowCard: {
-    shadowColor: "#000000",
+    shadowColor: "#4f46e5",
     shadowOffset: {
       width: 0,
       height: 5,

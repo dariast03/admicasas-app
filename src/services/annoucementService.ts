@@ -2,8 +2,10 @@ import firestore from "@react-native-firebase/firestore";
 
 import { IAnnouncement } from "../types/announcement/announcement";
 import chargerService from "./chargerService";
+import paymentService from "./paymentService";
 
 type GetAllDataQueryParams = {
+  iduser?: string;
   idcondominium: string;
   idhousing?: string;
   q?: string;
@@ -56,6 +58,7 @@ type GetAllDataQueryParams = {
 const getAllData = async (
   { idcondominium, q, limitResults, idhousing }: GetAllDataQueryParams = {
     idcondominium: "",
+    iduser: "",
   }
 ) => {
   try {
@@ -97,19 +100,21 @@ const getAllData = async (
   }
 };
 
-const getData = async (id: string) => {
+const getData = async (
+  id: string,
+  { iduser }: GetAllDataQueryParams
+): Promise<IAnnouncement> => {
   const docRef = firestore().collection("Announcements").doc(id);
   const docSnap = await docRef.get();
   //const data = docSnap.data() as IAnnouncement;
 
   const data = docSnap.data() as IAnnouncement;
+  const charge = await chargerService.getData(data.idcharge || "");
 
   return {
     ...data,
-    charge:
-      data.type === "charge"
-        ? await chargerService.getData(data.idcharge || "")
-        : undefined,
+    charge: data.type === "charge" ? charge : undefined,
+
     //@ts-ignore
     start: new Date(data.start.toDate()),
     //@ts-ignore

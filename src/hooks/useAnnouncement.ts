@@ -9,6 +9,7 @@ type HookProps = {
   id?: string;
   params: {
     idcondominium: string;
+    iduser: string;
     //idhousing: string;
     // q?: string;
     // limitResults?: number;
@@ -43,7 +44,7 @@ export const useAnnouncement = (props: HookProps) => {
 
   const announcementQuery = useQuery({
     queryKey: ["announcements", id],
-    queryFn: () => announcementService.getData(id || ""),
+    queryFn: () => announcementService.getData(id || "", params),
     enabled: !!id,
   });
 

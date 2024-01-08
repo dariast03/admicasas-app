@@ -9,7 +9,8 @@ type QueryType = "announcementsQuery" | "announcementQuery";
 type HookProps = {
   id?: string;
   params: {
-    idcondominium: string;
+    idcharge: string;
+    iduser: string;
     //idhousing: string;
     // q?: string;
     // limitResults?: number;
@@ -44,11 +45,15 @@ export const usePayments = (props: HookProps) => {
   //     }),
   // });
 
-  // const paymentTypeQuery = useQuery({
-  //   queryKey: ["paymentTypes", id],
-  //   queryFn: () => paymentService.getData(id || ""),
-  //   enabled: !!id,
-  // });
+  const paymentQuery = useQuery({
+    queryKey: ["payment", params.idcharge, params.iduser],
+    queryFn: () =>
+      paymentService.getDataAnnouncement(
+        params.idcharge || "",
+        params.iduser || ""
+      ),
+    enabled: !!params.idcharge && !!params.iduser,
+  });
 
   const paymentCreateMutation = useMutation({
     mutationFn: (data: PropsCreate) => {
@@ -140,7 +145,7 @@ export const usePayments = (props: HookProps) => {
   // });
 
   return {
-    //paymentsQuery,
+    paymentQuery,
     paymentCreateMutation,
   };
 };

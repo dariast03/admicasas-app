@@ -1,4 +1,6 @@
+import { ICharge } from "../charges/charges";
 import { ICondominium } from "../condominium/condominium";
+import { IPayments } from "../payments/payments";
 
 interface IAnnouncement {
   id?: string;
@@ -13,4 +15,6 @@ interface IAnnouncement {
   title: string;
   type: string;
   idcharge?: string;
+
+  charge?: ICharge;
 }
