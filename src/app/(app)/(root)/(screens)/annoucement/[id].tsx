@@ -19,6 +19,9 @@ import * as FileSystem from "expo-file-system";
 import { useState } from "react";
 import { fi } from "date-fns/locale";
 import RNFetchBlob from "rn-fetch-blob";
+import { usePayments } from "@/hooks/usePayments";
+import { IPayments } from "@/types/payments/payments";
+import { InputCustom } from "@/components/CustomInput";
 
 const DetailAnnocenment = () => {
   const { id } = useLocalSearchParams();
@@ -27,6 +30,11 @@ const DetailAnnocenment = () => {
   const { width } = useWindowDimensions();
   const { user } = useSessionContext();
 
+  const { paymentCreateMutation } = usePayments({
+    id: id + "",
+    params: { idcondominium: user?.account?.idcondominium },
+  });
+
   const { announcementQuery } = useAnnouncement({
     id: id + "",
     params: { idcondominium: user?.account?.idcondominium },
@@ -34,7 +42,9 @@ const DetailAnnocenment = () => {
 
   const [image, setImage] = useState<ImagePicker.ImagePickerAsset | null>(null);
 
-  const pickImage = async (action: "library" | "camera") => {
+  const isEdit = id !== "create";
+
+  const pickImage = async () => {
     let result;
 
     const configImagePicker: ImagePicker.ImagePickerOptions = {
@@ -43,11 +53,7 @@ const DetailAnnocenment = () => {
       quality: 1,
     };
 
-    if (action === "camera") {
-      result = await ImagePicker.launchCameraAsync(configImagePicker);
-    } else {
-      result = await ImagePicker.launchImageLibraryAsync(configImagePicker);
-    }
+    result = await ImagePicker.launchImageLibraryAsync(configImagePicker);
 
     if (!result.canceled) {
       setImage({
@@ -59,6 +65,40 @@ const DetailAnnocenment = () => {
       });
     }
   };
+
+  const onSubmit = async (data: IPayments) => {
+    data.iduser = user.id;
+    data.idcharge = announcementQuery.data?.charge?.id;
+    data.state = "Pendiente";
+
+    // if (isEdit) {
+    //   // await paymentUpdateMutation.mutateAsync({
+    //   //   data,
+    //   //   file: {
+    //   //     name: image?.fileName || "",
+    //   //     uri: image?.uri || "",
+    //   //   },
+    //   // });
+    // } else {
+    //   await paymentCreateMutation.mutateAsync({
+    //     data,
+    //     file: {
+    //       name: image?.fileName || "",
+    //       uri: image?.uri || "",
+    //     },
+    //   });
+    // }
+    await paymentCreateMutation.mutateAsync({
+      data,
+      file: {
+        name: image?.fileName || "",
+        uri: image?.uri || "",
+      },
+    });
+
+    //router.push("/incidents/");
+  };
+
   const [downloadProgress, setDownloadProgress] = useState(0);
 
   // const callback = (downloadProgress) => {
@@ -69,9 +109,8 @@ const DetailAnnocenment = () => {
   // };
 
   const downloadFile = async (imageUrl: string) => {
-    console.log("Downloading file: ", imageUrl);
     const { dirs } = RNFetchBlob.fs;
-    const path = `${dirs.DownloadDir}/file.png`; // Replace with desired local file path
+    const path = `${dirs.DownloadDir}/file.png`;
 
     try {
       const res = await RNFetchBlob.config({
@@ -115,8 +154,6 @@ const DetailAnnocenment = () => {
   // };
 
   const pickDoc = async () => {
-    // No permissions request is necessary for launching the image library
-    /* await ImagePicker.getCameraPermissionsAsync(); */
     let result = await DocumentPicker.getDocumentAsync({
       copyToCacheDirectory: true,
       multiple: false,
@@ -136,7 +173,6 @@ const DetailAnnocenment = () => {
             className="bg-white rounded-t-2xl overflow-hidden "
             style={styles.shadowCard}
           >
-            <Text>{JSON.stringify(announcementQuery.data?.charge)}</Text>
             <Image
               style={{ width, height: 200 }}
               source={announcementQuery.data?.urlimg}
@@ -154,13 +190,43 @@ const DetailAnnocenment = () => {
                 COBRO
               </Text>
             </View>
-            <View className="py-4 px-6">
-              <Text className="text-2xl font-semibold text-gray-800">
-                {announcementQuery.data?.title}
-              </Text>
-              <Text className="py-2 text-lg text-gray-700">
-                {announcementQuery.data?.description}
-              </Text>
+            <View className="py-4 px-6 ">
+              <View
+                className="bg-white  rounded-md p-5"
+                style={styles.shadowCard}
+              >
+                <Text className="text-6xl text-primario-600 mt-2">
+                  Bs {announcementQuery.data?.charge?.amount}
+                </Text>
+                <Text className="text-stone-500 mt-2">
+                  {announcementQuery.data?.charge?.name}
+                </Text>
+                <Text className="text-stone-400 my-2">
+                  {announcementQuery.data?.charge?.description}
+                </Text>
+                <View className="border-b border-stone-400 my-5"></View>
+                <InputCustom
+                  icon={{
+                    type: IconType.MaterialCommunityIcons,
+                    name: "clock-outline",
+                  }}
+                  label="Cargar Comprobante:"
+                  value={image ? "Comprobante Seleccionado" : ""}
+                  placeholder="Selecciona una imagen"
+                  editable={false}
+                  rightContent={
+                    <View className="flex-row">
+                      <Icon
+                        onPress={() => pickImage()}
+                        icon={{
+                          type: IconType.MaterialCommunityIcons,
+                          name: "folder-multiple-image",
+                        }}
+                      />
+                    </View>
+                  }
+                />
+              </View>
               {/* <View className="flex-row items-center mt-4 text-gray-700">
                 <Icon
                   icon={{
@@ -181,7 +247,10 @@ const DetailAnnocenment = () => {
                   {announcementQuery.data?.end?.toLocaleDateString()}
                 </Text>
               </View> */}
-              <View className="items-center">
+              <View
+                className="bg-white mt-2 items-center rounded-md p-5"
+                style={styles.shadowCard}
+              >
                 <Image
                   style={{ width: 200, height: 200 }}
                   source={announcementQuery.data?.charge?.urlimg}
@@ -196,14 +265,30 @@ const DetailAnnocenment = () => {
                 </Text>
               </View>
             </View>
+
             <View className="p-5">
               <View className="rounded-xl bg-indigo-600 p-3">
-                <TouchableOpacity className="items-center">
+                {/* <TouchableOpacity className="items-center">
                   <Text
                     className="text-white text-center text-xl font-bold"
-                    onPress={() => pickDoc()}
+                    onPress={() => pickImage()}
                   >
-                    PAGAR
+                    Cargar
+                  </Text>
+                </TouchableOpacity> */}
+                <TouchableOpacity
+                  className="items-center"
+                  disabled={paymentCreateMutation.isPending}
+                >
+                  <Text
+                    className="text-white text-center text-xl font-bold"
+                    onPress={() => {
+                      if (!paymentCreateMutation.isPending) {
+                        onSubmit({} as IPayments);
+                      }
+                    }}
+                  >
+                    {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"}
                   </Text>
                 </TouchableOpacity>
               </View>
