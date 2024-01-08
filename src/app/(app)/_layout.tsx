@@ -35,13 +35,6 @@ const Layout = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const subscriber = () => {
-      console.log("object");
-    };
-    return subscriber;
-  }, []);
-
   return (
     <>
       <QueryClientProvider client={queryClient}>

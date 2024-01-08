@@ -3,7 +3,8 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start --localhost -c --dev-client",
+    "start": "expo start --localhost --dev-client",
+    "start:tailwind": "expo start --localhost --dev-client && npx tailwindcss --watch -i ./src/global.css -o ./src/output.css",
     "android": "expo run:android --device",
     "ios": "expo run:ios",
     "web": "expo start --web",
@@ -47,7 +48,7 @@
     "expo-status-bar": "~1.6.0",
     "expo-system-ui": "~2.4.0",
     "expo-web-browser": "~12.3.2",
-    "nativewind": "4.0.1",
+    "nativewind": "^4.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.48.2",

@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { SessionProvider } from "../context/SessionContext";
 import "../global.css";
+import "../output.css";
 import Toast from "react-native-toast-message";
 
 export {
