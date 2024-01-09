@@ -6,8 +6,8 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  View,
   useWindowDimensions,
+  View,
 } from "react-native";
 import { useSessionContext } from "../../../../../hooks/useSessionContext";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -209,6 +209,15 @@ const DetailAnnocenment = () => {
                   {announcementQuery.data?.charge?.description}
                 </Text>
                 <View className="border-b border-stone-400 my-5"></View>
+                <View className="items-center">
+                  {paymentQuery.data?.urlimg && (
+                    <Image
+                      style={{ width: 200, height: 200 }}
+                      source={paymentQuery.data?.urlimg}
+                    />
+                  )}
+                </View>
+
                 <InputCustom
                   icon={{
                     type: IconType.MaterialCommunityIcons,
