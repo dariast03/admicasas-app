@@ -160,10 +160,13 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
       selectedDate?: Date
     ) => {
       if (!selectedDate || event.type == "dismissed") return hideDateTime();
-      hideDate();
+
       setDate(selectedDate);
+
       //@ts-ignore
       props.onChangeText && props.onChangeText(selectedDate);
+
+      hideDate();
     };
 
     const handleDateTimeChange = (
@@ -179,11 +182,14 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
       /*       const dateValue = props.value || "";
       const dateSplit = dateValue.split(" ")[0].split("/");
       const date = new Date(`${dateSplit[2]}-${dateSplit[1]}-${dateSplit[0]}`); */
-      console.log(date);
+
       props.onChangeText &&
         props.onChangeText(
           //@ts-ignore
-          setSeconds(setMinutes(setHours(date, hours), minutes), seconds)
+          setSeconds(
+            setMinutes(setHours(selectedDate, hours), minutes),
+            seconds
+          )
         );
     };
 

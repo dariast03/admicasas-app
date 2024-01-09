@@ -7,9 +7,11 @@ const login = async (data: IFormLogin): Promise<IUser> => {
   const { email, password } = data;
 
   try {
+    console.log("BEGIN LOGIN");
     const response = await auth().signInWithEmailAndPassword(email, password);
     const user = response.user;
 
+    console.log(user);
     return {
       id: user.uid,
       email: user.email || "",
@@ -17,6 +19,7 @@ const login = async (data: IFormLogin): Promise<IUser> => {
       account: await getAccount(user.uid),
     };
   } catch (error: any) {
+    console.log("🚀 ~ login ~ error:", error);
     throw new Error(error.code);
   }
 };

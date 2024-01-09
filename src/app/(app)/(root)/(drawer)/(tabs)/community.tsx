@@ -2,7 +2,6 @@ import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import React from "react";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { FontAwesome } from "@expo/vector-icons";
-import { ScrollView } from "react-native-gesture-handler";
 import { Link } from "expo-router";
 
 type Menu = {
@@ -10,6 +9,7 @@ type Menu = {
   title: string;
   to: any;
 };
+
 const menu: Menu[] = [
   {
     icon: <FontAwesome name="deafness" size={50} color="#FFF" />,
@@ -18,8 +18,8 @@ const menu: Menu[] = [
   },
   {
     icon: <FontAwesome name="diamond" size={50} color="#FFF" />,
-    title: "ALGO MAS",
-    to: "/algomas",
+    title: "VISITAS",
+    to: "/visits",
   },
   {
     icon: <FontAwesome name="ticket" size={50} color="#FFF" />,
