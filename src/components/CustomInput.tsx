@@ -7,7 +7,15 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import Icon, { TIcon } from "./Icon";
-import { setHours, setMinutes, setSeconds } from "date-fns";
+import {
+  setDay,
+  setHours,
+  setMinutes,
+  setMonth,
+  setSeconds,
+  setYear,
+  setDate as setDateFns,
+} from "date-fns";
 import { useColorScheme } from "nativewind";
 
 type Props = {
@@ -124,16 +132,27 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
   ({ label, icon, error, password, withAsterisk, disabled, ...props }, ref) => {
     const isDark = useColorScheme().colorScheme === "dark";
 
-    const parseFecha = (dateString: string) => {
+    const parseFecha = (dateString?: string) => {
+      if (!dateString) return new Date();
+
       const dateValue = dateString;
       const dateSplit = dateValue.split(" ")[0].split("/");
-      return new Date(`${dateSplit[2]}-${dateSplit[1]}-${dateSplit[0]}`);
+
+      const dateNow = new Date();
+
+      const newwDate = setDateFns(
+        setMonth(setYear(dateNow, +dateSplit[2]), +dateSplit[1] - 1),
+        +dateSplit[0]
+      );
+      return newwDate;
     };
 
     const [showDate, setShowDate] = useState(false);
     const [showTime, setShowTime] = useState(false);
+
     const [isFocused, setIsFocused] = useState(false);
-    const [date, setDate] = useState(parseFecha(props.value || ""));
+
+    const [date, setDate] = useState(parseFecha(props.value));
 
     const showDatePicker = () => {
       setShowDate(true);
@@ -151,6 +170,7 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
     };
 
     const hideDateTime = () => {
+      console.log("XDD CLOSE");
       setShowDate(false);
       setShowTime(false);
     };
@@ -160,13 +180,11 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
       selectedDate?: Date
     ) => {
       if (!selectedDate || event.type == "dismissed") return hideDateTime();
-
+      setShowDate(false);
       setDate(selectedDate);
-
       //@ts-ignore
       props.onChangeText && props.onChangeText(selectedDate);
-
-      hideDate();
+      setShowTime(true);
     };
 
     const handleDateTimeChange = (
@@ -175,24 +193,19 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
     ) => {
       if (!selectedDate || event.type == "dismissed") return hideDateTime();
       hideDateTime();
+
       const hours = selectedDate.getHours();
       const minutes = selectedDate.getMinutes();
       const seconds = selectedDate.getSeconds();
-
-      /*       const dateValue = props.value || "";
-      const dateSplit = dateValue.split(" ")[0].split("/");
-      const date = new Date(`${dateSplit[2]}-${dateSplit[1]}-${dateSplit[0]}`); */
-
+      //@ts-ignore
       props.onChangeText &&
         props.onChangeText(
           //@ts-ignore
-          setSeconds(
-            setMinutes(setHours(selectedDate, hours), minutes),
-            seconds
-          )
+          setSeconds(setMinutes(setHours(date, hours), minutes), seconds)
         );
     };
 
+    /*     console.log(parseFecha(props.value || ""), "PARSED"); */
     return (
       <InputBase
         label={label}

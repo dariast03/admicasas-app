@@ -15,7 +15,7 @@ import { InputDatePicker, InputText } from "@/components/CustomInput";
 import Dropdown from "@/components/DropDown";
 import { IDropdownRef } from "react-native-element-dropdown";
 import { useVisits } from "@/hooks/useVisits"; // Update the import path
-import { format } from "date-fns";
+import { format } from "date-fns-tz";
 import Loader from "@/components/Loader";
 import { useHousing } from "@/hooks/useHousing";
 import { useSessionContext } from "@/hooks/useSessionContext";
@@ -54,6 +54,22 @@ const FormVisit = () => {
     },
   });
 
+  function formatCustomDate(date: Date) {
+    const day = String(date.getDate() + 1).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    let hours = date.getHours();
+    const ampm = hours >= 12 ? "PM" : "AM";
+
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes} ${ampm}`;
+    return formattedDate;
+  }
+
   const {
     control,
     handleSubmit,
@@ -75,7 +91,6 @@ const FormVisit = () => {
   const ref = useRef<IDropdownRef>(null);
 
   const onSubmit = async (data: IVisit) => {
-    console.log(data);
     if (isEdit) {
       await visitUpdateMutation.mutateAsync(data);
     } else {
@@ -272,7 +287,7 @@ const FormVisit = () => {
                                 placeholder="Enter your password"
                                 error={error?.message}
                                 //disabled={isStatusDifferentPending}
-                                //editable={!isStatusDifferentPending}
+                                editable={false}
                               />
                             </>
                           )}
