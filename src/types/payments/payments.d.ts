@@ -6,4 +6,5 @@ export interface IPayments {
   date: Date;
   state: "Pendiente" | "Aprobado" | "Rechazado";
   urlimg: string;
+  message?: string;
 }

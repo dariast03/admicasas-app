@@ -195,10 +195,21 @@ const DetailAnnocenment = () => {
               </Text>
             </View>
             <View className="py-4 px-6 ">
-              <View
-                className="bg-white  rounded-md p-5"
-                style={styles.shadowCard}
-              >
+              {paymentQuery.data?.message && (
+                <View
+                  className={`p-5 rounded-md ${
+                    paymentQuery.data.state === "Aprobado"
+                      ? "bg-green-400"
+                      : "bg-yellow-400"
+                  }`}
+                >
+                  <Text>{paymentQuery.data?.message}</Text>
+                </View>
+              )}
+              <Text className="font-semibold text-xl my-2">
+                Detalle del Cobro
+              </Text>
+              <View className="bg-white border border-gray-300 rounded-md p-5">
                 <Text className="text-6xl text-primario-600 mt-2">
                   Bs {announcementQuery.data?.charge?.amount}
                 </Text>
@@ -210,35 +221,40 @@ const DetailAnnocenment = () => {
                 </Text>
                 <View className="border-b border-stone-400 my-5"></View>
                 <View className="items-center">
-                  {paymentQuery.data?.urlimg && (
-                    <Image
-                      style={{ width: 200, height: 200 }}
-                      source={paymentQuery.data?.urlimg}
-                    />
-                  )}
-                </View>
-
-                <InputCustom
-                  icon={{
-                    type: IconType.MaterialCommunityIcons,
-                    name: "clock-outline",
-                  }}
-                  label="Cargar Comprobante:"
-                  value={image ? "Comprobante Seleccionado" : ""}
-                  placeholder="Selecciona una imagen"
-                  editable={false}
-                  rightContent={
-                    <View className="flex-row">
-                      <Icon
-                        onPress={() => pickImage()}
+                  {paymentQuery.data?.urlimg ? (
+                    <>
+                      <Text className="font-bold">Comprobante</Text>
+                      <Image
+                        style={{ width: 200, height: 200 }}
+                        source={paymentQuery.data?.urlimg}
+                      />
+                    </>
+                  ) : (
+                    <View className="w-full">
+                      <InputCustom
                         icon={{
                           type: IconType.MaterialCommunityIcons,
-                          name: "folder-multiple-image",
+                          name: "clock-outline",
                         }}
+                        label="Cargar Comprobante:"
+                        value={image ? "Comprobante Seleccionado" : ""}
+                        placeholder="Selecciona una imagen"
+                        editable={false}
+                        rightContent={
+                          <View className="flex-row">
+                            <Icon
+                              onPress={() => pickImage()}
+                              icon={{
+                                type: IconType.MaterialCommunityIcons,
+                                name: "folder-multiple-image",
+                              }}
+                            />
+                          </View>
+                        }
                       />
                     </View>
-                  }
-                />
+                  )}
+                </View>
               </View>
               {/* <View className="flex-row items-center mt-4 text-gray-700">
                 <Icon
@@ -260,26 +276,38 @@ const DetailAnnocenment = () => {
                   {announcementQuery.data?.end?.toLocaleDateString()}
                 </Text>
               </View> */}
-              <View
-                className="bg-white mt-2 items-center rounded-md p-5"
-                style={styles.shadowCard}
+              <Text className="font-semibold text-xl my-2">Medio de pago</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  downloadFile(announcementQuery.data?.charge?.urlimg || "")
+                }
               >
-                <Image
-                  style={{ width: 200, height: 200 }}
-                  source={announcementQuery.data?.charge?.urlimg}
-                />
-                <Text
+                <View className="border border-gray-300 mt-2 items-center rounded-md p-5">
+                  <Image
+                    style={{ width: 200, height: 200 }}
+                    source={announcementQuery.data?.charge?.urlimg}
+                  />
+
+                  {/* <View className="rounded-sm bg-indigo-600 p-3 ">
+                      <Text className="text-white text-center">
+                        Descargar QR
+                      </Text>
+                    </View> */}
+
+                  {/* <TouchableOpacity
                   onPress={() =>
                     downloadFile(announcementQuery.data?.charge?.urlimg || "")
                   }
                 >
-                  {" "}
-                  Descargar
-                </Text>
-              </View>
+                  <View className="rounded-xl bg-indigo-600 p-3 m-0">
+                    <Text className="text-white f">Descargar QR</Text>
+                  </View>
+                </TouchableOpacity> */}
+                </View>
+              </TouchableOpacity>
             </View>
 
-            <View className="p-5">
+            <View className="px-5 pb-5">
               {/* <TouchableOpacity className="items-center">
                   <Text
                     className="text-white text-center text-xl font-bold"
