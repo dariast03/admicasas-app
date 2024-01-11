@@ -3,6 +3,7 @@ import DefaultLayout from "@/layout/DefaultLayout";
 import { Image } from "expo-image";
 import { Redirect, useLocalSearchParams } from "expo-router";
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,14 +11,14 @@ import {
   View,
 } from "react-native";
 import { useSessionContext } from "../../../../../hooks/useSessionContext";
-import { MaterialIcons } from "@expo/vector-icons";
+
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Icon, { IconType } from "@/components/Icon";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system";
+
 import { useState } from "react";
-import { fi } from "date-fns/locale";
+
 import RNFetchBlob from "rn-fetch-blob";
 import { usePayments } from "@/hooks/usePayments";
 import { IPayments } from "@/types/payments/payments";
@@ -36,13 +37,14 @@ const DetailAnnocenment = () => {
     params: { idcondominium: user?.account?.idcondominium, iduser: user.id },
   });
 
-  const { paymentCreateMutation, paymentQuery } = usePayments({
-    id: id + "",
-    params: {
-      idcharge: announcementQuery.data?.idcharge || "",
-      iduser: user.id,
-    },
-  });
+  const { paymentCreateMutation, paymentQuery, paymentUpdateMutation } =
+    usePayments({
+      id: id + "",
+      params: {
+        idcharge: announcementQuery.data?.idcharge || "",
+        iduser: user.id,
+      },
+    });
 
   const [image, setImage] = useState<ImagePicker.ImagePickerAsset | null>(null);
 
@@ -71,34 +73,35 @@ const DetailAnnocenment = () => {
   };
 
   const onSubmit = async (data: IPayments) => {
-    data.iduser = user.id;
-    data.idcharge = announcementQuery.data?.charge?.id;
-    data.state = "Pendiente";
-
-    // if (isEdit) {
-    //   // await paymentUpdateMutation.mutateAsync({
-    //   //   data,
-    //   //   file: {
-    //   //     name: image?.fileName || "",
-    //   //     uri: image?.uri || "",
-    //   //   },
-    //   // });
-    // } else {
-    //   await paymentCreateMutation.mutateAsync({
-    //     data,
-    //     file: {
-    //       name: image?.fileName || "",
-    //       uri: image?.uri || "",
-    //     },
-    //   });
-    // }
-    await paymentCreateMutation.mutateAsync({
-      data,
-      file: {
-        name: image?.fileName || "",
-        uri: image?.uri || "",
-      },
-    });
+    if (paymentQuery.data?.id) {
+      data.id = paymentQuery.data?.id;
+      data.state = "Pendiente";
+      await paymentUpdateMutation.mutateAsync({
+        data,
+        file: {
+          name: image?.fileName || "",
+          uri: image?.uri || "",
+        },
+      });
+    } else {
+      data.iduser = user.id;
+      data.idcharge = announcementQuery.data?.charge?.id;
+      data.state = "Pendiente";
+      await paymentCreateMutation.mutateAsync({
+        data,
+        file: {
+          name: image?.fileName || "",
+          uri: image?.uri || "",
+        },
+      });
+    }
+    // await paymentCreateMutation.mutateAsync({
+    //   data,
+    //   file: {
+    //     name: image?.fileName || "",
+    //     uri: image?.uri || "",
+    //   },
+    // });
 
     //router.push("/incidents/");
   };
@@ -166,7 +169,13 @@ const DetailAnnocenment = () => {
     console.log(result.assets);
   };
 
-  if (announcementQuery.isLoading) return <Text>CARGANDO AREA</Text>;
+  if (announcementQuery.isLoading)
+    return (
+      <View className="p-5">
+        <ActivityIndicator color={"#4648E5"} size={20} />
+        <Text className="text-center text-primario-600">Cargando Anuncio</Text>
+      </View>
+    );
   if (announcementQuery.isError) return <Text>ERROR AREA</Text>;
 
   return (
@@ -195,17 +204,18 @@ const DetailAnnocenment = () => {
               </Text>
             </View>
             <View className="py-4 px-6 ">
-              {paymentQuery.data?.message && (
-                <View
-                  className={`p-5 rounded-md ${
-                    paymentQuery.data.state === "Aprobado"
-                      ? "bg-green-400"
-                      : "bg-yellow-400"
-                  }`}
-                >
-                  <Text>{paymentQuery.data?.message}</Text>
-                </View>
-              )}
+              {paymentQuery.data?.message &&
+                paymentQuery.data.state !== "Pendiente" && (
+                  <View
+                    className={`p-5 rounded-md ${
+                      paymentQuery.data.state === "Aprobado"
+                        ? "bg-green-400"
+                        : "bg-yellow-400"
+                    }`}
+                  >
+                    <Text>{paymentQuery.data?.message}</Text>
+                  </View>
+                )}
               <Text className="font-semibold text-xl my-2">
                 Detalle del Cobro
               </Text>
@@ -221,7 +231,7 @@ const DetailAnnocenment = () => {
                 </Text>
                 <View className="border-b border-stone-400 my-5"></View>
                 <View className="items-center">
-                  {paymentQuery.data?.urlimg ? (
+                  {paymentQuery.data?.urlimg && !image && (
                     <>
                       <Text className="font-bold">Comprobante</Text>
                       <Image
@@ -229,7 +239,18 @@ const DetailAnnocenment = () => {
                         source={paymentQuery.data?.urlimg}
                       />
                     </>
-                  ) : (
+                  )}
+                  {image && (
+                    <>
+                      <Text className="font-bold">Comprobante</Text>
+                      <Image
+                        style={{ width: 200, height: 200 }}
+                        source={image}
+                      />
+                    </>
+                  )}
+                  {(!paymentQuery.data?.state ||
+                    paymentQuery.data?.state === "Rechazado") && (
                     <View className="w-full">
                       <InputCustom
                         icon={{
@@ -343,7 +364,11 @@ const DetailAnnocenment = () => {
                   }
                 }}
                 style={{
-                  opacity: paymentQuery.data?.state === "Pendiente" ? 0.5 : 1,
+                  opacity:
+                    paymentQuery.data?.state === "Pendiente" ||
+                    paymentQuery.data?.state === "Aprobado"
+                      ? 0.5
+                      : 1,
                 }}
                 loading={paymentCreateMutation.isPending}
               >

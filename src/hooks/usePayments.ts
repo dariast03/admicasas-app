@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import storageService, { TFile } from "@/services/storageService";
 import { IPayments } from "@/types/payments/payments";
 import paymentService from "@/services/paymentService";
+import Toast from "react-native-toast-message";
 
 type QueryType = "announcementsQuery" | "announcementQuery";
 
@@ -39,14 +40,13 @@ export const usePayments = (props: HookProps) => {
   // const paymentsQuery = useQuery({
   //   queryKey: ["paymentTypes", params],
   //   queryFn: () =>
-  //     paymentsService.getAllData({
+  //     paymentService.getAllData({
   //       ...params,
-  //       idcondominium: params?.idcondominium || "",
   //     }),
   // });
 
   const paymentQuery = useQuery({
-    queryKey: ["payment", params.idcharge, params.iduser],
+    queryKey: ["payments", params.idcharge, params.iduser],
     queryFn: () =>
       paymentService.getDataAnnouncement(
         params.idcharge || "",
@@ -83,48 +83,51 @@ export const usePayments = (props: HookProps) => {
       client.invalidateQueries({
         queryKey: ["payments"],
       });
+      client.invalidateQueries({
+        queryKey: ["announcements"],
+      });
     },
     onError: (error: any) => {
       console.log(error);
     },
   });
 
-  // const incidentUpdateMutation = useMutation({
-  //   mutationFn: (data: PropsCreate) => {
-  //     const update = async () => {
-  //       if (data.file?.uri) {
-  //         const urlimg = await storageService.onUploadFile(
-  //           data.file,
-  //           [data.file.name],
-  //           "images"
-  //         );
-  //         await incidentService.updateData({ ...data.data, urlimg });
-  //       } else {
-  //         await incidentService.updateData(data.data);
-  //       }
-  //     };
+  const paymentUpdateMutation = useMutation({
+    mutationFn: (data: PropsCreate) => {
+      const update = async () => {
+        if (data.file?.uri) {
+          const urlimg = await storageService.onUploadFile(
+            data.file,
+            [data.file.name],
+            "images"
+          );
+          await paymentService.updateData({ ...data.data, urlimg });
+        } else {
+          await paymentService.updateData(data.data);
+        }
+      };
 
-  //     return update();
-  //   },
-  //   onSuccess: () => {
-  //     Toast.show({
-  //       type: "success",
-  //       text1: "Exito",
-  //       text2: "Se ha registrado con exito",
-  //     });
-  //     client.invalidateQueries({
-  //       queryKey: ["incidents"],
-  //     });
-  //   },
-  //   onError: (error: any) => {
-  //     Toast.show({
-  //       type: "error",
-  //       text1: "Error",
-  //       text2: "Hubo un error",
-  //     });
-  //     console.log(error);
-  //   },
-  // });
+      return update();
+    },
+    onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: "Exito",
+        text2: "¡Pago actualizado exitosamente!",
+      });
+      client.invalidateQueries({
+        queryKey: ["payments"],
+      });
+    },
+    onError: (error: any) => {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Hubo un error",
+      });
+      console.log(error);
+    },
+  });
 
   // const paymentTypesDeleteMutation = useMutation({
   //   mutationFn: (id: string) => {
@@ -147,5 +150,6 @@ export const usePayments = (props: HookProps) => {
   return {
     paymentQuery,
     paymentCreateMutation,
+    paymentUpdateMutation,
   };
 };

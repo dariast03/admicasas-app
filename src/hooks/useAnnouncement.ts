@@ -9,8 +9,8 @@ type HookProps = {
   id?: string;
   params: {
     idcondominium: string;
-    iduser: string;
-    //idhousing: string;
+    iduser?: string;
+    idhousing?: string;
     // q?: string;
     // limitResults?: number;
   };

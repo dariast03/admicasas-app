@@ -84,6 +84,7 @@ const FormVisit = () => {
       datevisit: new Date(),
       idhousing: selectedHousing,
       idpropietary: user.id,
+      idcondominium: user.account.idcondominium,
       observation: "",
     },
   });
@@ -91,6 +92,7 @@ const FormVisit = () => {
   const ref = useRef<IDropdownRef>(null);
 
   const onSubmit = async (data: IVisit) => {
+    //return console.log(data);
     if (isEdit) {
       await visitUpdateMutation.mutateAsync(data);
     } else {
@@ -107,17 +109,17 @@ const FormVisit = () => {
     }
   }, [visitQuery.data]);
 
-  useEffect(() => {
-    const idHousing = getValues("idhousing");
-    if (idHousing) {
-      const housing = housingsByPropietaryQuery.data?.find(
-        (x) => x.id == idHousing
-      );
-      if (housing) {
-        setValue("idcondominium", housing.idcondominium);
-      }
-    }
-  }, [watch("idhousing")]);
+  // useEffect(() => {
+  //   const idHousing = getValues("idhousing");
+  //   if (idHousing) {
+  //     const housing = housingsByPropietaryQuery.data?.find(
+  //       (x) => x.id == idHousing
+  //     );
+  //     if (housing) {
+  //       setValue("idcondominium", housing.idcondominium);
+  //     }
+  //   }
+  // }, [watch("idhousing")]);
 
   return (
     <>
