@@ -20,6 +20,25 @@ const getData = async (id: string) => {
     console.log(e);
   }
 };
+const getAllData = async (idhousing: string) => {
+  try {
+    let queryRef = firestore()
+      .collection(FirestoreKey)
+      .where("idhousing", "==", idhousing);
+    const querySnapshot = await queryRef.get();
+
+    const data: IPayments[] = querySnapshot.docs.map((doc) => {
+      return {
+        ...(doc.data() as IPayments),
+        id: doc.id,
+      };
+    });
+
+    return data;
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 const getDataAnnouncement = async (idcharge: string, iduser: string) => {
   try {
@@ -71,6 +90,7 @@ const updateData = async (data: IPayments) => {
 };
 
 export default {
+  getAllData,
   getData,
   getDataAnnouncement,
   insertData,

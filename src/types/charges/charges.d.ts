@@ -1,4 +1,5 @@
 import { IHousing } from "../housing/housing";
+import { IPayments } from "../payments/payments";
 import { IPaymentTypes } from "../paymet-types/payment-types";
 
 export interface ICharge {
@@ -13,7 +14,7 @@ export interface ICharge {
   start: Date;
   end: Date;
   amount: number;
-  idhousings: string[]
+  idhousings: string[];
   housings?: IHousing[];
-  isPublished: boolean
+  isPublished: boolean;
 }

@@ -38,7 +38,7 @@ export default function Layout() {
           }}
           tabBarPosition="bottom"
           screenOptions={{
-            //   lazy: true,
+            lazy: true,
             //tabBarItemStyle: { padding: 6 },
 
             /*  tabBarStyle: {

@@ -4,27 +4,39 @@ import LayoutWithTopBar from "../../../../../../layout/LayoutWithTopBar";
 import { FlatList } from "react-native-gesture-handler";
 import { usePayments } from "@/hooks/usePayments";
 
-const paymentsHistory = () => {
-  // const { paymentQuery,  } = usePayments();
+import DefaultLayout from "@/layout/DefaultLayout";
+import { IPayments } from "@/types/payments/payments";
+import { useCharges } from "@/hooks/useCharges";
 
-  const payments = [
-    { name: "Pago 1", status: "Completado" },
-    { name: "Pago 2", status: "Pendiente" },
-    // Agrega más pagos aquí
-  ];
-  const renderItem = ({ item }) => (
-    <View className="p-4 border-b border-gray-200">
-      <Text className="text-lg font-bold">{item.name}</Text>
-      <Text className="text-sm text-gray-500">{item.status}</Text>
-    </View>
-  );
+const PaymentItem = ({ item }: { item: IPayments }) => {
+  const { chargeQuery } = useCharges({ id: item.idcharge || "" });
+
   return (
-    <FlatList
-      data={payments}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.name}
-    />
+    <View className="p-4 border-b border-primario-600">
+      <Text>{chargeQuery.data?.name}</Text>
+      <Text className="text-sm text-primario-500">{item.state}</Text>
+    </View>
   );
 };
 
-export default paymentsHistory;
+const PaymentsHistory = () => {
+  const { paymentsQuery } = usePayments({
+    params: { idhousing: "kk4MmbbeEfGyfNn57pVH" },
+  });
+
+  const renderItem = ({ item }: { item: IPayments }) => (
+    <PaymentItem item={item} />
+  );
+
+  return (
+    <DefaultLayout>
+      <FlatList
+        data={paymentsQuery.data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id || ""}
+      />
+    </DefaultLayout>
+  );
+};
+
+export default PaymentsHistory;

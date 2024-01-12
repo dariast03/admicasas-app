@@ -10,9 +10,9 @@ type QueryType = "announcementsQuery" | "announcementQuery";
 type HookProps = {
   id?: string;
   params: {
-    idcharge: string;
-    iduser: string;
-    //idhousing: string;
+    idcharge?: string;
+    iduser?: string;
+    idhousing?: string;
     // q?: string;
     // limitResults?: number;
   };
@@ -37,13 +37,10 @@ export const usePayments = (props: HookProps) => {
 
   const { params, id = undefined, query } = props;
 
-  // const paymentsQuery = useQuery({
-  //   queryKey: ["paymentTypes", params],
-  //   queryFn: () =>
-  //     paymentService.getAllData({
-  //       ...params,
-  //     }),
-  // });
+  const paymentsQuery = useQuery({
+    queryKey: ["payments", params.idhousing],
+    queryFn: () => paymentService.getAllData(params.idhousing || ""),
+  });
 
   const paymentQuery = useQuery({
     queryKey: ["payments", params.idcharge, params.iduser],
@@ -148,6 +145,7 @@ export const usePayments = (props: HookProps) => {
   // });
 
   return {
+    paymentsQuery,
     paymentQuery,
     paymentCreateMutation,
     paymentUpdateMutation,
