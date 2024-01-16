@@ -182,8 +182,7 @@ const DetailAnnocenment = () => {
     <DefaultLayout>
       <ScrollView>
         <View className=" p-5">
-          <Text>Anucio</Text>
-          {/* <View
+          <View
             className="bg-white rounded-t-2xl overflow-hidden "
             style={styles.shadowCard}
           >
@@ -297,7 +296,7 @@ const DetailAnnocenment = () => {
                 <Text className="text-sm">
                   {announcementQuery.data?.end?.toLocaleDateString()}
                 </Text>
-              </View> 
+              </View> */}
               <Text className="font-semibold text-xl my-2">Medio de pago</Text>
               <TouchableOpacity
                 onPress={() =>
@@ -314,7 +313,7 @@ const DetailAnnocenment = () => {
                       <Text className="text-white text-center">
                         Descargar QR
                       </Text>
-                    </View> *
+                    </View> */}
 
                   {/* <TouchableOpacity
                   onPress={() =>
@@ -324,7 +323,7 @@ const DetailAnnocenment = () => {
                   <View className="rounded-xl bg-indigo-600 p-3 m-0">
                     <Text className="text-white f">Descargar QR</Text>
                   </View>
-                </TouchableOpacity> 
+                </TouchableOpacity> */}
                 </View>
               </TouchableOpacity>
             </View>
@@ -338,7 +337,7 @@ const DetailAnnocenment = () => {
                     Cargar
                   </Text>
                 </TouchableOpacity> */}
-          {/* <TouchableOpacity
+              {/* <TouchableOpacity
                 className="items-center"
                 disabled={true}
                 onPress={() => {
@@ -355,7 +354,7 @@ const DetailAnnocenment = () => {
                     {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"}
                   </Text>
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <ButtonLoader
                 className="items-center"
                 disabled={paymentQuery.data?.state === "Pendiente"}
@@ -378,7 +377,7 @@ const DetailAnnocenment = () => {
                 </Text>
               </ButtonLoader>
             </View>
-          </View> */}
+          </View>
         </View>
       </ScrollView>
     </DefaultLayout>

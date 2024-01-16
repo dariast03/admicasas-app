@@ -23,6 +23,28 @@ export default function UnprotectedLayout() {
             headerTintColor: "white",
           }}
         />
+        <Stack.Screen
+          name="payment/[id]"
+          options={{
+            headerShadowVisible: false,
+            title: "Anuncios",
+            headerStyle: {
+              backgroundColor: Colors.primario[600],
+            },
+            headerTintColor: "white",
+          }}
+        />
+        <Stack.Screen
+          name="meeting/[id]"
+          options={{
+            headerShadowVisible: false,
+            title: "Anuncios",
+            headerStyle: {
+              backgroundColor: Colors.primario[600],
+            },
+            headerTintColor: "white",
+          }}
+        />
 
         <Stack.Screen name="areas/index" options={{}} />
 

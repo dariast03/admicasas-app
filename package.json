@@ -3,7 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start --localhost --dev-client",
+    "start": "expo start --localhost -c --dev-client",
     "start:tailwind": "expo start --localhost --dev-client && npx tailwindcss --watch -i ./src/global.css -o ./src/output.css",
     "android": "expo run:android --device",
     "ios": "expo run:ios",

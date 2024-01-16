@@ -5,7 +5,7 @@ import { useAreas } from "../../../../../hooks/useAreas";
 import { Image } from "expo-image";
 import DefaultLayout from "../../../../../layout/DefaultLayout";
 
-import DetailAnnocenment from "../annoucement/[id]";
+import DetailAnnocenment from "../payment/[id]";
 
 const DetailArea = () => {
   const { id } = useLocalSearchParams();
