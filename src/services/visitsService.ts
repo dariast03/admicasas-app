@@ -17,7 +17,6 @@ const getData = async (id: string) => {
       id: docSnap.id,
     };
   } catch (e) {
-    console.log("🚀 ~ getData ~ e:", e);
     throw new Error("No se pudo obtener");
   }
 };
@@ -64,7 +63,7 @@ const getAllDataQuery = async ({
     return data;
   } catch (e) {
     console.error("Error al obtener:");
-    console.log("🚀 ~ getAllDataQuery ~ e:", e);
+
     throw new Error("No se pudo obtener");
   }
 };

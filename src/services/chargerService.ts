@@ -97,7 +97,6 @@ const getData = async (id: string) => {
     const docSnap = await docRef.get();
 
     const data = docSnap.data() as ICharge;
-    console.log("🚀 ~ getData ~ data:", data);
 
     return {
       ...data,

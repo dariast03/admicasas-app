@@ -8,6 +8,7 @@ type GetAllDataQueryParams = {
   iduser?: string;
   idcondominium: string;
   idhousing?: string;
+  idcharge?: string;
   q?: string;
   limitResults?: number;
 };
@@ -102,7 +103,7 @@ const getAllData = async (
 
 const getData = async (
   id: string,
-  { iduser }: GetAllDataQueryParams
+  { idcharge }: GetAllDataQueryParams
 ): Promise<IAnnouncement> => {
   const docRef = firestore().collection("Announcements").doc(id);
   const docSnap = await docRef.get();
@@ -123,6 +124,59 @@ const getData = async (
   };
 };
 
+const getDataDetail = async ({
+  idcharge,
+}: GetAllDataQueryParams): Promise<IAnnouncement | null> => {
+  const queryRef = firestore()
+    .collection("Announcements")
+    .where("idcharge", "==", idcharge);
+
+  const querySnapshot = await queryRef.get();
+
+  if (querySnapshot.empty) {
+    return null;
+  }
+  const docSnap = querySnapshot.docs[0];
+  const data = docSnap.data() as IAnnouncement;
+  console.log("🚀 ~ data:", data);
+
+  return {
+    ...data,
+    id: docSnap.id,
+    //@ts-ignore
+    start: new Date(data.start.toDate()),
+    //@ts-ignore
+    end: new Date(data.end.toDate()),
+  };
+};
+
+// const getDataDetail = async ({
+//   idcharge,
+// }: GetAllDataQueryParams): Promise<IAnnouncement> => {
+//   let queryRef = firestore()
+//     .collection("Announcements")
+//     .where("idcharge", "==", idcharge);
+
+//   const querySnapshot = await queryRef.get();
+
+//   const data: IAnnouncement[] = querySnapshot.docs.map((doc) => {
+//     return {
+//       ...(doc.data() as IAnnouncement),
+//       id: doc.id,
+//       //@ts-ignore
+//       start: new Date(data.start.toDate()),
+//       //@ts-ignore
+//       end: new Date(data.end.toDate()),
+//     };
+//   });
+//   console.log(
+//     "🚀 ~ constdata:IAnnouncement[]=querySnapshot.docs.map ~ data:",
+//     data
+//   );
+
+//   return data.length > 0 ? data[0] : ({} as IAnnouncement);
+// };
+
 // const getData = async (id: string) => {
 //   const docRef = doc("Announcements", id + "");
 //   const docSnap = await getDoc(docRef);
@@ -139,6 +193,7 @@ const getData = async (
 // };
 
 export default {
+  getDataDetail,
   getAllData,
   getData,
 };

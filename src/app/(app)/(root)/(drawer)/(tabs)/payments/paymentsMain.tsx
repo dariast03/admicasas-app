@@ -7,6 +7,8 @@ import Loader from "@/components/Loader";
 import { useCharges } from "@/hooks/useCharges";
 import useAuth from "@/hooks/useAuth";
 import { ICharge } from "../../../../../../types/charges/charges";
+import { router } from "expo-router";
+import { ButtonLoader } from "@/components/ButtonLoader";
 
 type Props = {
   data: ICharge;
@@ -19,6 +21,7 @@ const PaymentCard = () => {
   });
 
   const Card = ({ data }: Props) => {
+    const routeView: any = "/payment/" + data.id;
     return (
       <View
         className="p-5 m-3 rounded bg-white shadow-md"
@@ -29,7 +32,9 @@ const PaymentCard = () => {
         <Text className="text-lg text-gray-700 my-3">
           Monto a pagar: {data.amount}
         </Text>
-        <Button title="Pagar" onPress={() => console.log("Pago realizado")} />
+        <ButtonLoader onPress={() => router.push(routeView)}>
+          <Text className="text-center font-bold text-white">PAGAR</Text>
+        </ButtonLoader>
       </View>
     );
   };

@@ -5,6 +5,7 @@ import {
   FlatList,
   useWindowDimensions,
   TouchableOpacity,
+  StyleSheet,
 } from "react-native";
 
 import { Image } from "expo-image";
@@ -18,6 +19,7 @@ import { useAppContext } from "@/hooks/useAppContext";
 import Loader from "@/components/Loader";
 import { Route } from "expo-router";
 import { da } from "date-fns/locale";
+import DefaultLayout from "@/layout/DefaultLayout";
 
 type Props = {
   data: IAnnouncement;
@@ -27,7 +29,7 @@ const Card = ({ data }: Props) => {
   const { width } = useWindowDimensions();
   let routeView: any;
   if (data.type === "charge") {
-    routeView = "/payment/" + data.id;
+    routeView = "/payment/" + data.idcharge;
   } else if (data.type === "meeting") {
     routeView = "/meeting/" + data.id;
   } else {
@@ -37,7 +39,10 @@ const Card = ({ data }: Props) => {
   return (
     <Link href={routeView} asChild>
       <TouchableOpacity>
-        <View className="w-full bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-lg dark:bg-gray-800 dark:border-gray-700">
+        <View
+          style={styles.shadowCard}
+          className="w-full bg-white border border-gray-200 rounded-2xl"
+        >
           <View>
             <Image
               source={data.urlimg}
@@ -84,7 +89,7 @@ const Home = () => {
   });
 
   return (
-    <>
+    <DefaultLayout>
       <FlatList
         data={null}
         renderItem={() => null}
@@ -126,8 +131,21 @@ const Home = () => {
           </>
         }
       />
-    </>
+    </DefaultLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  shadowCard: {
+    shadowColor: "#4f46e5",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5.62,
+    elevation: 7,
+  },
+});
 
 export default Home;

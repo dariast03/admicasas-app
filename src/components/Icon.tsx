@@ -47,108 +47,114 @@ export type TIcon = {
 const Icon = ({ icon, ...props }: TIcon) => {
   const isDark = useColorScheme().colorScheme === "dark";
 
+  const color = props.color
+    ? props.color
+    : isDark
+    ? Colors.primario[100]
+    : Colors.primario[600];
+
   return (
     <>
       {icon.type === IconType.FontAweomseIcon && (
         <FontAwesome
+          {...props}
           name={icon.name}
           size={20}
           style={{
-            color: isDark ? Colors.primario[100] : Colors.primario[600],
             fontSize: 22,
             marginRight: 10,
           }}
-          {...props}
+          color={color}
         />
       )}
       {icon.type === IconType.MatetrialIcon && (
         <MaterialIcons
+          {...props}
           name={icon.name}
           size={20}
-          color={isDark ? Colors.primario[100] : Colors.primario[600]}
           style={{
             fontSize: 22,
             marginRight: 10,
           }}
-          {...props}
+          color={color}
         />
       )}
 
       {icon.type === IconType.Ionicon && (
         <Ionicons
+          {...props}
           name={icon.name}
           size={20}
+          color={color}
           style={{
-            color: isDark ? Colors.primario[100] : Colors.primario[600],
             fontSize: 22,
             marginRight: 10,
           }}
-          {...props}
         />
       )}
 
       {icon.type === IconType.AntDesign && (
         <AntDesign
+          {...props}
           name={icon.name}
           size={20}
+          color={color}
           style={{
-            color: isDark ? Colors.primario[100] : Colors.primario[600],
             fontSize: 22,
             marginRight: 10,
           }}
-          {...props}
         />
       )}
 
       {icon.type === IconType.MaterialCommunityIcons && (
         <MaterialCommunityIcons
+          {...props}
           name={icon.name}
           size={20}
-          color={isDark ? Colors.primario[100] : Colors.primario[600]}
           style={{
             fontSize: 22,
             marginRight: 10,
           }}
-          {...props}
+          color={color}
         />
       )}
 
       {icon.type === IconType.EvilIcons && (
         <EvilIcons
+          {...props}
           name={icon.name}
           size={20}
+          color={color}
           style={{
-            color: isDark ? Colors.primario[100] : Colors.primario[600],
             fontSize: 22,
             marginRight: 10,
           }}
-          {...props}
         />
       )}
 
       {icon.type === IconType.Fontisto && (
         <Fontisto
+          {...props}
           name={icon.name}
           size={20}
+          color={color}
           style={{
-            color: isDark ? Colors.primario[100] : Colors.primario[600],
             fontSize: 22,
             marginRight: 10,
           }}
-          {...props}
         />
       )}
 
       {icon.type === IconType.Feather && (
         <Feather
+          {...props}
           name={icon.name}
           size={20}
+          color={color}
           style={{
-            color: isDark ? Colors.primario[100] : Colors.primario[600],
             fontSize: 22,
             marginRight: 10,
           }}
-          {...props}
         />
       )}
     </>

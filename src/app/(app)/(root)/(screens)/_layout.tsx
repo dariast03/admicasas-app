@@ -1,5 +1,7 @@
 import Colors from "@/constants/Colors";
-import { Stack } from "expo-router";
+
+import { Stack, router } from "expo-router";
+import Icon, { IconType } from "@/components/Icon";
 
 export default function UnprotectedLayout() {
   return (
@@ -16,33 +18,67 @@ export default function UnprotectedLayout() {
           name="annoucement/[id]"
           options={{
             headerShadowVisible: false,
-            title: "Anuncios",
+            headerTitleAlign: "center",
+
+            title: "Detalle",
             headerStyle: {
               backgroundColor: Colors.primario[600],
             },
             headerTintColor: "white",
+            headerLeft: () => (
+              <Icon
+                color={"white"}
+                icon={{
+                  type: IconType.Ionicon,
+                  name: "chevron-back-outline",
+                }}
+                onPress={() => router.back()}
+              />
+            ),
           }}
         />
         <Stack.Screen
           name="payment/[id]"
           options={{
             headerShadowVisible: false,
-            title: "Anuncios",
+            headerTitleAlign: "center",
+            title: "Detalle",
             headerStyle: {
               backgroundColor: Colors.primario[600],
             },
             headerTintColor: "white",
+            headerLeft: () => (
+              <Icon
+                color={"white"}
+                icon={{
+                  type: IconType.Ionicon,
+                  name: "chevron-back-outline",
+                }}
+                onPress={() => router.back()}
+              />
+            ),
           }}
         />
         <Stack.Screen
           name="meeting/[id]"
           options={{
             headerShadowVisible: false,
-            title: "Anuncios",
+            headerTitleAlign: "center",
+            title: "Detalle",
             headerStyle: {
               backgroundColor: Colors.primario[600],
             },
             headerTintColor: "white",
+            headerLeft: () => (
+              <Icon
+                color={"white"}
+                icon={{
+                  type: IconType.Ionicon,
+                  name: "chevron-back-outline",
+                }}
+                onPress={() => router.back()}
+              />
+            ),
           }}
         />
 

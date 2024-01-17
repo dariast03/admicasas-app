@@ -24,24 +24,30 @@ import { usePayments } from "@/hooks/usePayments";
 import { IPayments } from "@/types/payments/payments";
 import { InputCustom } from "@/components/CustomInput";
 import { ButtonLoader } from "@/components/ButtonLoader";
+import { useCharges } from "@/hooks/useCharges";
 
 const DetailAnnocenment = () => {
   const { id } = useLocalSearchParams();
+
   if (!id) return <Redirect href={"/404"} />;
 
   const { width } = useWindowDimensions();
   const { user } = useSessionContext();
 
-  const { announcementQuery } = useAnnouncement({
+  const { chargeQuery } = useCharges({
     id: id + "",
-    params: { idcondominium: user?.account?.idcondominium, iduser: user.id },
+    params: { idhousing: "" },
+  });
+
+  const { announcementDetailQuery } = useAnnouncement({
+    params: { idcharge: id + "" || "", idcondominium: "" },
   });
 
   const { paymentCreateMutation, paymentQuery, paymentUpdateMutation } =
     usePayments({
       id: id + "",
       params: {
-        idcharge: announcementQuery.data?.idcharge || "",
+        idcharge: id + "",
         iduser: user.id,
       },
     });
@@ -85,7 +91,7 @@ const DetailAnnocenment = () => {
       });
     } else {
       data.iduser = user.id;
-      data.idcharge = announcementQuery.data?.charge?.id;
+      data.idcharge = id + "";
       data.state = "Pendiente";
       await paymentCreateMutation.mutateAsync({
         data,
@@ -95,15 +101,6 @@ const DetailAnnocenment = () => {
         },
       });
     }
-    // await paymentCreateMutation.mutateAsync({
-    //   data,
-    //   file: {
-    //     name: image?.fileName || "",
-    //     uri: image?.uri || "",
-    //   },
-    // });
-
-    //router.push("/incidents/");
   };
 
   const [downloadProgress, setDownloadProgress] = useState(0);
@@ -169,14 +166,14 @@ const DetailAnnocenment = () => {
     console.log(result.assets);
   };
 
-  if (announcementQuery.isLoading)
+  if (announcementDetailQuery.isLoading)
     return (
       <View className="p-5">
         <ActivityIndicator color={"#4648E5"} size={20} />
-        <Text className="text-center text-primario-600">Cargando Anuncio</Text>
+        <Text className="text-center text-primario-600">Cargando..</Text>
       </View>
     );
-  if (announcementQuery.isError) return <Text>ERROR AREA</Text>;
+  if (announcementDetailQuery.isError) return <Text>ERROR AREA</Text>;
 
   return (
     <DefaultLayout>
@@ -188,7 +185,7 @@ const DetailAnnocenment = () => {
           >
             <Image
               style={{ width, height: 200 }}
-              source={announcementQuery.data?.urlimg}
+              source={announcementDetailQuery.data?.urlimg}
             />
 
             <View className="flex-row justify-start px-4 py-3 bg-indigo-600">
@@ -221,13 +218,13 @@ const DetailAnnocenment = () => {
               </Text>
               <View className="bg-white border border-gray-300 rounded-md p-5">
                 <Text className="text-6xl text-primario-600 mt-2">
-                  Bs {announcementQuery.data?.charge?.amount}
+                  Bs {chargeQuery.data?.amount}
                 </Text>
                 <Text className="text-stone-500 mt-2">
-                  {announcementQuery.data?.charge?.name}
+                  {chargeQuery.data?.name}
                 </Text>
                 <Text className="text-stone-400 my-2">
-                  {announcementQuery.data?.charge?.description}
+                  {chargeQuery.data?.description}
                 </Text>
                 <View className="border-b border-stone-400 my-5"></View>
                 <View className="items-center">
@@ -277,84 +274,20 @@ const DetailAnnocenment = () => {
                   )}
                 </View>
               </View>
-              {/* <View className="flex-row items-center mt-4 text-gray-700">
-                <Icon
-                  icon={{
-                    type: IconType.MaterialCommunityIcons,
-                    name: "clock-time-three-outline",
-                  }}
-                />
-                <Text className="text-sm">
-                  {announcementQuery.data?.start?.toLocaleDateString()}
-                </Text>
-                <Icon
-                  icon={{
-                    type: IconType.MaterialCommunityIcons,
-                    name: "clock-time-nine-outline",
-                  }}
-                />
-                <Text className="text-sm">
-                  {announcementQuery.data?.end?.toLocaleDateString()}
-                </Text>
-              </View> */}
               <Text className="font-semibold text-xl my-2">Medio de pago</Text>
               <TouchableOpacity
-                onPress={() =>
-                  downloadFile(announcementQuery.data?.charge?.urlimg || "")
-                }
+                onPress={() => downloadFile(chargeQuery.data?.urlimg || "")}
               >
                 <View className="border border-gray-300 mt-2 items-center rounded-md p-5">
                   <Image
                     style={{ width: 200, height: 200 }}
-                    source={announcementQuery.data?.charge?.urlimg}
+                    source={chargeQuery.data?.urlimg}
                   />
-
-                  {/* <View className="rounded-sm bg-indigo-600 p-3 ">
-                      <Text className="text-white text-center">
-                        Descargar QR
-                      </Text>
-                    </View> */}
-
-                  {/* <TouchableOpacity
-                  onPress={() =>
-                    downloadFile(announcementQuery.data?.charge?.urlimg || "")
-                  }
-                >
-                  <View className="rounded-xl bg-indigo-600 p-3 m-0">
-                    <Text className="text-white f">Descargar QR</Text>
-                  </View>
-                </TouchableOpacity> */}
                 </View>
               </TouchableOpacity>
             </View>
 
             <View className="px-5 pb-5">
-              {/* <TouchableOpacity className="items-center">
-                  <Text
-                    className="text-white text-center text-xl font-bold"
-                    onPress={() => pickImage()}
-                  >
-                    Cargar
-                  </Text>
-                </TouchableOpacity> */}
-              {/* <TouchableOpacity
-                className="items-center"
-                disabled={true}
-                onPress={() => {
-                  if (!paymentCreateMutation.isPending) {
-                    onSubmit({} as IPayments);
-                  }
-                }}
-                style={{
-                  opacity: paymentQuery.data?.state === "Pendiente" ? 0.5 : 1,
-                }}
-              >
-                <View className="rounded-xl bg-indigo-600 p-3">
-                  <Text className="text-white text-center text-xl font-bold">
-                    {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"}
-                  </Text>
-                </View>
-              </TouchableOpacity> */}
               <ButtonLoader
                 className="items-center"
                 disabled={paymentQuery.data?.state === "Pendiente"}

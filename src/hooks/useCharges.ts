@@ -15,7 +15,6 @@ export const useCharges = (props: HookProps) => {
   }
 
   const { params, id } = props;
-  console.log("🚀 ~ useCharges ~ id:", id);
 
   const chargesQuery = useQuery({
     queryKey: ["charges", params],
