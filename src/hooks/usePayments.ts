@@ -76,7 +76,13 @@ export const usePayments = (props: HookProps) => {
 
       return creation();
     },
+
     onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: "Exito",
+        text2: "¡Pago registrado exitosamente!",
+      });
       client.invalidateQueries({
         queryKey: ["payments"],
       });
@@ -85,6 +91,11 @@ export const usePayments = (props: HookProps) => {
       });
     },
     onError: (error: any) => {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Hubo un error",
+      });
       console.log(error);
     },
   });

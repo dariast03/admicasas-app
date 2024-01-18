@@ -37,12 +37,12 @@ const Card = ({ data }: Props) => {
   }
 
   return (
-    <Link href={routeView} asChild>
-      <TouchableOpacity>
-        <View
-          style={styles.shadowCard}
-          className="w-full bg-white border border-gray-200 rounded-2xl"
-        >
+    <View
+      style={styles.shadowCard}
+      className="w-full bg-white border border-gray-200 rounded-2xl"
+    >
+      <Link href={routeView} asChild>
+        <TouchableOpacity>
           <View>
             <Image
               source={data.urlimg}
@@ -63,9 +63,9 @@ const Card = ({ data }: Props) => {
               </Text>
             </View>
           </View>
-        </View>
-      </TouchableOpacity>
-    </Link>
+        </TouchableOpacity>
+      </Link>
+    </View>
   );
 };
 
@@ -78,7 +78,7 @@ const Home = () => {
     query: ["announcementsQuery"],
     params: {
       idcondominium: user?.account?.idcondominium,
-      idhousing: selectedHousing,
+      idhousing: selectedHousing ? selectedHousing : user?.account?.idhousing,
     },
   });
 

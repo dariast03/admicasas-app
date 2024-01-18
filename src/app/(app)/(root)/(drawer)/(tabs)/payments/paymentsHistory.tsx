@@ -7,6 +7,7 @@ import { usePayments } from "@/hooks/usePayments";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { IPayments } from "@/types/payments/payments";
 import { useCharges } from "@/hooks/useCharges";
+import { useSessionContext } from "@/hooks/useSessionContext";
 
 const PaymentItem = ({ item }: { item: IPayments }) => {
   const { chargeQuery } = useCharges({ id: item.idcharge || "" });
@@ -20,8 +21,9 @@ const PaymentItem = ({ item }: { item: IPayments }) => {
 };
 
 const PaymentsHistory = () => {
+  const { user } = useSessionContext();
   const { paymentsQuery } = usePayments({
-    params: { idhousing: "kk4MmbbeEfGyfNn57pVH" },
+    params: { idhousing: user.account.idhousing },
   });
 
   const renderItem = ({ item }: { item: IPayments }) => (

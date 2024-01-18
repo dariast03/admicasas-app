@@ -11,6 +11,7 @@ export interface IAccount {
   state: boolean;
   idcondominium: string;
   idcompany: string;
+  idhousing: string;
   condominiums: [];
 }
 export interface IUser {

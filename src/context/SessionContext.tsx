@@ -3,13 +3,13 @@ import { useStorageState } from "../hooks/useStorageState";
 import { keysStorage } from "../data";
 
 import { IUser } from "../types/user";
+import { set } from "date-fns";
 
 type TSessionContext = {
   signIn: (user: IUser) => void;
   signOut: () => void;
   user: IUser;
-  session?: string | null;
-  isLoading: boolean;
+  status: StatusAuth;
   showWelcomeScreen?: string | null;
   isLoadingShowWelcomeScreen: boolean;
   handleShowWelcomeScreen: (value: string | null) => void;
@@ -20,10 +20,10 @@ export const SessionContext = createContext<TSessionContext>(
   {} as TSessionContext
 );
 
+type StatusAuth = "no-authenticated" | "authenticated" | "pending";
+
 export function SessionProvider(props: PropsWithChildren) {
-  const [[isLoading, session], setSession] = useStorageState(
-    keysStorage.AUTH_SESSION
-  );
+  const [status, setStatus] = useState<StatusAuth>("pending");
 
   const [
     [isLoadingShowWelcomeScreen, showWelcomeScreen],
@@ -50,17 +50,18 @@ export function SessionProvider(props: PropsWithChildren) {
       value={{
         user,
         signIn: (user) => {
-          setSession("xxx");
           setUser(user);
+          setStatus("authenticated");
         },
         signOut: () => {
-          setSession(null);
+          //
+          setStatus("no-authenticated");
+          setUser({} as IUser);
         },
+        status,
         handleShowWelcomeScreen: (value) => {
           setShowWelcomeScreen(value);
         },
-        session,
-        isLoading,
         isLoadingShowWelcomeScreen,
         showWelcomeScreen,
         updateCompanyCondominium,

@@ -9,15 +9,16 @@ import useAuth from "@/hooks/useAuth";
 import { ICharge } from "../../../../../../types/charges/charges";
 import { router } from "expo-router";
 import { ButtonLoader } from "@/components/ButtonLoader";
+import { useSessionContext } from "@/hooks/useSessionContext";
 
 type Props = {
   data: ICharge;
 };
 
 const PaymentCard = () => {
-  const { user } = useAuth();
+  const { user } = useSessionContext();
   const { chargesQuery } = useCharges({
-    params: { idhousing: "kk4MmbbeEfGyfNn57pVH" },
+    params: { idhousing: user.account.idhousing },
   });
 
   const Card = ({ data }: Props) => {

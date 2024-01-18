@@ -4,14 +4,14 @@ import { useStorageState } from "../../../hooks/useStorageState";
 import { Text } from "react-native";
 
 export default function UnprotectedLayout() {
-  const { session, isLoading, isLoadingShowWelcomeScreen, showWelcomeScreen } =
+  const { status, isLoadingShowWelcomeScreen, showWelcomeScreen } =
     useSessionContext();
 
-  if (isLoading || isLoadingShowWelcomeScreen) {
+  if (status == "pending" || isLoadingShowWelcomeScreen) {
     return <Text>Loading...</Text>;
   }
 
-  if (session && showWelcomeScreen == "true") {
+  if (status == "authenticated" && showWelcomeScreen == "true") {
     return <Redirect href="/" />;
   }
 

@@ -30,8 +30,8 @@ const useAuth = () => {
 
       console.log("LOGIN");
       const response = await authService.login(data);
-      console.log(response);
       if (!response) return;
+      console.log(response, 222);
       signIn(response);
     } finally {
       setIsLoading(false);

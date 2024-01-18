@@ -1,7 +1,7 @@
 import { useAnnouncement } from "@/hooks/useAnnouncement";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { Image } from "expo-image";
-import { Redirect, useLocalSearchParams } from "expo-router";
+import { Redirect, Stack, useLocalSearchParams } from "expo-router";
 import {
   ActivityIndicator,
   ScrollView,
@@ -40,7 +40,10 @@ const DetailAnnocenment = () => {
   });
 
   const { announcementDetailQuery } = useAnnouncement({
-    params: { idcharge: id + "" || "", idcondominium: "" },
+    params: {
+      idcharge: id + "" || "",
+      idcondominium: user.account.idcondominium,
+    },
   });
 
   const { paymentCreateMutation, paymentQuery, paymentUpdateMutation } =
@@ -91,8 +94,10 @@ const DetailAnnocenment = () => {
       });
     } else {
       data.iduser = user.id;
+      data.idhousing = user.account.idhousing;
       data.idcharge = id + "";
       data.state = "Pendiente";
+      data.date = new Date();
       await paymentCreateMutation.mutateAsync({
         data,
         file: {
@@ -177,6 +182,11 @@ const DetailAnnocenment = () => {
 
   return (
     <DefaultLayout>
+      <Stack.Screen
+        options={{
+          title: chargeQuery.data?.name,
+        }}
+      />
       <ScrollView>
         <View className=" p-5">
           <View
