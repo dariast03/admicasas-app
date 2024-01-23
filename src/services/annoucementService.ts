@@ -103,14 +103,16 @@ const getAllData = async (
 
 const getData = async (
   id: string,
-  { idcharge }: GetAllDataQueryParams
+  { idcharge, idhousing }: GetAllDataQueryParams
 ): Promise<IAnnouncement> => {
   const docRef = firestore().collection("Announcements").doc(id);
   const docSnap = await docRef.get();
   //const data = docSnap.data() as IAnnouncement;
 
   const data = docSnap.data() as IAnnouncement;
-  const charge = await chargerService.getData(data.idcharge || "");
+  const charge = await chargerService.getData(data.idcharge || "", {
+    idhousing: idhousing || "",
+  });
 
   return {
     ...data,
@@ -138,7 +140,6 @@ const getDataDetail = async ({
   }
   const docSnap = querySnapshot.docs[0];
   const data = docSnap.data() as IAnnouncement;
-  console.log("🚀 ~ data:", data);
 
   return {
     ...data,

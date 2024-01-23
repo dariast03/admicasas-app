@@ -36,7 +36,7 @@ const DetailAnnocenment = () => {
 
   const { chargeQuery } = useCharges({
     id: id + "",
-    params: { idhousing: "" },
+    params: { idhousing: user.account.idhousing },
   });
 
   const { announcementDetailQuery } = useAnnouncement({
@@ -193,9 +193,14 @@ const DetailAnnocenment = () => {
             className="bg-white rounded-t-2xl overflow-hidden "
             style={styles.shadowCard}
           >
+            <Text>{announcementDetailQuery.data?.urlimg}</Text>
             <Image
               style={{ width, height: 200 }}
-              source={announcementDetailQuery.data?.urlimg}
+              source={
+                announcementDetailQuery.data?.urlimg === undefined
+                  ? "https://th.bing.com/th/id/OIP.FD_DKax9RQv_s7tizNOL_wHaDo?rs=1&pid=ImgDetMain"
+                  : announcementDetailQuery.data.urlimg
+              }
             />
 
             <View className="flex-row justify-start px-4 py-3 bg-indigo-600">

@@ -39,6 +39,21 @@ const getAllData = async ({
   }
 };
 
+const getData = async (id: string) => {
+  try {
+    const docRef = firestore().collection("Housing").doc(id);
+    const docSnap = await docRef.get();
+    const data = docSnap.data() as IHousing;
+    return {
+      ...data,
+      id: docSnap.id,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default {
   getAllData,
+  getData,
 };

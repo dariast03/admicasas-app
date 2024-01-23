@@ -93,9 +93,9 @@ export default function Layout() {
           <MaterialTopTabs.Screen
             name="payments"
             options={{
-              title: "Pagos",
+              title: "Cargos",
               tabBarIcon: ({ color }) => (
-                <MaterialIcons name="donut-small" color={color} size={20} />
+                <MaterialIcons name="payments" color={color} size={20} />
               ),
             }}
           />
@@ -105,7 +105,7 @@ export default function Layout() {
             options={{
               title: "Reservas",
               tabBarIcon: ({ color }) => (
-                <MaterialIcons name="no-drinks" color={color} size={20} />
+                <MaterialIcons name="calendar-today" color={color} size={20} />
               ),
             }}
           />

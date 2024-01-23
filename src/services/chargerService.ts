@@ -1,6 +1,8 @@
 import firestore from "@react-native-firebase/firestore";
 import { ICharge } from "@/types/charges/charges";
 import paymentService from "./paymentService";
+import paymentTypeService from "./paymentTypeService";
+import housingService from "./housingService";
 
 type GetDataQueryParams = {
   idhousing: string;
@@ -36,7 +38,14 @@ const getAllData = async ({
 
     for (const doc of querySnapshot.docs) {
       const chargeData = doc.data() as ICharge;
-      console.log("🚀 ~ chargeData:", doc.id);
+
+      const paymentTypes = await paymentTypeService.getData(
+        chargeData.idpaymenttypes
+      );
+      if (paymentTypes?.type === "expensa") {
+        const housing = await housingService.getData(idhousing);
+        chargeData.amount = housing?.amount;
+      }
 
       const paymentQuerySnapshot = await firestore()
         .collection("Payments")
@@ -44,8 +53,6 @@ const getAllData = async ({
         .get();
 
       const paymentExists = paymentQuerySnapshot.docs.some((paymentDoc) => {
-        console.log("🚀 ~ paymentExists ~ paymentDoc:", paymentDoc.data());
-
         if (
           paymentDoc.data().state === "Aprobado" ||
           paymentDoc.data().state === "Pendiente"
@@ -114,20 +121,27 @@ const getAllData = async ({
 //   }
 // };
 
-const getData = async (id: string) => {
+const getData = async (id: string, { idhousing }: GetDataQueryParams) => {
   try {
     const docRef = firestore().collection(FirestoreKey).doc(id);
     const docSnap = await docRef.get();
 
     const data = docSnap.data() as ICharge;
 
+    const dataTypes = await paymentTypeService.getData(data.idpaymenttypes);
+
+    if (dataTypes?.type == "expensa") {
+      const hounsing = await housingService.getData(idhousing);
+
+      data.amount = hounsing?.amount;
+    }
     return {
       ...data,
+      id: docSnap.id,
       //@ts-ignore
       start: new Date(data.start.toDate()),
       //@ts-ignore
       end: new Date(data.end.toDate()),
-      id: docSnap.id,
     };
   } catch (error) {
     console.log(error);

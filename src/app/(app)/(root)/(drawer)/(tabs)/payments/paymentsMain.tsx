@@ -1,15 +1,16 @@
 import { View, Text, Button, StyleSheet } from "react-native";
 import React from "react";
-import LayoutWithTopBar from "../../../../../../layout/LayoutWithTopBar";
+
 import DefaultLayout from "@/layout/DefaultLayout";
 import { FlatList } from "react-native-gesture-handler";
 import Loader from "@/components/Loader";
 import { useCharges } from "@/hooks/useCharges";
-import useAuth from "@/hooks/useAuth";
+
 import { ICharge } from "../../../../../../types/charges/charges";
 import { router } from "expo-router";
 import { ButtonLoader } from "@/components/ButtonLoader";
 import { useSessionContext } from "@/hooks/useSessionContext";
+import Icon, { IconType } from "@/components/Icon";
 
 type Props = {
   data: ICharge;
@@ -24,12 +25,23 @@ const PaymentCard = () => {
   const Card = ({ data }: Props) => {
     const routeView: any = "/payment/" + data.id;
     return (
-      <View
-        className="p-5 m-3 rounded bg-white shadow-md"
-        style={styles.cardShadow}
-      >
+      <View className="p-5 m-3 rounded-lg bg-white" style={styles.shadowCard}>
         <Text className="text-xl font-bold">{data.name}</Text>
         <Text className="text-base text-gray-600">{data.description}</Text>
+        <View className="border-b border-stone-400 my-5"></View>
+        <Text className="text-base text-gray-600">Fecha limite</Text>
+        <View className="flex-row items-center">
+          <Icon
+            icon={{
+              type: IconType.AntDesign,
+              name: "calendar",
+            }}
+          />
+          <Text className="text-stone-400 my-2">
+            {data?.start?.toLocaleDateString()}
+          </Text>
+        </View>
+
         <Text className="text-lg text-gray-700 my-3">
           Monto a pagar: {data.amount}
         </Text>
@@ -83,13 +95,15 @@ const PaymentCard = () => {
 };
 
 const styles = StyleSheet.create({
-  cardShadow: {
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
+  shadowCard: {
+    shadowColor: "#4f46e5",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5.62,
+    elevation: 7,
   },
 });
 

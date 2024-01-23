@@ -23,7 +23,11 @@ const DetailAnnocenment = () => {
 
   const { announcementQuery } = useAnnouncement({
     id: id + "",
-    params: { idcondominium: user?.account?.idcondominium, iduser: user.id },
+    params: {
+      idcondominium: user?.account?.idcondominium,
+      iduser: user.id,
+      idhousing: user.account.idhousing,
+    },
   });
 
   if (announcementQuery.isLoading)

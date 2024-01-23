@@ -14,4 +14,5 @@ export interface IHousing {
   residents: IResident[];
   idproprietary?: string;
   proprietary?: IUserAccount;
+  amount: decimal;
 }

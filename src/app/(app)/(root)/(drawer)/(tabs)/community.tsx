@@ -1,4 +1,10 @@
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import React from "react";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { FontAwesome } from "@expo/vector-icons";
@@ -12,18 +18,18 @@ type Menu = {
 
 const menu: Menu[] = [
   {
-    icon: <FontAwesome name="deafness" size={50} color="#FFF" />,
+    icon: <FontAwesome name="warning" size={50} color="#4f46e5" />,
     title: "INCIDENTES",
     to: "/incidents",
   },
   {
-    icon: <FontAwesome name="diamond" size={50} color="#FFF" />,
-    title: "VISITAS",
+    icon: <FontAwesome name="group" size={50} color="#4f46e5" />,
+    title: "LIBRO VISITAS",
     to: "/visits",
   },
   {
-    icon: <FontAwesome name="ticket" size={50} color="#FFF" />,
-    title: "OTRO MAS",
+    icon: <FontAwesome name="group" size={50} color="#4f46e5" />,
+    title: "REUNIONES",
     to: "/otromas",
   },
 ];
@@ -56,11 +62,25 @@ type CardProps = {
 };
 const Card: React.FC<CardProps> = ({ icon, title }) => {
   return (
-    <View className="bg-primario-400 p-5 items-center  justify-center gap-3 rounded-2xl w-40 h-40">
+    <View
+      className="bg-white p-5 items-center  justify-center gap-3 rounded-2xl w-40 h-40"
+      style={styles.shadowCard}
+    >
       {icon}
-      <Text className="text-white">{title}</Text>
+      <Text className="text-primario-600">{title}</Text>
     </View>
   );
 };
-
+const styles = StyleSheet.create({
+  shadowCard: {
+    shadowColor: "#4f46e5",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5.62,
+    elevation: 7,
+  },
+});
 export default Community;

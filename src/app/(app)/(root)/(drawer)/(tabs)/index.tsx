@@ -54,7 +54,6 @@ const Card = ({ data }: Props) => {
           </View>
           <View className="p-5">
             <View>
-              <Text>{data.id + data.type}</Text>
               <Text className="mb-1 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                 {data.title}
               </Text>
