@@ -36,12 +36,15 @@ const menu: Menu[] = [
 const Community = () => {
   return (
     <DefaultLayout withSafeArea={false}>
+      <Text className="text-center text-primario-600 text-2xl mt-10">
+        COMUNIDAD
+      </Text>
       <FlatList
         data={null}
-        contentContainerClassName="p-4"
+        contentContainerClassName="p-5 flex-1"
         renderItem={() => null}
         ListHeaderComponent={() => (
-          <View className="flex-row flex-wrap gap-2 justify-center">
+          <View className=" flex-row flex-wrap gap-10 justify-center">
             {menu.map((option, i) => (
               <Link href={option.to} key={option.title + i} asChild>
                 <TouchableOpacity activeOpacity={0.8}>
@@ -63,7 +66,7 @@ type CardProps = {
 const Card: React.FC<CardProps> = ({ icon, title }) => {
   return (
     <View
-      className="bg-white p-5 items-center  justify-center gap-3 rounded-2xl w-40 h-40"
+      className="bg-white p-5 items-center  justify-center gap-3 rounded-2xl w-44 h-44"
       style={styles.shadowCard}
     >
       {icon}

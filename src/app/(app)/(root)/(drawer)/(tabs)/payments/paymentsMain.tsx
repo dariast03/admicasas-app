@@ -6,7 +6,7 @@ import { FlatList } from "react-native-gesture-handler";
 import Loader from "@/components/Loader";
 import { useCharges } from "@/hooks/useCharges";
 
-import { ICharge } from "../../../../../../types/charges/charges";
+import { ICharge } from "@/types/charges/charges";
 import { router } from "expo-router";
 import { ButtonLoader } from "@/components/ButtonLoader";
 import { useSessionContext } from "@/hooks/useSessionContext";

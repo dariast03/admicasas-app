@@ -89,6 +89,9 @@ const Home = () => {
 
   return (
     <DefaultLayout>
+      <Text className="bg-primario-600 p-6 rounded-b-3xl text-white font-black">
+        ADMICASAS
+      </Text>
       <FlatList
         data={null}
         renderItem={() => null}

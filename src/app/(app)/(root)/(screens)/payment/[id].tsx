@@ -193,7 +193,6 @@ const DetailAnnocenment = () => {
             className="bg-white rounded-t-2xl overflow-hidden "
             style={styles.shadowCard}
           >
-            <Text>{announcementDetailQuery.data?.urlimg}</Text>
             <Image
               style={{ width, height: 200 }}
               source={
