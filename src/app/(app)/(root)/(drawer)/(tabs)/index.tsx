@@ -20,6 +20,7 @@ import Loader from "@/components/Loader";
 import { Route } from "expo-router";
 import { da } from "date-fns/locale";
 import DefaultLayout from "@/layout/DefaultLayout";
+import { useUsers } from "@/hooks/useUsers";
 
 type Props = {
   data: IAnnouncement;
@@ -39,19 +40,18 @@ const Card = ({ data }: Props) => {
   return (
     <View
       style={styles.shadowCard}
-      className="w-full bg-white border border-gray-200 rounded-2xl"
+      className="w-full bg-white border border-gray-200 rounded-2xl overflow-hidden"
     >
       <Link href={routeView} asChild>
         <TouchableOpacity>
-          <View>
-            <Image
-              source={data.urlimg}
-              style={{
-                maxWidth: width,
-                height: 200,
-              }}
-            />
-          </View>
+          <Image
+            source={data.urlimg}
+            style={{
+              maxWidth: width,
+              height: 200,
+            }}
+          />
+
           <View className="p-5">
             <View>
               <Text className="mb-1 text-xl font-bold tracking-tight text-gray-900 dark:text-white">

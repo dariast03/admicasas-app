@@ -44,7 +44,7 @@ const Community = () => {
         contentContainerClassName="p-5 flex-1"
         renderItem={() => null}
         ListHeaderComponent={() => (
-          <View className=" flex-row flex-wrap gap-10 justify-center">
+          <View className=" flex-row flex-wrap gap-10 justify-center ">
             {menu.map((option, i) => (
               <Link href={option.to} key={option.title + i} asChild>
                 <TouchableOpacity activeOpacity={0.8}>
@@ -66,7 +66,7 @@ type CardProps = {
 const Card: React.FC<CardProps> = ({ icon, title }) => {
   return (
     <View
-      className="bg-white p-5 items-center  justify-center gap-3 rounded-2xl w-44 h-44"
+      className="bg-white p-5 items-center  justify-center gap-3 rounded-2xl w-44 h-44 border border-gray-200"
       style={styles.shadowCard}
     >
       {icon}

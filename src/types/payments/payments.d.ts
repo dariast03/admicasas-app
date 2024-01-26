@@ -3,6 +3,7 @@ export interface IPayments {
   idhousing?: string;
   iduser?: string;
   idcharge?: string;
+  idcondominium?: string;
   date: Date;
   state: "Pendiente" | "Aprobado" | "Rechazado";
   urlimg: string;

@@ -97,6 +97,7 @@ const DetailAnnocenment = () => {
       data.idhousing = user.account.idhousing;
       data.idcharge = id + "";
       data.state = "Pendiente";
+      data.idcondominium = user.account.idcondominium;
       data.date = new Date();
       await paymentCreateMutation.mutateAsync({
         data,

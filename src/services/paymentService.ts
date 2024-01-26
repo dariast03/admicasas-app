@@ -13,14 +13,15 @@ const getData = async (id: string) => {
 
     return {
       ...data,
-      //@ts-ignore
       id: docSnap.id,
+      //@ts-ignore
     };
   } catch (e) {
     console.log(e);
   }
 };
 const getAllData = async (idhousing: string) => {
+  console.log("🚀 ~ getAllData ~ idhousing:", idhousing);
   try {
     let queryRef = firestore()
       .collection(FirestoreKey)

@@ -122,6 +122,7 @@ const getAllData = async ({
 // };
 
 const getData = async (id: string, { idhousing }: GetDataQueryParams) => {
+  console.log("🚀 ~ getData ~ idhousing:", idhousing);
   try {
     const docRef = firestore().collection(FirestoreKey).doc(id);
     const docSnap = await docRef.get();
