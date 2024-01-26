@@ -62,7 +62,8 @@
     "react-native-toast-message": "^2.1.8",
     "react-native-web": "~0.19.6",
     "rn-fetch-blob": "^0.12.0",
-    "zustand": "^4.4.7"
+    "zustand": "^4.4.7",
+    "expo-notifications": "~0.20.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
