@@ -7,7 +7,7 @@ import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 const useAuth = () => {
   // const { setLogin, user, status, setLogout, setCondominium } = useAuthStore();
-  const { signIn, signOut, user } = useSessionContext();
+  const { signIn, signOut, user, status } = useSessionContext();
   const [isLoading, setIsLoading] = useState(false);
 
   const onLogin = async (data: IFormLogin) => {
@@ -97,7 +97,7 @@ const useAuth = () => {
 
   return {
     user,
-    //  status,
+    status,
     isLoading,
     onLogin,
     onRegister,
