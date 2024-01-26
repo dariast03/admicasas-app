@@ -12,6 +12,7 @@ import { SessionProvider } from "../context/SessionContext";
 import "../global.css";
 import "../output.css";
 import Toast from "react-native-toast-message";
+import messaging from "@react-native-firebase/messaging";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -25,6 +26,10 @@ export const unstable_settings = {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+messaging().setBackgroundMessageHandler(async (msg) => {
+  console.log("NOTIFICATION ON BACKGROUND", msg.data);
+});
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -70,6 +75,7 @@ function RootLayoutNav() {
 import { SessionProvider } from "../context/SessionContext";
 import { useStorageState } from "../hooks/useStorageState";
 import { Text } from "../components/Themed";
+import messaging from '@react-native-firebase/messaging';
 
 export default function Root() {
   // Set up the auth context and render our layout inside of it.
