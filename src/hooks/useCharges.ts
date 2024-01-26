@@ -24,7 +24,7 @@ export const useCharges = (props: HookProps) => {
       }),
   });
   const chargeQuery = useQuery({
-    queryKey: ["charges", id],
+    queryKey: ["charges", id, params?.idhousing],
     queryFn: () =>
       chargerService.getData(id || "", { idhousing: params?.idhousing || "" }),
     enabled: !!id,

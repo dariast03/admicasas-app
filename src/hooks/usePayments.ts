@@ -11,7 +11,6 @@ type HookProps = {
   id?: string;
   params: {
     idcharge?: string;
-    iduser?: string;
     idhousing?: string;
     // q?: string;
     // limitResults?: number;
@@ -43,13 +42,13 @@ export const usePayments = (props: HookProps) => {
   });
 
   const paymentQuery = useQuery({
-    queryKey: ["payments", params.idcharge, params.iduser],
+    queryKey: ["payments", params.idcharge, params.idhousing],
     queryFn: () =>
       paymentService.getDataAnnouncement(
         params.idcharge || "",
-        params.iduser || ""
+        params.idhousing || ""
       ),
-    enabled: !!params.idcharge && !!params.iduser,
+    enabled: !!params.idcharge && !!params.idhousing,
   });
 
   const paymentCreateMutation = useMutation({

@@ -25,6 +25,7 @@ import { IPayments } from "@/types/payments/payments";
 import { InputCustom } from "@/components/CustomInput";
 import { ButtonLoader } from "@/components/ButtonLoader";
 import { useCharges } from "@/hooks/useCharges";
+import { useAppContext } from "@/hooks/useAppContext";
 
 const DetailAnnocenment = () => {
   const { id } = useLocalSearchParams();
@@ -33,10 +34,12 @@ const DetailAnnocenment = () => {
 
   const { width } = useWindowDimensions();
   const { user } = useSessionContext();
+  const { selectedHousing } = useAppContext();
 
+  console.log("🚀 ~ DetailAnnocenment ~ selectedHousing:", selectedHousing);
   const { chargeQuery } = useCharges({
     id: id + "",
-    params: { idhousing: user.account.idhousing },
+    params: { idhousing: selectedHousing },
   });
 
   const { announcementDetailQuery } = useAnnouncement({
@@ -51,7 +54,7 @@ const DetailAnnocenment = () => {
       id: id + "",
       params: {
         idcharge: id + "",
-        iduser: user.id,
+        idhousing: selectedHousing,
       },
     });
 

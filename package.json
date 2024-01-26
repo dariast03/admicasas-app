@@ -42,6 +42,7 @@
     "expo-image": "~1.3.5",
     "expo-image-picker": "~14.3.2",
     "expo-linking": "~5.0.2",
+    "expo-notifications": "~0.20.1",
     "expo-router": "2.0.0",
     "expo-secure-store": "~12.3.1",
     "expo-splash-screen": "~0.20.5",
@@ -53,6 +54,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.48.2",
     "react-native": "0.72.6",
+    "react-native-calendars": "^1.1303.0",
     "react-native-element-dropdown": "^2.10.1",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-pager-view": "6.2.0",
@@ -62,8 +64,7 @@
     "react-native-toast-message": "^2.1.8",
     "react-native-web": "~0.19.6",
     "rn-fetch-blob": "^0.12.0",
-    "zustand": "^4.4.7",
-    "expo-notifications": "~0.20.1"
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -41,12 +41,12 @@ const getAllData = async (idhousing: string) => {
   }
 };
 
-const getDataAnnouncement = async (idcharge: string, iduser: string) => {
+const getDataAnnouncement = async (idcharge: string, idhousing: string) => {
   try {
     let queryRef = firestore()
       .collection(FirestoreKey)
       .where("idcharge", "==", idcharge)
-      .where("iduser", "==", iduser);
+      .where("idhousing", "==", idhousing);
 
     const querySnapshot = await queryRef.get();
 

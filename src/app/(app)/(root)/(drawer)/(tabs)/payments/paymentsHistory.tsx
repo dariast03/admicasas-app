@@ -13,6 +13,8 @@ import { useSessionContext } from "@/hooks/useSessionContext";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { IPayments } from "@/types/payments/payments";
 import { Button } from "react-native";
+import { useAppContext } from "@/hooks/useAppContext";
+import Tag from "@/components/Tag";
 
 interface typePayments {
   id?: string | undefined;
@@ -34,7 +36,9 @@ const PaymentItem = ({
     <View style={styles.itemContainer}>
       <TouchableOpacity onPress={openModal}>
         <Text>{chargeQuery.data?.name}</Text>
-        <Text style={styles.text}>{item.state}</Text>
+        <View className="flex-row items-center">
+          <Tag value={item.state} severity="info" />
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -43,6 +47,7 @@ const PaymentItem = ({
 const PaymentsHistory = () => {
   const { user } = useSessionContext();
   const [modalVisible, setModalVisible] = useState(false);
+  const { selectedHousing } = useAppContext();
 
   const openModal = () => {
     setModalVisible(true);
@@ -53,7 +58,7 @@ const PaymentsHistory = () => {
   };
 
   const { paymentsQuery } = usePayments({
-    params: { idhousing: user.account.idhousing },
+    params: { idhousing: selectedHousing },
   });
 
   const renderItem = ({ item }: { item: IPayments }) => (

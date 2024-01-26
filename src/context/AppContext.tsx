@@ -13,6 +13,7 @@ export const AppContext = createContext<TAppContext>({} as TAppContext);
 export function AppProvider(props: PropsWithChildren) {
   const [[isLoadingSelectedHousing, selectedHousing], setSelectedHousing] =
     useStorageState(keysStorage.SELECTER_HOUSING);
+  console.log("id selecionado", selectedHousing);
 
   const updateHousing = (id: string) => {
     setSelectedHousing(id);
