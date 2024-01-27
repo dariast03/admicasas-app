@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React, { useState } from "react";
 
 import DefaultLayout from "@/layout/DefaultLayout";
-import { Agenda, LocaleConfig } from "react-native-calendars";
+import { Agenda, AgendaSchedule, LocaleConfig } from "react-native-calendars";
 
 const Reservations = () => {
   const [items, setItems] = useState<{
@@ -79,9 +79,9 @@ const Reservations = () => {
   LocaleConfig.defaultLocale = "es";
   return (
     <DefaultLayout>
-      <View>
+      <View className="flex-1">
         <Agenda
-          items={items}
+          items={items as any}
           loadItemsForMonth={loadItems}
           selected={"2024-01-26"}
           renderItem={renderItem}
