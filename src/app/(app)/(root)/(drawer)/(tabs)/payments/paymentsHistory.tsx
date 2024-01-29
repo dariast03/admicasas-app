@@ -33,11 +33,11 @@ const PaymentItem = ({
   const { chargeQuery } = useCharges({ id: item.idcharge || "" });
 
   return (
-    <View style={styles.itemContainer}>
-      <TouchableOpacity onPress={openModal}>
-        <Text>{chargeQuery.data?.name}</Text>
-        <View className="flex-row items-center">
-          <Tag value={item.state} severity="info" />
+    <View className="p-4 border-b border-primario-400">
+      <TouchableOpacity onPress={openModal} className="cursor-pointer">
+        <Text className="text-black">{chargeQuery.data?.name}</Text>
+        <View className="flex-row">
+          <Tag severity="info" value={item.state} />
         </View>
       </TouchableOpacity>
     </View>
@@ -73,50 +73,23 @@ const PaymentsHistory = () => {
         keyExtractor={(item) => item.id || ""}
       />
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={closeModal}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text>Contenido del modal</Text>
-            <Button title="Cerrar Modal" onPress={closeModal} />
+      {modalVisible && (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={closeModal}
+        >
+          <View className="flex items-center justify-center h-full">
+            <View className="bg-white p-4 rounded border">
+              <Text>Contenido del modal</Text>
+              <Button title="Cerrar Modal" onPress={closeModal} />
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      )}
     </DefaultLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  itemContainer: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(0, 0, 0, 0.1)",
-  },
-  text: {
-    fontSize: 14,
-    color: "black",
-  },
-});
 
 export default PaymentsHistory;
