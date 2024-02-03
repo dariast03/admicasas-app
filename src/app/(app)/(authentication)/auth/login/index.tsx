@@ -19,7 +19,7 @@ GoogleSignin.configure({
 });
 
 import auth from "@react-native-firebase/auth";
-import { Link } from "expo-router";
+import { Link, Stack } from "expo-router";
 import SvgComponent from "@/components/SvgComponent";
 
 async function onGoogleButtonPress() {
@@ -60,6 +60,12 @@ const Login = () => {
 
   return (
     <View className="flex-1">
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+      />
+
       <View
         style={{
           position: "absolute",
@@ -69,61 +75,70 @@ const Login = () => {
           zIndex: -1,
         }}
       >
-        <SvgComponent></SvgComponent>
+        <SvgComponent />
       </View>
 
       <View className="flex-1  justify-center p-4">
-        <View className="bg-white p-4 rounded-lg">
+        <View className="bg-white p-6 rounded-lg">
           <View className="items-center mb-4">
-            <Text className="text-2xl font-bold mb-2">Bienvenido</Text>
+            <Text className="text-4xl font-bold mb-2 text-primario-700">
+              Bienvenido
+            </Text>
             {/* <Image source={logo} className="h-24 w-24 mb-2" /> */}
-            <Text className="text-lg font-bold">
+            <Text className="text-lg font-bold text-primario-700">
               Inicia sesión con tu cuenta
             </Text>
           </View>
 
-          <View>
-            <Text className="text-xl font-bold mb-1">Email:</Text>
+          <View className="p-2">
+            <Text className="text-xl font-bold mb-1 text-primario-700">
+              Email:
+            </Text>
             <Controller
               name="email"
               control={control}
               rules={{
-                required: "Email required",
+                required: "Email requerido",
               }}
               render={({ field, formState }) => (
                 <>
                   <TextInput
                     {...field}
                     placeholder="Ingrese su email"
+                    placeholderClassName="text-primario-400"
                     value={field.value}
                     onChangeText={(e) => field.onChange(e)}
-                    className="border-b-2 py-2 px-4 mb-2 w-full"
+                    className="border border-primario-600 rounded py-2 px-4 mb-2 w-full"
                   />
                 </>
               )}
             />
+
             {errors?.email && (
               <Text style={{ color: "red" }}>{errors.email?.message}</Text>
             )}
           </View>
 
-          <View>
-            <Text className="text-xl font-bold mb-1">Contraseña:</Text>
+          <View className="mb-2 p-2">
+            <Text className="text-xl font-bold mb-1 text-primario-700">
+              Contraseña:
+            </Text>
             <Controller
               name="password"
               control={control}
               rules={{
-                required: "password required",
+                required: "Contraseña requerida",
               }}
               render={({ field, formState }) => (
                 <>
                   <TextInput
                     {...field}
-                    placeholder="Ingrese su pass"
+                    placeholder="Ingrese su contraseña"
+                    placeholderClassName="text-primario-400"
                     value={field.value}
                     secureTextEntry
                     onChangeText={(e) => field.onChange(e)}
-                    className="border-b-2 py-2 px-4 mb-2 w-full"
+                    className="border border-primario-600 rounded py-2 px-4 mb-2 w-full"
                   />
                 </>
               )}
@@ -133,24 +148,26 @@ const Login = () => {
             )}
           </View>
 
-          <View className="flex-row items-center mb-4">
+          {/* <TouchableOpacity onPress={handleSubmit(onSubmit)}>
+            <View className="bg-blue-500 p-3 rounded-md items-center">
+              <Text className="text-white text-xl">Login</Text>
+            </View>
+          </TouchableOpacity> */}
+          <View className="p-2">
+            <TouchableOpacity onPress={handleSubmit(onSubmit)}>
+              <View className="border border-primario-600 p-3 rounded-md items-center">
+                <Text className="text-primario-600 text-xl">Login</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View className="flex-row items-center justify-end p-4">
             <TouchableOpacity>
-              <Text className="font-bold text-blue-500">
+              <Text className="font-bold text-blue-500 ">
                 Olvidaste tu contraseña?
               </Text>
             </TouchableOpacity>
           </View>
-
-          <TouchableOpacity
-            onPress={handleSubmit(onSubmit)}
-            //    disabled={isLoading}
-          >
-            <View className="bg-blue-500 p-3 rounded-md items-center">
-              <Text className="text-white text-xl">Login</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
+          {/* <TouchableOpacity
             //     onPress={promptAsync}
             //onPress={() => promptAsync()}
             //   disabled={isLoading}
@@ -163,9 +180,9 @@ const Login = () => {
             <View className="bg-white mt-2 p-3 border-2 border-gray-500 rounded-md flex-row items-center justify-center">
               <Text>Login with Google</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
-          <View className="items-center justify-center m-10">
+          {/* <View className="items-center justify-center m-10">
             <View className="flex-row gap-2">
               <Text>No tienes una cuenta?</Text>
               <Link href={"/auth/register/"} asChild>
@@ -174,7 +191,7 @@ const Login = () => {
                 </TouchableOpacity>
               </Link>
             </View>
-          </View>
+          </View> */}
         </View>
       </View>
     </View>

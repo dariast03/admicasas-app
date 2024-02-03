@@ -53,7 +53,14 @@
         {
           "iCloudContainerEnvironment": "Production"
         }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": "node_modules/@expo-google-fonts/inter/Inter_100Thin.ttf"
+        }
       ]
+
     ],
     "experiments": {
       "typedRoutes": true,
