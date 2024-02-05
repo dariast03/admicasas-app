@@ -54,7 +54,6 @@ const Login = () => {
   });
 
   const onSubmit = (data: IFormLogin) => {
-    console.log(data);
     onLogin({ ...data, rememberEmail: false });
   };
 

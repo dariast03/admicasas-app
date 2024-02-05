@@ -25,7 +25,7 @@ export const ButtonLoader: React.FC<Props> = ({
       disabled={disabled}
       activeOpacity={0.6}
     >
-      <View className="rounded-xl bg-indigo-600 p-3">
+      <View className="rounded-xl bg-primario-600 p-3">
         {loading ? (
           <ActivityIndicator color={"#fff"} size={20} />
         ) : (

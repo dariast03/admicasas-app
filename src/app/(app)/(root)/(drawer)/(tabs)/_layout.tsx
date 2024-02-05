@@ -45,7 +45,7 @@ export default function Layout() {
                backgroundColor: isDarkMode ? COLORS.dark.secondary : '#FFF',
              }, */
             tabBarLabelStyle: { margin: 0, padding: 0, fontSize: 12 },
-
+            tabBarActiveTintColor: Colors.primario[700],
             /*  tabBarActiveTintColor: isDarkMode
                ? '#FFF'
                : COLORS.light.background, */

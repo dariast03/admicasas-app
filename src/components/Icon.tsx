@@ -8,12 +8,13 @@ import {
   EvilIcons,
   Fontisto,
   Feather,
+  FontAwesome5,
 } from "@expo/vector-icons";
 import { IconProps } from "@expo/vector-icons/build/createIconSet";
 import { useColorScheme } from "nativewind";
 
 export enum IconType {
-  MatetrialIcon,
+  MaterialIcon,
   FontAweomseIcon,
   Ionicon,
   AntDesign,
@@ -21,12 +22,13 @@ export enum IconType {
   EvilIcons,
   Fontisto,
   Feather,
+  FontAwesome5,
 }
 
 export type TIcon = {
   icon:
     | {
-        type: IconType.MatetrialIcon;
+        type: IconType.MaterialIcon;
         name: keyof typeof MaterialIcons.glyphMap;
       }
     | {
@@ -41,7 +43,8 @@ export type TIcon = {
       }
     | { type: IconType.EvilIcons; name: keyof typeof EvilIcons.glyphMap }
     | { type: IconType.Fontisto; name: keyof typeof Fontisto.glyphMap }
-    | { type: IconType.Feather; name: keyof typeof Feather.glyphMap };
+    | { type: IconType.Feather; name: keyof typeof Feather.glyphMap }
+    | { type: IconType.FontAwesome5; name: keyof typeof FontAwesome5.glyphMap };
 } & Omit<IconProps<keyof typeof FontAwesome.glyphMap>, "name">;
 
 const Icon = ({ icon, ...props }: TIcon) => {
@@ -67,7 +70,7 @@ const Icon = ({ icon, ...props }: TIcon) => {
           color={color}
         />
       )}
-      {icon.type === IconType.MatetrialIcon && (
+      {icon.type === IconType.MaterialIcon && (
         <MaterialIcons
           {...props}
           name={icon.name}
@@ -147,6 +150,18 @@ const Icon = ({ icon, ...props }: TIcon) => {
 
       {icon.type === IconType.Feather && (
         <Feather
+          {...props}
+          name={icon.name}
+          size={20}
+          color={color}
+          style={{
+            fontSize: 22,
+            marginRight: 10,
+          }}
+        />
+      )}
+      {icon.type === IconType.FontAwesome5 && (
+        <FontAwesome5
           {...props}
           name={icon.name}
           size={20}
