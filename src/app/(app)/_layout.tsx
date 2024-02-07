@@ -10,6 +10,7 @@ import { Alert, PermissionsAndroid, Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import { router } from "expo-router";
 import { useRootNavigationState } from "expo-router/src/hooks";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 const queryClient = new QueryClient();
 
@@ -155,7 +156,9 @@ const Layout = () => {
     <>
       <QueryClientProvider client={queryClient}>
         <AppProvider>
-          <Slot />
+          <BottomSheetModalProvider>
+            <Slot />
+          </BottomSheetModalProvider>
         </AppProvider>
       </QueryClientProvider>
     </>

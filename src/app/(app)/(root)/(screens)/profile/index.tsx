@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Button,
-  SafeAreaView,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import { Avatar } from "react-native-elements";
 import useAuth from "@/hooks/useAuth";
 import { Stack } from "expo-router";

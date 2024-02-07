@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Button,
   ImageBackground,
+  StyleSheet,
 } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
@@ -58,7 +59,7 @@ const Login = () => {
   };
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 bg-white">
       <Stack.Screen
         options={{
           headerShown: false,
@@ -78,21 +79,19 @@ const Login = () => {
       </View>
 
       <View className="flex-1  justify-center p-4">
-        <View className="bg-white p-6 rounded-lg">
-          <View className="items-center mb-4">
-            <Text className="text-4xl font-bold mb-2 text-primario-700">
+        <View className="p-6 rounded-3xl border border-white">
+          <View className=" items-center mb-4">
+            <Text className="text-4xl font-bold mb-2 text-white">
               Bienvenido
             </Text>
             {/* <Image source={logo} className="h-24 w-24 mb-2" /> */}
-            <Text className="text-lg font-bold text-primario-700">
+            <Text className="text-lg font-bold text-white">
               Inicia sesión con tu cuenta
             </Text>
           </View>
 
           <View className="p-2">
-            <Text className="text-xl font-bold mb-1 text-primario-700">
-              Email:
-            </Text>
+            <Text className="text-xl font-bold mb-1 text-white">Email:</Text>
             <Controller
               name="email"
               control={control}
@@ -107,7 +106,7 @@ const Login = () => {
                     placeholderClassName="text-primario-400"
                     value={field.value}
                     onChangeText={(e) => field.onChange(e)}
-                    className="border border-primario-600 rounded py-2 px-4 mb-2 w-full"
+                    className="text-white border border-primario-200 rounded py-2 px-4 mb-2 w-full"
                   />
                 </>
               )}
@@ -119,7 +118,7 @@ const Login = () => {
           </View>
 
           <View className="mb-2 p-2">
-            <Text className="text-xl font-bold mb-1 text-primario-700">
+            <Text className="text-xl font-bold mb-1 text-white">
               Contraseña:
             </Text>
             <Controller
@@ -137,7 +136,7 @@ const Login = () => {
                     value={field.value}
                     secureTextEntry
                     onChangeText={(e) => field.onChange(e)}
-                    className="border border-primario-600 rounded py-2 px-4 mb-2 w-full"
+                    className="text-white border border-primario-200 rounded py-2 px-4 mb-2 w-full"
                   />
                 </>
               )}
@@ -154,8 +153,8 @@ const Login = () => {
           </TouchableOpacity> */}
           <View className="p-2">
             <TouchableOpacity onPress={handleSubmit(onSubmit)}>
-              <View className="border border-primario-600 p-3 rounded-md items-center">
-                <Text className="text-primario-600 text-xl">Login</Text>
+              <View className="border border-primario-200 p-3 rounded-md items-center">
+                <Text className="text-primario-100 text-xl">Login</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -196,5 +195,18 @@ const Login = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  shadowCard: {
+    shadowColor: "#4f46e5",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5.62,
+    elevation: 7,
+  },
+});
 
 export default Login;
