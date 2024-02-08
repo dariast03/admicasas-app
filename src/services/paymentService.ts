@@ -1,6 +1,5 @@
 import { IPayments } from "@/types/payments/payments";
 import firestore from "@react-native-firebase/firestore";
-import { da } from "date-fns/locale";
 
 const FirestoreKey = "Payments";
 
@@ -15,13 +14,13 @@ const getData = async (id: string) => {
       ...data,
       id: docSnap.id,
       //@ts-ignore
+      date: new Date(data.date.toDate()),
     };
   } catch (e) {
     console.log(e);
   }
 };
 const getAllData = async (idhousing: string) => {
-  console.log("🚀 ~ getAllData ~ idhousing:", idhousing);
   try {
     let queryRef = firestore()
       .collection(FirestoreKey)
@@ -29,9 +28,13 @@ const getAllData = async (idhousing: string) => {
     const querySnapshot = await queryRef.get();
 
     const data: IPayments[] = querySnapshot.docs.map((doc) => {
+      const data = doc.data() as IPayments;
+
       return {
-        ...(doc.data() as IPayments),
+        ...data,
         id: doc.id,
+        //@ts-ignore
+        date: new Date(data.date.toDate()),
       };
     });
 
