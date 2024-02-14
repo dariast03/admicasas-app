@@ -1,13 +1,9 @@
 import {
   View,
   Text,
-  Button,
   KeyboardAvoidingView,
-  Platform,
   TouchableWithoutFeedback,
   Keyboard,
-  StyleSheet,
-  Alert,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
@@ -20,7 +16,7 @@ import { Image } from "expo-image";
 
 import Icon, { IconType } from "@/components/Icon";
 import * as ImagePicker from "expo-image-picker";
-import * as DocumentPicker from "expo-document-picker";
+
 import {
   InputCustom,
   InputDatePicker,

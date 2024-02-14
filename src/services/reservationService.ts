@@ -26,9 +26,9 @@ const getAllData = async (
         ...data,
         id: doc.id,
         //@ts-ignore
-        date: new Date(data.start.toDate()),
+        start: new Date(data.start.toDate()),
         //@ts-ignore
-        date: new Date(data.end.toDate()),
+        end: new Date(data.end.toDate()),
       };
     });
 

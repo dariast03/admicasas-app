@@ -56,7 +56,7 @@ const DetailAnnocenment = () => {
               <Icon
                 color={"white"}
                 icon={{
-                  type: IconType.MatetrialIcon,
+                  type: IconType.MaterialIcon,
                   name: "announcement",
                 }}
               />
