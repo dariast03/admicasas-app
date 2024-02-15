@@ -16,28 +16,25 @@ type Props = {
   };
 };
 
-const defaultProps: Props = {
-  params: {
-    selectedDate: new Date(),
-    idcondominium: "",
-  },
-};
+// const defaultProps: Props = {
+//   params: {
+//     selectedDate: new Date(),
+//     idcondominium: "",
+//   },
+// };
 
-type PropsCreate = {
-  data: IReservation;
-  file?: File[];
-  requiredPayment: boolean;
-};
-type PropsUpdate = {
-  data: Partial<IReservation>;
-  file?: File[];
-  requiredPayment: boolean;
-};
+// type PropsCreate = {
+//   data: IReservation;
+//   file?: File[];
+//   requiredPayment: boolean;
+// };
+// type PropsUpdate = {
+//   data: Partial<IReservation>;
+//   file?: File[];
+//   requiredPayment: boolean;
+// };
 
-export const useReserve = ({
-  id = undefined,
-  params,
-}: Props = defaultProps) => {
+export const useReserve = ({ id = undefined, params }: Props) => {
   const client = useQueryClient();
 
   /*

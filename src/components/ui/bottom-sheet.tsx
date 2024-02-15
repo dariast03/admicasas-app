@@ -61,7 +61,7 @@ function useBottomSheetContext() {
 
 const CLOSED_INDEX = -1;
 
-type BottomSheetContentRef = React.ElementRef<typeof BottomSheetModal>;
+export type BottomSheetContentRef = React.ElementRef<typeof BottomSheetModal>;
 
 type BottomSheetContentProps = Omit<
   React.ComponentPropsWithoutRef<typeof BottomSheetModal>,
@@ -168,6 +168,7 @@ const BottomSheetOpenTrigger = React.forwardRef<
     sheetRef.current?.present();
     onPress?.(ev);
   }
+
   const Trigger = asChild ? Slot.Pressable : Pressable;
   return <Trigger ref={ref} onPress={handleOnPress} {...props} />;
 });

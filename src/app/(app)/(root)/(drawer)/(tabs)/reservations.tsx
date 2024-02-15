@@ -1,5 +1,5 @@
 import { useColorScheme } from "nativewind";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { Calendar, LocaleConfig } from "@/components/ui/calendar";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { useSessionContext } from "@/hooks/useSessionContext";
@@ -9,11 +9,16 @@ import Colors from "@/constants/Colors";
 import {
   BottomSheet,
   BottomSheetContent,
+  BottomSheetContentRef,
+  BottomSheetFlatList,
   BottomSheetHeader,
   BottomSheetOpenTrigger,
+  BottomSheetView,
 } from "@/components/ui/bottom-sheet";
-import { BottomSheetView } from "@gorhom/bottom-sheet";
+
 import Icon, { IconType } from "@/components/Icon";
+import {} from "react-native-calendars";
+import { IReservation } from "@/types/reserve/reserve";
 
 LocaleConfig.defaultLocale = "es";
 const Reservations = () => {
@@ -22,19 +27,13 @@ const Reservations = () => {
   const { reservationsQuery } = useReserve({
     params: { idcondominium: user.account.idcondominium },
   });
-  const [bottomSheetVisible, setBottomSheetVisible] = React.useState(false);
+  const visible = useRef<BottomSheetContentRef>(null);
 
-  const handleDayPress = (day: any) => {
-    const dateString = day.dateString;
-    let newSelectedDates = [...selectedDates];
-    if (newSelectedDates.includes(dateString)) {
-      newSelectedDates = newSelectedDates.filter((date) => date !== dateString);
-    } else {
-      newSelectedDates.push(dateString);
-    }
-
-    setSelectedDates(newSelectedDates);
-    setBottomSheetVisible(true);
+  const handleDayPress = (date: any) => {
+    // const { reservationsQuery } = useReserve({
+    //   params: { idcondominium: user.account.idcondominium, selectedDate: date },
+    // });
+    visible.current?.present();
   };
 
   const markedDates: { [key: string]: any } = {};
@@ -53,30 +52,27 @@ const Reservations = () => {
     }
   });
 
+  const renderItem = ({ item }: { item: any }) => (
+    <View className="flex-1">
+      <Text>{item.idcondominium}</Text>
+    </View>
+  );
+
   return (
     <DefaultLayout>
-      <BottomSheet>
-        <BottomSheetOpenTrigger asChild>
-          <TouchableOpacity onPress={() => setBottomSheetVisible(true)}>
-            <Calendar
-              style={{
-                borderRadius: 10,
-                margin: 20,
-                ...styles.shadowCard,
-              }}
-              onDayPress={handleDayPress}
-              markingType="multi-dot"
-              markedDates={markedDates}
-            />
-          </TouchableOpacity>
-        </BottomSheetOpenTrigger>
-        <BottomSheetContent>
+      {/* <BottomSheet>
+        <BottomSheetContent ref={visible}>
           <BottomSheetHeader>
             <Text className="text-foreground text-xl font-bold text-center pb-1 text-primario-600">
-              Detalle de Pago
+              Reservas
             </Text>
           </BottomSheetHeader>
+
           <BottomSheetView className="gap-5 pt-6">
+            <BottomSheetFlatList
+              data={reservationsQuery.data}
+              renderItem={renderItem}
+            />
             <View className="pb-2 gap-6">
               <View className="flex-row justify-around">
                 <View className="flex-row">
@@ -100,13 +96,65 @@ const Reservations = () => {
                   />
                   <Text>Fecha Registro</Text>
                 </View>
-
                 <Text>ddfda</Text>
               </View>
             </View>
           </BottomSheetView>
         </BottomSheetContent>
+      </BottomSheet> */}
+      <BottomSheet>
+        <BottomSheetContent ref={visible}>
+          <BottomSheetHeader>
+            <Text className="text-foreground text-xl font-bold text-center pb-1 text-primario-600">
+              Detalle de Pago
+            </Text>
+          </BottomSheetHeader>
+          <BottomSheetView className="gap-5 pt-6">
+            <View className="pb-2 gap-6">
+              <View className="flex-row justify-around">
+                <View className="flex-row">
+                  <Icon
+                    icon={{
+                      type: IconType.FontAweomseIcon,
+                      name: "money",
+                    }}
+                  />
+                  <Text className={"pb-2.5"}>Monto</Text>
+                </View>
+                <Text className={"pb-2.5"}>"dfd</Text>
+              </View>
+              <View className="flex-row justify-around">
+                <View className="flex-row">
+                  <Icon
+                    icon={{
+                      type: IconType.AntDesign,
+                      name: "calendar",
+                    }}
+                  />
+                  <Text>Fecha Registro</Text>
+                </View>
+
+                <Text>dfd</Text>
+              </View>
+            </View>
+            {/* <View className={cn(Platform.OS === "android" && "pb-2")}>
+                <BottomSheetCloseTrigger>
+                  <Text>Save Changes</Text>
+                </BottomSheetCloseTrigger>
+              </View> */}
+          </BottomSheetView>
+        </BottomSheetContent>
       </BottomSheet>
+      <Calendar
+        style={{
+          borderRadius: 10,
+          margin: 20,
+          ...styles.shadowCard,
+        }}
+        onDayPress={(day) => handleDayPress(day.dateString)}
+        markingType="multi-dot"
+        markedDates={markedDates}
+      />
     </DefaultLayout>
   );
 };
