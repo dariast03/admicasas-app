@@ -19,20 +19,17 @@ import {
 import Icon, { IconType } from "@/components/Icon";
 import {} from "react-native-calendars";
 import { IReservation } from "@/types/reserve/reserve";
+import { Button } from "@/components/ui/button";
 
 LocaleConfig.defaultLocale = "es";
 const Reservations = () => {
-  const [selectedDates, setSelectedDates] = React.useState<Date[]>([]);
   const { user } = useSessionContext();
   const { reservationsQuery } = useReserve({
     params: { idcondominium: user.account.idcondominium },
   });
   const visible = useRef<BottomSheetContentRef>(null);
 
-  const handleDayPress = (date: any) => {
-    // const { reservationsQuery } = useReserve({
-    //   params: { idcondominium: user.account.idcondominium, selectedDate: date },
-    // });
+  const handleDayPress = (date: Date) => {
     visible.current?.present();
   };
 
@@ -54,13 +51,13 @@ const Reservations = () => {
 
   const renderItem = ({ item }: { item: any }) => (
     <View className="flex-1">
-      <Text>{item.idcondominium}</Text>
+      <Text>{item.id}</Text>
     </View>
   );
 
   return (
     <DefaultLayout>
-      {/* <BottomSheet>
+      <BottomSheet>
         <BottomSheetContent ref={visible}>
           <BottomSheetHeader>
             <Text className="text-foreground text-xl font-bold text-center pb-1 text-primario-600">
@@ -69,72 +66,31 @@ const Reservations = () => {
           </BottomSheetHeader>
 
           <BottomSheetView className="gap-5 pt-6">
-            <BottomSheetFlatList
-              data={reservationsQuery.data}
-              renderItem={renderItem}
-            />
             <View className="pb-2 gap-6">
               <View className="flex-row justify-around">
                 <View className="flex-row">
                   <Icon
                     icon={{
                       type: IconType.FontAweomseIcon,
-                      name: "money",
+                      name: "check-square-o",
                     }}
                   />
-                  <Text className={"pb-2.5"}>Monto</Text>
+                  <Text className={"pb-2.5"}>Piscina</Text>
                 </View>
-                <Text className={"pb-2.5"}>dd</Text>
+                <Text>{new Date(Date.now()).toDateString()}</Text>
               </View>
-              <View className="flex-row justify-around">
-                <View className="flex-row">
-                  <Icon
-                    icon={{
-                      type: IconType.AntDesign,
-                      name: "calendar",
-                    }}
-                  />
-                  <Text>Fecha Registro</Text>
-                </View>
-                <Text>ddfda</Text>
-              </View>
-            </View>
-          </BottomSheetView>
-        </BottomSheetContent>
-      </BottomSheet> */}
-      <BottomSheet>
-        <BottomSheetContent ref={visible}>
-          <BottomSheetHeader>
-            <Text className="text-foreground text-xl font-bold text-center pb-1 text-primario-600">
-              Detalle de Pago
-            </Text>
-          </BottomSheetHeader>
-          <BottomSheetView className="gap-5 pt-6">
-            <View className="pb-2 gap-6">
               <View className="flex-row justify-around">
                 <View className="flex-row">
                   <Icon
                     icon={{
                       type: IconType.FontAweomseIcon,
-                      name: "money",
+                      name: "check-square-o",
                     }}
                   />
-                  <Text className={"pb-2.5"}>Monto</Text>
-                </View>
-                <Text className={"pb-2.5"}>"dfd</Text>
-              </View>
-              <View className="flex-row justify-around">
-                <View className="flex-row">
-                  <Icon
-                    icon={{
-                      type: IconType.AntDesign,
-                      name: "calendar",
-                    }}
-                  />
-                  <Text>Fecha Registro</Text>
+                  <Text>Parrillero</Text>
                 </View>
 
-                <Text>dfd</Text>
+                <Text>{new Date(Date.now()).toDateString()}</Text>
               </View>
             </View>
             {/* <View className={cn(Platform.OS === "android" && "pb-2")}>
@@ -145,13 +101,34 @@ const Reservations = () => {
           </BottomSheetView>
         </BottomSheetContent>
       </BottomSheet>
+
+      <View className="flex-row justify-between items-center p-2 mx-4 mt-2">
+        <View className="flex-1 justify-center items-center">
+          <Text className="text-primario-600 text-2xl">Reservas</Text>
+        </View>
+        <Button
+          variant="outline"
+          size="default"
+          className="border-primario-600"
+        >
+          <Icon
+            size={5}
+            icon={{
+              type: IconType.FontAweomseIcon,
+              name: "plus",
+            }}
+          />
+          <Text className="text-primario-600">Nuevo</Text>
+        </Button>
+      </View>
+
       <Calendar
         style={{
           borderRadius: 10,
           margin: 20,
           ...styles.shadowCard,
         }}
-        onDayPress={(day) => handleDayPress(day.dateString)}
+        onDayPress={(day) => handleDayPress(new Date(day.dateString))}
         markingType="multi-dot"
         markedDates={markedDates}
       />
