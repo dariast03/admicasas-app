@@ -48,6 +48,7 @@ export type TIcon = {
 } & Omit<IconProps<keyof typeof FontAwesome.glyphMap>, "name">;
 
 const Icon = ({ icon, ...props }: TIcon) => {
+  console.log("🚀 ~ Icon ~ props:", props);
   const isDark = useColorScheme().colorScheme === "dark";
 
   const color = props.color
@@ -60,14 +61,13 @@ const Icon = ({ icon, ...props }: TIcon) => {
     <>
       {icon.type === IconType.FontAweomseIcon && (
         <FontAwesome
+          size={20}
+          color={color}
           {...props}
           name={icon.name}
-          size={20}
           style={{
-            fontSize: 22,
             marginRight: 10,
           }}
-          color={color}
         />
       )}
       {icon.type === IconType.MaterialIcon && (

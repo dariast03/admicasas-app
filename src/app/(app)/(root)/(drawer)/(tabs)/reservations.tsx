@@ -18,11 +18,15 @@ import {
 
 import Icon, { IconType } from "@/components/Icon";
 import {} from "react-native-calendars";
-import { IReservation } from "@/types/reserve/reserve";
+
 import { Button } from "@/components/ui/button";
+
+import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 
 LocaleConfig.defaultLocale = "es";
 const Reservations = () => {
+  const router = useRouter();
   const { user } = useSessionContext();
   const { reservationsQuery } = useReserve({
     params: { idcondominium: user.account.idcondominium },
@@ -54,6 +58,11 @@ const Reservations = () => {
       <Text>{item.id}</Text>
     </View>
   );
+
+  const handlePress = () => {
+    // Aquí haces el push a la siguiente pantalla
+    router.push("/(app)/(root)/(screens)/reservation");
+  };
 
   return (
     <DefaultLayout>
@@ -106,19 +115,16 @@ const Reservations = () => {
         <View className="flex-1 justify-center items-center">
           <Text className="text-primario-600 text-2xl">Reservas</Text>
         </View>
-        <Button
-          variant="outline"
-          size="default"
-          className="border-primario-600"
-        >
+        <Button size={"sm"} className="bg-primario-600" onPress={handlePress}>
           <Icon
-            size={5}
+            color={"white"}
+            size={12}
             icon={{
               type: IconType.FontAweomseIcon,
               name: "plus",
             }}
           />
-          <Text className="text-primario-600">Nuevo</Text>
+          <Text className="text-white">Nuevo</Text>
         </Button>
       </View>
 
