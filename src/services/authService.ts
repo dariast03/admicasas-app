@@ -19,7 +19,6 @@ const login = async (data: IFormLogin): Promise<IUser> => {
       account: await getAccount(user.uid),
     };
   } catch (error: any) {
-    console.log("🚀 ~ login ~ error:", error);
     throw new Error(error.code);
   }
 };

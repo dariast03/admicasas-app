@@ -35,8 +35,6 @@ const DetailAnnocenment = () => {
   const { width } = useWindowDimensions();
   const { user } = useSessionContext();
   const { selectedHousing } = useAppContext();
-
-  console.log("🚀 ~ DetailAnnocenment ~ selectedHousing:", selectedHousing);
   const { chargeQuery } = useCharges({
     id: id + "",
     params: { idhousing: selectedHousing },
@@ -210,7 +208,7 @@ const DetailAnnocenment = () => {
               <Icon
                 color={"white"}
                 icon={{
-                  type: IconType.MatetrialIcon,
+                  type: IconType.MaterialIcon,
                   name: "payment",
                 }}
               />

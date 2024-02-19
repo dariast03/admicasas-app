@@ -48,7 +48,6 @@ export type TIcon = {
 } & Omit<IconProps<keyof typeof FontAwesome.glyphMap>, "name">;
 
 const Icon = ({ icon, ...props }: TIcon) => {
-  console.log("🚀 ~ Icon ~ props:", props);
   const isDark = useColorScheme().colorScheme === "dark";
 
   const color = props.color

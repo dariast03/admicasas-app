@@ -42,7 +42,7 @@ const DetailAnnocenment = () => {
       id: id + "",
       params: {
         idcharge: announcementQuery.data?.idcharge || "",
-        iduser: user.id,
+        //iduser: user.id,
       },
     });
 
@@ -195,7 +195,7 @@ const DetailAnnocenment = () => {
               <Icon
                 color={"white"}
                 icon={{
-                  type: IconType.MatetrialIcon,
+                  type: IconType.MaterialIcon,
                   name: "payment",
                 }}
               />

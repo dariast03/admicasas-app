@@ -60,7 +60,6 @@ const Reservations = () => {
   );
 
   const handlePress = () => {
-    // Aquí haces el push a la siguiente pantalla
     router.push("/(app)/(root)/(screens)/reservation");
   };
 

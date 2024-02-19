@@ -74,7 +74,7 @@ const insertData = async (data: IVisit) => {
     return doc.id;
   } catch (e: any) {
     console.error("Error al insertar:");
-    console.log("🚀 ~ insertData ~ e:", e);
+
     throw new Error("No se pudo insertar");
   }
 };
@@ -85,7 +85,7 @@ const deleteData = async (id: string) => {
     await docRef.delete();
   } catch (e: any) {
     console.error("Error al eliminar:");
-    console.log("🚀 ~ deleteData ~ e:", e);
+
     throw new Error("No se pudo eliminar");
   }
 };
@@ -99,7 +99,7 @@ const updateData = async (data: Partial<IVisit>) => {
     await docRef.update(data);
   } catch (e: any) {
     console.error("Error al actualizar");
-    console.log("🚀 ~ updateData ~ e:", e);
+
     throw new Error("No se pudo actualizar");
   }
 };

@@ -35,9 +35,11 @@ type GetDataQueryParams = {
   limitResults?: number;
 };
 
-const getDataQuery = async (
-  { idcondominium, q, limitResults }: GetDataQueryParams = { idcondominium: "" }
-) => {
+const getDataQuery = async ({
+  idcondominium,
+  q,
+  limitResults,
+}: GetDataQueryParams) => {
   try {
     let queryRef = firestore()
       .collection(FirestoreKey)
