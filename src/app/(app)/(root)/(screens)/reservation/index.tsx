@@ -11,8 +11,8 @@ import Icon, { IconType } from "@/components/Icon";
 import Loader from "@/components/Loader";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { IReservation } from "@/types/reserve/reserve";
-import { format } from "date-fns";
-import React, { useRef, useState } from "react";
+import { addHours, addMinutes, compareAsc, format, isSameDay } from "date-fns";
+import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   View,
@@ -31,6 +31,7 @@ import { Stack, router } from "expo-router";
 import Colors from "@/constants/Colors";
 import { ButtonLoader } from "@/components/ButtonLoader";
 import { useReserve } from "@/hooks/useReservation";
+import { detailDate } from "@/helpers/detailDate";
 
 const Reservation = () => {
   const shadow = {
@@ -46,6 +47,10 @@ const Reservation = () => {
   };
 
   const ref = useRef<IDropdownRef>(null);
+  const [minDates, setMinDates] = useState({
+    start: addMinutes(new Date(), 5),
+    end: addMinutes(new Date(), 5),
+  });
 
   const {
     control,
@@ -63,6 +68,8 @@ const Reservation = () => {
     },
   });
   const { user } = useSessionContext();
+
+  const [priceSelect, setPriceSelect] = useState<number | null>(null);
 
   const { areaCommonsAllQuery } = useAreas({
     idcondominium: user.account.idcondominium,
@@ -146,6 +153,32 @@ const Reservation = () => {
 
   //   router.push("/incidents/");
   // };
+
+  useEffect(() => {
+    setValue("fullDay", !isSameDay(getValues("start"), getValues("end")));
+  }, [watch("start"), watch("end")]);
+
+  useEffect(() => {
+    setValue("startDetail", detailDate(getValues("start")));
+
+    if (compareAsc(getValues("start"), getValues("end")) == 1) {
+      // * FECHA DE INICIO MAYOR A FECHA DE FIN
+      setValue("end", addHours(getValues("start"), 4));
+    }
+
+    setMinDates({ ...minDates, end: getValues("start") });
+  }, [watch("start")]);
+
+  useEffect(() => {
+    setValue("endDetail", detailDate(getValues("end")));
+  }, [watch("end")]);
+
+  // useEffect(() => {
+  //   if (getValues("state")) {
+  //     setValue("color", statusColorIcon[getValues("state")].color);
+  //   }
+  // }, [watch("state")]);
+
   const needPay = (watch("area")?.price || 0) > 0;
   return (
     <DefaultLayout>
@@ -220,7 +253,7 @@ const Reservation = () => {
                             placeholder="Descripcion de la reserva"
                             error={error?.message}
                             multiline
-                            numberOfLines={5}
+                            numberOfLines={3}
                           />
                         </>
                       )}
@@ -297,7 +330,10 @@ const Reservation = () => {
                               labelField={"name"}
                               value={field.value}
                               data={areaCommonsAllQuery.data || []}
-                              onChange={(e) => field.onChange(e.id)}
+                              onChange={(e) => {
+                                field.onChange(e.id);
+                                setPriceSelect(e.price);
+                              }}
                               icon={{
                                 type: IconType.MaterialCommunityIcons,
                                 name: "account-group-outline",
@@ -308,7 +344,25 @@ const Reservation = () => {
                       }}
                     />
                   </View>
-
+                  <View>
+                    <Controller
+                      name="area.price"
+                      control={control}
+                      render={({ field, fieldState: { error } }) => (
+                        <>
+                          <InputText
+                            ref={field.ref}
+                            value={field.value}
+                            onChangeText={(e) => field.onChange(e)}
+                            withAsterisk
+                            label="precio"
+                            placeholder="precio"
+                            error={error?.message}
+                          />
+                        </>
+                      )}
+                    />
+                  </View>
                   <View className="w-full">
                     <InputCustom
                       icon={{
