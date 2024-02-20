@@ -30,6 +30,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Stack, router } from "expo-router";
 import Colors from "@/constants/Colors";
 import { ButtonLoader } from "@/components/ButtonLoader";
+import { useReserve } from "@/hooks/useReservation";
 
 const Reservation = () => {
   const shadow = {
@@ -68,6 +69,10 @@ const Reservation = () => {
     params: { idcondominium: user.account.idcondominium },
   });
 
+  const { reservationCreateMutation } = useReserve({
+    params: { idcondominium: user.account.idcondominium },
+  });
+
   const [image, setImage] = useState<ImagePicker.ImagePickerAsset | null>(null);
 
   const pickImage = async () => {
@@ -92,6 +97,56 @@ const Reservation = () => {
     }
   };
 
+  const onSubmit = async (data: IReservation) => {
+    delete data.area;
+    delete data.reservedBy;
+
+    // const file = uploadRef.current?.getFiles();
+
+    // if (reservation?.id) {
+    //   await reservationUpdateMutation.mutateAsync({
+    //     data,
+    //     file,
+    //     requiredPayment: needPay,
+    //   });
+
+    // } else {
+    //   await reservationCreateMutation.mutateAsync({
+    //     data,
+    //     file,
+    //     requiredPayment: needPay,
+    //   });
+
+    //  }
+    await reservationCreateMutation.mutateAsync({
+      data,
+      //file,
+      requiredPayment: needPay,
+    });
+  };
+
+  // const onSubmit = async (data: any) => {
+  //   if (isEdit) {
+  //     await incidentUpdateMutation.mutateAsync({
+  //       data,
+  //       file: {
+  //         name: image?.fileName || "",
+  //         uri: image?.uri || "",
+  //       },
+  //     });
+  //   } else {
+  //     await reservationCreateMutation.mutateAsync({
+  //       data,
+  //       file: {
+  //         name: image?.fileName || "",
+  //         uri: image?.uri || "",
+  //       },
+  //     });
+  //   }
+
+  //   router.push("/incidents/");
+  // };
+  const needPay = (watch("area")?.price || 0) > 0;
   return (
     <DefaultLayout>
       <Stack.Screen
@@ -280,6 +335,7 @@ const Reservation = () => {
                   <View className="mt-2">
                     <ButtonLoader
                       className="items-center"
+                      onPress={handleSubmit(onSubmit)}
                       // disabled={paymentQuery.data?.state === "Pendiente"}
 
                       // style={{

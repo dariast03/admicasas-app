@@ -53,7 +53,6 @@ export const usePayments = (props: HookProps) => {
 
   const paymentCreateMutation = useMutation({
     mutationFn: (data: PropsCreate) => {
-      console.log(data);
       const creation = async () => {
         if (data.file?.uri) {
           const urlimg = await storageService.onUploadFile(

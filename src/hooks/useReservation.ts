@@ -23,11 +23,11 @@ type Props = {
 //   },
 // };
 
-// type PropsCreate = {
-//   data: IReservation;
-//   file?: File[];
-//   requiredPayment: boolean;
-// };
+type PropsCreate = {
+  data: IReservation;
+  file?: File[];
+  requiredPayment: boolean;
+};
 // type PropsUpdate = {
 //   data: Partial<IReservation>;
 //   file?: File[];
@@ -56,61 +56,75 @@ export const useReserve = ({ id = undefined, params }: Props) => {
   //   enabled: !!id,
   // });
 
-  // const reservationCreateMutation = useMutation({
-  //   mutationFn: async (data: PropsCreate) => {
-  //     const creacion = async () => {
-  //       if (data.requiredPayment && !data.file?.length)
-  //         throw new Error("No se ha subido un comprobante");
+  const reservationCreateMutation = useMutation({
+    mutationFn: async (data: PropsCreate) => {
+      const creacion = async () => {
+        // if (data.requiredPayment && !data.file?.length)
+        //   throw new Error("No se ha subido un comprobante");
 
-  //       if (data.requiredPayment && data.file?.length) {
-  //         const id = await reservationService.insertData({
-  //           ...data.data,
-  //           idcondominium: params?.idcondominium || "",
-  //         });
-  //         const urlPayment = await onUploadFile(data.file[0], [id], "payments");
-  //         await reservationService.updateData(
-  //           {
-  //             id,
-  //             urlPayment,
-  //             filename: data.file[0].name,
-  //             idcondominium: params?.idcondominium || "",
-  //           },
-  //           true
-  //         );
-  //       } else {
-  //         await reservationService.insertData({
-  //           ...data.data,
-  //           idcondominium: params?.idcondominium || "",
-  //         });
-  //       }
-  //     };
-
-  //     try {
-  //       return await toast.promise(creacion(), {
-  //         loading: "Creando reserva....",
-  //         error: (e: any) =>
-  //           firebaseError[e.message] ||
-  //           e.message ||
-  //           "Hubo un error al crear la reserva",
-  //         success: "Reserva creada con éxito",
-  //       });
-  //     } catch (e: any) {
-  //       throw new Error(
-  //         firebaseError[e.message] ||
-  //         e.message ||
-  //         "Hubo un error al crear la reserva"
-  //       );
-  //     }
-  //   },
-  //   onSuccess: () => {
-  //     client.invalidateQueries({
-  //       queryKey: ["reservations"],
-  //     });
-  //   },
-  //   onError: (e: any) => {
-  //     console.log(e.message);
-  //   },
-  // });
+        //  if (data.requiredPayment && data.file?.length) {
+        //   const id = await reservationService.insertData({
+        //     ...data.data,
+        //     idcondominium: params?.idcondominium || "",
+        //   });
+        //   // const urlPayment = await onUploadFile(data.file[0], [id], "payments");
+        //   // await reservationService.updateData(
+        //   //   {
+        //   //     id,
+        //   //     urlPayment,
+        //   //     filename: data.file[0].name,
+        //   //     idcondominium: params?.idcondominium || "",
+        //   //   },
+        //   //   true
+        //   // );
+        // } else {
+        //   await reservationService.insertData({
+        //     ...data.data,
+        //     idcondominium: params?.idcondominium || "",
+        //   });
+        // }
+        await reservationService.insertData({
+          ...data.data,
+          idcondominium: params?.idcondominium || "",
+        });
+      };
+      return creacion();
+      // try {
+      //   return await toast.promise(creacion(), {
+      //     loading: "Creando reserva....",
+      //     error: (e: any) =>
+      //       firebaseError[e.message] ||
+      //       e.message ||
+      //       "Hubo un error al crear la reserva",
+      //     success: "Reserva creada con éxito",
+      //   });
+      // } catch (e: any) {
+      //   throw new Error(
+      //     firebaseError[e.message] ||
+      //     e.message ||
+      //     "Hubo un error al crear la reserva"
+      //   );
+      // }
+    },
+    onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: "Exito",
+        text2: "¡Pago registrado exitosamente!",
+      });
+      client.invalidateQueries({
+        queryKey: ["reservations"],
+      });
+    },
+    onError: (e: any) => {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Hubo un error",
+      });
+      console.log(e.message);
+    },
+  });
 
   // const reservationUpdateMutation = useMutation({
   //   mutationFn: (data: Partial<PropsUpdate>) => {
@@ -185,7 +199,7 @@ export const useReserve = ({ id = undefined, params }: Props) => {
   return {
     reservationsQuery,
     //reservationQuery,
-    // reservationCreateMutation,
+    reservationCreateMutation,
     // reservationUpdateMutation,
     // reservationDeleteMutation,
   };
