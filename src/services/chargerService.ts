@@ -74,6 +74,7 @@ const getAllData = async ({
       }
     }
 
+    console.log("🚀 ~ data:", data);
     return data;
   } catch (e) {
     console.log(e);
@@ -122,27 +123,27 @@ const getAllData = async ({
 // };
 
 const getData = async (id: string, { idhousing }: GetDataQueryParams) => {
-  console.log("🚀 ~ getData ~ idhousing:", idhousing);
   try {
     const docRef = firestore().collection(FirestoreKey).doc(id);
     const docSnap = await docRef.get();
 
     const data = docSnap.data() as ICharge;
+    console.log("🚀 ~ getData ~ data:", data);
 
     const dataTypes = await paymentTypeService.getData(data.idpaymenttypes);
 
     if (dataTypes?.type == "expensa") {
       const hounsing = await housingService.getData(idhousing);
-
       data.amount = hounsing?.amount;
     }
+
     return {
       ...data,
-      id: docSnap.id,
+      id: data.id,
       //@ts-ignore
-      start: new Date(data.start.toDate()),
+      //start: new Date(data.start.toDate()),
       //@ts-ignore
-      end: new Date(data.end.toDate()),
+      //end: new Date(data.end.toDate()),
     };
   } catch (error) {
     console.log(error);

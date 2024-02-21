@@ -26,8 +26,7 @@ import {
   BottomSheetTextInput,
   BottomSheetView,
 } from "@/components/ui/bottom-sheet";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+
 import Icon, { IconType } from "@/components/Icon";
 
 interface typePayments {
@@ -38,6 +37,7 @@ interface typePayments {
 
 const PaymentItem = ({ item }: { item: IPayments }) => {
   const { selectedHousing } = useAppContext();
+
   const { chargeQuery } = useCharges({
     id: item.idcharge || "",
     params: { idhousing: selectedHousing },
@@ -49,12 +49,13 @@ const PaymentItem = ({ item }: { item: IPayments }) => {
         <BottomSheet>
           <BottomSheetOpenTrigger asChild>
             <TouchableOpacity>
-              <Text className="text-black">{chargeQuery.data?.name}</Text>
-              <View className="flex-row">
-                <Tag severity="info" value={item.state} />
+              <View className="flex-row justify-between">
+                <Text className="text-black">{chargeQuery.data?.name}</Text>
+                <View className="flex-row">
+                  <Tag severity="info" value={item.state} />
+                </View>
               </View>
             </TouchableOpacity>
-            {/* <Button>{"Ver"}</Button> */}
           </BottomSheetOpenTrigger>
           <BottomSheetContent>
             <BottomSheetHeader>
@@ -117,11 +118,15 @@ const PaymentsHistory = () => {
 
   return (
     <DefaultLayout>
-      <FlatList
-        data={paymentsQuery.data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id || ""}
-      />
+      {paymentsQuery.data ? (
+        <FlatList
+          data={paymentsQuery.data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id || ""}
+        />
+      ) : (
+        <Text>No se encontro pagos</Text>
+      )}
     </DefaultLayout>
   );
 };

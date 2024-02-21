@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { FontAwesome } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { Link, Stack, router } from "expo-router";
 import { useIncidents } from "@/hooks/useIncident";
 import { FlatList } from "react-native-gesture-handler";
 import Tag from "@/components/Tag";
@@ -11,6 +11,8 @@ import { useAppContext } from "@/hooks/useAppContext";
 import { useHousing } from "@/hooks/useHousing";
 import { useSessionContext } from "@/hooks/useSessionContext";
 import { statusColorIncident } from "@/data/statusColorIncident";
+import Colors from "@/constants/Colors";
+import Icon, { IconType } from "@/components/Icon";
 
 const Incidents = () => {
   const { selectedHousing } = useAppContext();
@@ -33,12 +35,34 @@ const Incidents = () => {
 
   return (
     <DefaultLayout>
+      <Stack.Screen
+        options={{
+          headerShadowVisible: false,
+          headerTitleAlign: "center",
+
+          title: "Incidentes",
+          headerStyle: {
+            backgroundColor: Colors.primario[600],
+          },
+          headerTintColor: "white",
+          headerLeft: () => (
+            <Icon
+              color={"white"}
+              icon={{
+                type: IconType.Ionicon,
+                name: "chevron-back-outline",
+              }}
+              onPress={() => router.back()}
+            />
+          ),
+        }}
+      />
       <FlatList
         data={incidentsQuery.data}
         ListHeaderComponent={() => (
           <>
-            <Text className="text-center font-bold text-xl p-4">
-              TUS INCIDENTES
+            <Text className="text-center text-primario-600 text-xl p-5">
+              Historial de Incidentes
             </Text>
           </>
         )}

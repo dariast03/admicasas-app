@@ -11,6 +11,7 @@ import { router } from "expo-router";
 import { ButtonLoader } from "@/components/ButtonLoader";
 import { useSessionContext } from "@/hooks/useSessionContext";
 import Icon, { IconType } from "@/components/Icon";
+import { useAppContext } from "@/hooks/useAppContext";
 
 type Props = {
   data: ICharge;
@@ -18,8 +19,9 @@ type Props = {
 
 const PaymentCard = () => {
   const { user } = useSessionContext();
+  const { selectedHousing } = useAppContext();
   const { chargesQuery } = useCharges({
-    params: { idhousing: user.account.idhousing },
+    params: { idhousing: selectedHousing },
   });
 
   const Card = ({ data }: Props) => {
@@ -70,7 +72,9 @@ const PaymentCard = () => {
                   {chargesQuery.isLoading ? (
                     <Loader />
                   ) : (
-                    <Text>No hay cobros</Text>
+                    <Text className="text-center flex-row p-2 text-gray-400">
+                      No hay pagos pendientes
+                    </Text>
                   )}
                 </>
               )}
