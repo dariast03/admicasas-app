@@ -16,6 +16,7 @@ import {
   setYear,
   setDate as setDateFns,
 } from "date-fns";
+
 import { useColorScheme } from "nativewind";
 
 type Props = {
@@ -245,6 +246,7 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
             style={{
               backgroundColor: "red",
             }}
+            locale="es"
           />
         )}
 

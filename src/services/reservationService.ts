@@ -107,6 +107,27 @@ const validateReservation = async (data: IReservation, isUpdate = false) => {
 //   return document.id;
 // };
 
+const updateData = async (
+  data: Partial<IReservation>,
+  ignoreValidations = false
+) => {
+  if (!data.idcondominium) {
+    throw new Error("idcondominium invalid or empty");
+  }
+
+  if (!ignoreValidations) await validateReservation(data as IReservation, true);
+
+  try {
+    const id = data.id;
+    delete data.id;
+    const docRef = firestore().collection(FirestoreKey).doc(id);
+    await docRef.update(data);
+  } catch (error: any) {
+    console.error("Error al actualizar", error);
+    throw new Error("No se pudo actualizar");
+  }
+};
+
 const insertData = async (data: IReservation) => {
   await validateReservation(data);
   try {
@@ -120,4 +141,5 @@ const insertData = async (data: IReservation) => {
 export default {
   getAllData,
   insertData,
+  updateData,
 };

@@ -28,11 +28,11 @@ type PropsCreate = {
   file?: File[];
   requiredPayment: boolean;
 };
-// type PropsUpdate = {
-//   data: Partial<IReservation>;
-//   file?: File[];
-//   requiredPayment: boolean;
-// };
+type PropsUpdate = {
+  data: Partial<IReservation>;
+  file?: File[];
+  requiredPayment: boolean;
+};
 
 export const useReserve = ({ id = undefined, params }: Props) => {
   const client = useQueryClient();
@@ -126,57 +126,35 @@ export const useReserve = ({ id = undefined, params }: Props) => {
     },
   });
 
-  // const reservationUpdateMutation = useMutation({
-  //   mutationFn: (data: Partial<PropsUpdate>) => {
-  //     const creacion = async () => {
-  //       if (!data.data) throw new Error("Informacion invalida");
+  const reservationUpdateMutation = useMutation({
+    mutationFn: (data: Partial<PropsUpdate>) => {
+      const creacion = async () => {
+        if (!data.data) throw new Error("Informacion invalida");
 
-  //       if (data.data && !data.data.id)
-  //         throw new Error("Informacion invalida. No se encontrol el id");
+        if (data.data && !data.data.id)
+          throw new Error("Informacion invalida. No se encontrol el id");
 
-  //       if (data.requiredPayment && !data.data.urlPayment && !data.file?.length)
-  //         throw new Error("No se ha subido un comprobante");
+        if (data.requiredPayment && !data.data.urlPayment && !data.file?.length)
+          throw new Error("No se ha subido un comprobante");
 
-  //       if (
-  //         data.requiredPayment &&
-  //         data.file?.length
-  //       ) {
-  //         const urlPayment = await onUploadFile(
-  //           data.file[0],
-  //           [data.data.id || ""],
-  //           "payments"
-  //         );
-  //         await reservationService.updateData({
-  //           ...data.data,
-  //           urlPayment,
-  //           filename: data.file[0].name,
-  //           idcondominium: params?.idcondominium,
-  //         });
-  //       } else {
-  //         await reservationService.updateData({
-  //           ...data.data,
-  //           idcondominium: params?.idcondominium,
-  //         });
-  //       }
-  //     };
+        await reservationService.updateData({
+          ...data.data,
+          idcondominium: params?.idcondominium,
+        });
+      };
 
-  //     return toast.promise(creacion(), {
-  //       loading: "Actualizando reserva....",
-  //       error: (e: any) =>
-  //         e.message || "Hubo un error al actualizar la reserva",
-  //       success: "Reserva actualizada con éxito",
-  //     });
-  //   },
-  //   onSuccess: () => {
-  //     client.invalidateQueries({
-  //       queryKey: ["reservations"],
-  //     });
-  //   },
-  //   onError: (error: any) => {
-  //     console.log(error.message, "ERROR UPDATE");
-  //     return error.message;
-  //   },
-  // });
+      return creacion();
+    },
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: ["reservations"],
+      });
+    },
+    onError: (error: any) => {
+      console.log(error.message, "ERROR UPDATE");
+      return error.message;
+    },
+  });
 
   // const reservationDeleteMutation = useMutation({
   //   mutationFn: (id: string) => {
@@ -200,7 +178,7 @@ export const useReserve = ({ id = undefined, params }: Props) => {
     reservationsQuery,
     //reservationQuery,
     reservationCreateMutation,
-    // reservationUpdateMutation,
+    reservationUpdateMutation,
     // reservationDeleteMutation,
   };
 };

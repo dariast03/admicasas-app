@@ -8,7 +8,6 @@ import Dropdown from "@/components/DropDown";
 import { IDropdownRef } from "react-native-element-dropdown";
 
 import Icon, { IconType } from "@/components/Icon";
-import Loader from "@/components/Loader";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { IReservation } from "@/types/reserve/reserve";
 import { addHours, addMinutes, compareAsc, format, isSameDay } from "date-fns";
@@ -21,8 +20,8 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
+  FlatList,
   TouchableOpacity,
-  Image,
 } from "react-native";
 import { useAreas } from "@/hooks/useAreas";
 import { useSessionContext } from "@/hooks/useSessionContext";
@@ -32,6 +31,8 @@ import Colors from "@/constants/Colors";
 import { ButtonLoader } from "@/components/ButtonLoader";
 import { useReserve } from "@/hooks/useReservation";
 import { detailDate } from "@/helpers/detailDate";
+import { useAppContext } from "@/hooks/useAppContext";
+import Tag from "@/components/Tag";
 
 const Reservation = () => {
   const shadow = {
@@ -69,6 +70,8 @@ const Reservation = () => {
   });
   const { user } = useSessionContext();
 
+  const { selectedHousing } = useAppContext();
+
   const [priceSelect, setPriceSelect] = useState<number | null>(null);
 
   const { areaCommonsAllQuery } = useAreas({
@@ -76,60 +79,34 @@ const Reservation = () => {
     params: { idcondominium: user.account.idcondominium },
   });
 
-  const { reservationCreateMutation } = useReserve({
+  const { reservationCreateMutation, reservationUpdateMutation } = useReserve({
     params: { idcondominium: user.account.idcondominium },
   });
-
-  const [image, setImage] = useState<ImagePicker.ImagePickerAsset | null>(null);
-
-  const pickImage = async () => {
-    let result;
-
-    const configImagePicker: ImagePicker.ImagePickerOptions = {
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      cameraType: ImagePicker.CameraType.back,
-      quality: 1,
-    };
-
-    result = await ImagePicker.launchImageLibraryAsync(configImagePicker);
-
-    if (!result.canceled) {
-      setImage({
-        ...result.assets[0],
-        fileName: result.assets[0].uri.substring(
-          result.assets[0].uri.lastIndexOf("/") + 1,
-          result.assets[0].uri.length
-        ),
-      });
-    }
-  };
 
   const onSubmit = async (data: IReservation) => {
     delete data.area;
     delete data.reservedBy;
-
+    data.idusuario = user.id;
+    data.idhousing = selectedHousing;
     // const file = uploadRef.current?.getFiles();
 
-    // if (reservation?.id) {
-    //   await reservationUpdateMutation.mutateAsync({
-    //     data,
-    //     file,
-    //     requiredPayment: needPay,
-    //   });
-
-    // } else {
-    //   await reservationCreateMutation.mutateAsync({
-    //     data,
-    //     file,
-    //     requiredPayment: needPay,
-    //   });
-
-    //  }
-    await reservationCreateMutation.mutateAsync({
-      data,
-      //file,
-      requiredPayment: needPay,
-    });
+    if (data?.id) {
+      await reservationUpdateMutation.mutateAsync({
+        data,
+        //requiredPayment:needPay
+      });
+    } else {
+      await reservationCreateMutation.mutateAsync({
+        data,
+        requiredPayment: needPay,
+      });
+    }
+    // await reservationCreateMutation.mutateAsync({
+    //   data,
+    //   //file,
+    //   requiredPayment: needPay,
+    // });
+    router.back();
   };
 
   // const onSubmit = async (data: any) => {
@@ -179,6 +156,21 @@ const Reservation = () => {
   //   }
   // }, [watch("state")]);
 
+  const renderItem = (item: IReservation) => {
+    const { areaCommonQuery } = useAreas({
+      id = item.idarea,
+    });
+    return (
+      <TouchableOpacity>
+        <View className="flex-row justify-between">
+          <Text className="text-black">{chargeQuery.data?.name}</Text>
+          <View className="flex-row">
+            <Tag severity="info" value={item.state} />
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
   const needPay = (watch("area")?.price || 0) > 0;
   return (
     <DefaultLayout>
@@ -332,7 +324,16 @@ const Reservation = () => {
                               data={areaCommonsAllQuery.data || []}
                               onChange={(e) => {
                                 field.onChange(e.id);
-                                setPriceSelect(e.price);
+                                const selectedArea =
+                                  areaCommonsAllQuery.data?.find(
+                                    (area) => area.id === e.id
+                                  );
+                                if (selectedArea) {
+                                  setValue(
+                                    "area.price",
+                                    selectedArea.price.toString()
+                                  );
+                                }
                               }}
                               icon={{
                                 type: IconType.MaterialCommunityIcons,
@@ -345,25 +346,27 @@ const Reservation = () => {
                     />
                   </View>
                   <View>
-                    <Controller
-                      name="area.price"
-                      control={control}
-                      render={({ field, fieldState: { error } }) => (
-                        <>
-                          <InputText
-                            ref={field.ref}
-                            value={field.value}
-                            onChangeText={(e) => field.onChange(e)}
-                            withAsterisk
-                            label="precio"
-                            placeholder="precio"
-                            error={error?.message}
-                          />
-                        </>
-                      )}
-                    />
+                    {watch("area.price") > 0 ? (
+                      <Controller
+                        name="area.price"
+                        control={control}
+                        render={({ field, fieldState: { error } }) => (
+                          <>
+                            <InputText
+                              ref={field.ref}
+                              value={field.value}
+                              onChangeText={(e) => field.onChange(e)}
+                              withAsterisk
+                              label="Precio"
+                              placeholder="precio"
+                              error={error?.message}
+                            />
+                          </>
+                        )}
+                      />
+                    ) : null}
                   </View>
-                  <View className="w-full">
+                  {/* <View className="w-full">
                     <InputCustom
                       icon={{
                         type: IconType.MaterialCommunityIcons,
@@ -385,7 +388,7 @@ const Reservation = () => {
                         </View>
                       }
                     />
-                  </View>
+                  </View> */}
                   <View className="mt-2">
                     <ButtonLoader
                       className="items-center"
@@ -410,6 +413,11 @@ const Reservation = () => {
                 </View>
               </View>
             </View>
+            <FlatList
+              data={paymentsQuery.data}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id || ""}
+            />
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

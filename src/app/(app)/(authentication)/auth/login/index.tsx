@@ -22,6 +22,7 @@ GoogleSignin.configure({
 import auth from "@react-native-firebase/auth";
 import { Link, Stack } from "expo-router";
 import SvgComponent from "@/components/SvgComponent";
+import { StatusBar } from "expo-status-bar";
 
 async function onGoogleButtonPress() {
   // Check if your device supports Google Play
@@ -59,113 +60,115 @@ const Login = () => {
   };
 
   return (
-    <View className="flex-1 bg-white">
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-      />
+    <>
+      <StatusBar style="light" />
+      <View className="flex-1 bg-white">
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+        />
 
-      <View
-        style={{
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-          bottom: 0,
-          zIndex: -1,
-        }}
-      >
-        <SvgComponent />
-      </View>
+        <View
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            bottom: 0,
+            zIndex: -1,
+          }}
+        >
+          <SvgComponent />
+        </View>
 
-      <View className="flex-1  justify-center p-4">
-        <View className="p-6 rounded-3xl border border-white">
-          <View className=" items-center mb-4">
-            <Text className="text-4xl font-bold mb-2 text-white">
-              Bienvenido
-            </Text>
-            {/* <Image source={logo} className="h-24 w-24 mb-2" /> */}
-            <Text className="text-lg font-bold text-white">
-              Inicia sesión con tu cuenta
-            </Text>
-          </View>
+        <View className="flex-1  justify-center p-4">
+          <View className="p-6 rounded-3xl border border-white">
+            <View className=" items-center mb-4">
+              <Text className="text-4xl font-bold mb-2 text-white">
+                Bienvenido
+              </Text>
+              {/* <Image source={logo} className="h-24 w-24 mb-2" /> */}
+              <Text className="text-lg font-bold text-white">
+                Inicia sesión con tu cuenta
+              </Text>
+            </View>
 
-          <View className="p-2">
-            <Text className="text-xl font-bold mb-1 text-white">Email:</Text>
-            <Controller
-              name="email"
-              control={control}
-              rules={{
-                required: "Email requerido",
-              }}
-              render={({ field, formState }) => (
-                <>
-                  <TextInput
-                    {...field}
-                    placeholder="Ingrese su email"
-                    placeholderClassName="text-primario-400"
-                    value={field.value}
-                    onChangeText={(e) => field.onChange(e)}
-                    className="text-white border border-primario-200 rounded py-2 px-4 mb-2 w-full"
-                  />
-                </>
+            <View className="p-2">
+              <Text className="text-xl font-bold mb-1 text-white">Email:</Text>
+              <Controller
+                name="email"
+                control={control}
+                rules={{
+                  required: "Email requerido",
+                }}
+                render={({ field, formState }) => (
+                  <>
+                    <TextInput
+                      {...field}
+                      placeholder="Ingrese su email"
+                      placeholderClassName="text-primario-400"
+                      value={field.value}
+                      onChangeText={(e) => field.onChange(e)}
+                      className="text-white border border-primario-200 rounded py-2 px-4 mb-2 w-full"
+                    />
+                  </>
+                )}
+              />
+
+              {errors?.email && (
+                <Text style={{ color: "red" }}>{errors.email?.message}</Text>
               )}
-            />
+            </View>
 
-            {errors?.email && (
-              <Text style={{ color: "red" }}>{errors.email?.message}</Text>
-            )}
-          </View>
-
-          <View className="mb-2 p-2">
-            <Text className="text-xl font-bold mb-1 text-white">
-              Contraseña:
-            </Text>
-            <Controller
-              name="password"
-              control={control}
-              rules={{
-                required: "Contraseña requerida",
-              }}
-              render={({ field, formState }) => (
-                <>
-                  <TextInput
-                    {...field}
-                    placeholder="Ingrese su contraseña"
-                    placeholderClassName="text-primario-400"
-                    value={field.value}
-                    secureTextEntry
-                    onChangeText={(e) => field.onChange(e)}
-                    className="text-white border border-primario-200 rounded py-2 px-4 mb-2 w-full"
-                  />
-                </>
+            <View className="mb-2 p-2">
+              <Text className="text-xl font-bold mb-1 text-white">
+                Contraseña:
+              </Text>
+              <Controller
+                name="password"
+                control={control}
+                rules={{
+                  required: "Contraseña requerida",
+                }}
+                render={({ field, formState }) => (
+                  <>
+                    <TextInput
+                      {...field}
+                      placeholder="Ingrese su contraseña"
+                      placeholderClassName="text-primario-400"
+                      value={field.value}
+                      secureTextEntry
+                      onChangeText={(e) => field.onChange(e)}
+                      className="text-white border border-primario-200 rounded py-2 px-4 mb-2 w-full"
+                    />
+                  </>
+                )}
+              />
+              {errors?.password && (
+                <Text style={{ color: "red" }}>{errors.password?.message}</Text>
               )}
-            />
-            {errors?.password && (
-              <Text style={{ color: "red" }}>{errors.password?.message}</Text>
-            )}
-          </View>
+            </View>
 
-          {/* <TouchableOpacity onPress={handleSubmit(onSubmit)}>
+            {/* <TouchableOpacity onPress={handleSubmit(onSubmit)}>
             <View className="bg-blue-500 p-3 rounded-md items-center">
               <Text className="text-white text-xl">Login</Text>
             </View>
           </TouchableOpacity> */}
-          <View className="p-2">
-            <TouchableOpacity onPress={handleSubmit(onSubmit)}>
-              <View className="border border-primario-200 p-3 rounded-md items-center">
-                <Text className="text-primario-100 text-xl">Login</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View className="flex-row items-center justify-end p-4">
-            <TouchableOpacity>
-              <Text className="font-bold text-blue-500 ">
-                Olvidaste tu contraseña?
-              </Text>
-            </TouchableOpacity>
-          </View>
-          {/* <TouchableOpacity
+            <View className="p-2">
+              <TouchableOpacity onPress={handleSubmit(onSubmit)}>
+                <View className="border border-primario-200 p-3 rounded-md items-center">
+                  <Text className="text-primario-100 text-xl">Login</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View className="flex-row items-center justify-end p-4">
+              <TouchableOpacity>
+                <Text className="font-bold text-blue-500 ">
+                  Olvidaste tu contraseña?
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {/* <TouchableOpacity
             //     onPress={promptAsync}
             //onPress={() => promptAsync()}
             //   disabled={isLoading}
@@ -180,7 +183,7 @@ const Login = () => {
             </View>
           </TouchableOpacity> */}
 
-          {/* <View className="items-center justify-center m-10">
+            {/* <View className="items-center justify-center m-10">
             <View className="flex-row gap-2">
               <Text>No tienes una cuenta?</Text>
               <Link href={"/auth/register/"} asChild>
@@ -190,9 +193,10 @@ const Login = () => {
               </Link>
             </View>
           </View> */}
+          </View>
         </View>
       </View>
-    </View>
+    </>
   );
 };
 
