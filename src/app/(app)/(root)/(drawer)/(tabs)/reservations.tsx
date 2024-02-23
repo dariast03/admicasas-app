@@ -4,7 +4,14 @@ import { Calendar, LocaleConfig } from "@/components/ui/calendar";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { useSessionContext } from "@/hooks/useSessionContext";
 import { useReserve } from "@/hooks/useReservation";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  ListRenderItem,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Colors from "@/constants/Colors";
 import {
   BottomSheet,
@@ -23,6 +30,9 @@ import { Button } from "@/components/ui/button";
 
 import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
+import { IReservation } from "@/types/reserve/reserve";
+import { useAreas } from "@/hooks/useAreas";
+import Tag from "@/components/Tag";
 
 LocaleConfig.defaultLocale = "es";
 const Reservations = () => {
@@ -62,6 +72,27 @@ const Reservations = () => {
   const handlePress = () => {
     router.push("/(app)/(root)/(screens)/reservation");
   };
+
+  const RenderItemReservation = ({ item }: { item: IReservation }) => {
+    const { areaCommonQuery } = useAreas({
+      id: item.idarea,
+    });
+    return (
+      <TouchableOpacity>
+        <View className="mx-6" style={styles.shadowCard}>
+          <View className="flex-row justify-between border-b border-primario-600 p-4">
+            <Text className="text-black">{areaCommonQuery.data?.name}</Text>
+            <View className="flex-row">
+              <Tag severity="info" value={item.state} />
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+  const renderReservation = ({ item }: { item: IReservation }) => (
+    <RenderItemReservation item={item} />
+  );
 
   return (
     <DefaultLayout>
@@ -136,6 +167,11 @@ const Reservations = () => {
         onDayPress={(day) => handleDayPress(new Date(day.dateString))}
         markingType="multi-dot"
         markedDates={markedDates}
+      />
+      <FlatList
+        data={reservationsQuery.data}
+        renderItem={renderReservation}
+        keyExtractor={(item) => item.id || ""}
       />
     </DefaultLayout>
   );

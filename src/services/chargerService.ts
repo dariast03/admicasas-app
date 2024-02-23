@@ -66,7 +66,7 @@ const getAllData = async ({
         data.push({
           ...chargeData,
           //@ts-ignore
-          start: new Date(chargeData.start.toDate()),
+          //start: new Date(chargeData.start.toDate()),
           //@ts-ignore
           end: new Date(chargeData.end.toDate()),
           id: doc.id,

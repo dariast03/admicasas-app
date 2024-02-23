@@ -20,6 +20,7 @@ export interface IReservation {
   urlPayment: string;
   filename: string;
   idhousing?: string;
+  type: "web" | "app";
 }
 
 export interface IDetailDate {

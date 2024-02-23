@@ -88,6 +88,8 @@ const Reservation = () => {
     delete data.reservedBy;
     data.idusuario = user.id;
     data.idhousing = selectedHousing;
+    data.state = "Pendiente";
+    data.type = "app";
     // const file = uploadRef.current?.getFiles();
 
     if (data?.id) {
@@ -156,21 +158,6 @@ const Reservation = () => {
   //   }
   // }, [watch("state")]);
 
-  const renderItem = (item: IReservation) => {
-    const { areaCommonQuery } = useAreas({
-      id = item.idarea,
-    });
-    return (
-      <TouchableOpacity>
-        <View className="flex-row justify-between">
-          <Text className="text-black">{chargeQuery.data?.name}</Text>
-          <View className="flex-row">
-            <Tag severity="info" value={item.state} />
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
   const needPay = (watch("area")?.price || 0) > 0;
   return (
     <DefaultLayout>
@@ -413,11 +400,6 @@ const Reservation = () => {
                 </View>
               </View>
             </View>
-            <FlatList
-              data={paymentsQuery.data}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id || ""}
-            />
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
