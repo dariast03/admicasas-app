@@ -8,7 +8,9 @@
     "scheme": "admicasas-app",
     "userInterfaceStyle": "automatic",
     "splash": {
+      
       "image": "./src/assets/images/splash.png",
+      
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
