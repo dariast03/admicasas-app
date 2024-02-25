@@ -1,12 +1,10 @@
-import { useColorScheme } from "nativewind";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useRef } from "react";
 import { Calendar, LocaleConfig } from "@/components/ui/calendar";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { useSessionContext } from "@/hooks/useSessionContext";
 import { useReserve } from "@/hooks/useReservation";
 import {
   FlatList,
-  ListRenderItem,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -28,7 +26,6 @@ import {} from "react-native-calendars";
 
 import { Button } from "@/components/ui/button";
 
-import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { IReservation } from "@/types/reserve/reserve";
 import { useAreas } from "@/hooks/useAreas";
@@ -78,26 +75,31 @@ const Reservations = () => {
     const { areaCommonQuery } = useAreas({
       id: item.idarea,
     });
+
+    const routeView = "/reservation/" + item.id;
+
     return (
-      <TouchableOpacity>
-        <View className="flex-row justify-between border-b border-primario-600 p-4">
-          <Text className="text-black">{areaCommonQuery.data?.name}</Text>
-          <View className="flex-row">
-            <Tag
-              severity={
-                item.state === "Aprobado"
-                  ? "success"
-                  : item.state === "Pendiente"
-                  ? "warning"
-                  : item.state === "Rechazado"
-                  ? "error"
-                  : "info"
-              }
-              value={item.state}
-            />
+      <link href={routeView}>
+        <TouchableOpacity>
+          <View className="flex-row justify-between border-b border-primario-600 p-4">
+            <Text className="text-black">{areaCommonQuery.data?.name}</Text>
+            <View className="flex-row">
+              <Tag
+                severity={
+                  item.state === "Aprobado"
+                    ? "success"
+                    : item.state === "Pendiente"
+                    ? "warning"
+                    : item.state === "Rechazado"
+                    ? "error"
+                    : "info"
+                }
+                value={item.state}
+              />
+            </View>
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </link>
     );
   };
   const renderReservation = ({ item }: { item: IReservation }) => (
