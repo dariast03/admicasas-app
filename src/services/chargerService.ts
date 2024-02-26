@@ -74,7 +74,6 @@ const getAllData = async ({
       }
     }
 
-    console.log("🚀 ~ data:", data);
     return data;
   } catch (e) {
     console.log(e);
@@ -128,7 +127,6 @@ const getData = async (id: string, { idhousing }: GetDataQueryParams) => {
     const docSnap = await docRef.get();
 
     const data = docSnap.data() as ICharge;
-    console.log("🚀 ~ getData ~ data:", data);
 
     const dataTypes = await paymentTypeService.getData(data.idpaymenttypes);
 

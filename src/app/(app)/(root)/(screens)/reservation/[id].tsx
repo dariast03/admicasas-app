@@ -229,7 +229,8 @@ const FormReservation = () => {
                       )}
 
                     {reservationQuery.data &&
-                      reservationQuery.data.state !== "Pendiente" && (
+                      reservationQuery.data.state !== "Pendiente" &&
+                      reservationQuery.data.state !== "Finalizado" && (
                         <AlertCard
                           value={reservationQuery.data.message}
                           severity={
