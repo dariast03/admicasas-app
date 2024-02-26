@@ -2,12 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Animated, useColorScheme } from "react-native";
 import { MaterialTopTabs } from "../../../../../navigator/top-tabs";
-import TopBar from "../../../../../layout/TopBar";
-import DefaultLayout from "../../../../../layout/DefaultLayout";
 import LayoutWithTopBar from "../../../../../layout/LayoutWithTopBar";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Colors from "@/constants/Colors";
-import { Stack, router } from "expo-router";
 
 const av = new Animated.Value(0);
 av.addListener(() => {

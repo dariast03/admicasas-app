@@ -17,10 +17,7 @@ import { useHousing } from "@/hooks/useHousing";
 import Dropdown from "@/components/DropDown";
 import { useAppContext } from "@/hooks/useAppContext";
 import Loader from "@/components/Loader";
-import { Route } from "expo-router";
-import { da } from "date-fns/locale";
 import DefaultLayout from "@/layout/DefaultLayout";
-import { useUsers } from "@/hooks/useUsers";
 
 type Props = {
   data: IAnnouncement;
