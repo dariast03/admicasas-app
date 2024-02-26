@@ -163,7 +163,7 @@ const Login = () => {
             </View>
             <View className="flex-row items-center justify-end p-4">
               <TouchableOpacity>
-                <Text className="font-bold text-blue-500 ">
+                <Text className="font-bold text-white">
                   Olvidaste tu contraseña?
                 </Text>
               </TouchableOpacity>
