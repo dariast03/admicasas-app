@@ -38,6 +38,26 @@ const getAllData = async (
   }
 };
 
+const getData = async (id: string) => {
+  try {
+    const docRef = firestore().collection(FirestoreKey).doc(id);
+    const docSnap = await docRef.get();
+
+    const data = docSnap.data() as IReservation;
+
+    return {
+      ...data,
+      //@ts-ignore
+      start: new Date(data.start.toDate()),
+      //@ts-ignore
+      end: new Date(data.end.toDate()),
+      id: docSnap.id,
+    };
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const checkSameAreaInDate = async (data: IReservation, isUpdate = false) => {
   console.log({
     data,
@@ -140,6 +160,7 @@ const insertData = async (data: IReservation) => {
 
 export default {
   getAllData,
+  getData,
   insertData,
   updateData,
 };

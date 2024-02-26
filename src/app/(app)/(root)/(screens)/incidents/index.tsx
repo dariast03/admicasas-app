@@ -10,7 +10,7 @@ import { IIncident } from "@/types/Incidents/incidents";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useHousing } from "@/hooks/useHousing";
 import { useSessionContext } from "@/hooks/useSessionContext";
-import { statusColorIncident } from "@/data/statusColorIncident";
+import { statusColorIncident } from "@/data/statusColor";
 import Colors from "@/constants/Colors";
 import Icon, { IconType } from "@/components/Icon";
 
@@ -71,14 +71,13 @@ const Incidents = () => {
           <>
             <Link href={`/incidents/form/${item.id}`} asChild>
               <TouchableOpacity activeOpacity={0.6}>
-                <View className="bg-primario-50 dark:bg-primario-400 p-4 flex-row justify-between">
+                <View className="bg-primario-50 dark:bg-primario-400 p-4 flex-row color={Colors.primario[600]}">
                   <Text className="dark:text-white">{item.description}</Text>
-                  <View>
-                    <Tag
-                      value={item.state}
-                      severity={statusColorIncident[item.state]}
-                    />
-                  </View>
+
+                  <Tag
+                    value={item.state}
+                    severity={statusColorIncident[item.state]}
+                  />
                 </View>
               </TouchableOpacity>
             </Link>

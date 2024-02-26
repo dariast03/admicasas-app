@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useEffect, useRef } from "react";
-import { router, useLocalSearchParams } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { InputDatePicker, InputText } from "@/components/CustomInput";
@@ -20,8 +20,9 @@ import Loader from "@/components/Loader";
 import { useHousing } from "@/hooks/useHousing";
 import { useSessionContext } from "@/hooks/useSessionContext";
 import { useAppContext } from "@/hooks/useAppContext";
-import { IconType } from "@/components/Icon";
+import Icon, { IconType } from "@/components/Icon";
 import { IVisit } from "@/types/visits/visits";
+import Colors from "@/constants/Colors";
 
 const shadow = {
   shadowColor: "#000",
@@ -124,6 +125,28 @@ const FormVisit = () => {
   return (
     <>
       <DefaultLayout>
+        <Stack.Screen
+          options={{
+            headerShadowVisible: false,
+            headerTitleAlign: "center",
+
+            title: "Nuevo Registro",
+            headerStyle: {
+              backgroundColor: Colors.primario[600],
+            },
+            headerTintColor: "white",
+            headerLeft: () => (
+              <Icon
+                color={"white"}
+                icon={{
+                  type: IconType.Ionicon,
+                  name: "chevron-back-outline",
+                }}
+                onPress={() => router.back()}
+              />
+            ),
+          }}
+        />
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={undefined}
@@ -137,10 +160,10 @@ const FormVisit = () => {
                   style={shadow}
                 >
                   <View className="items-center mb-4">
-                    <Text className="text-2xl font-bold mb-2  ">
-                      Registra una visita
+                    <Text className="text-xl font-bold mb-2 text-primario-600 ">
+                      Registro de Visita
                     </Text>
-                    <Text className="text-lg  text-center  ">
+                    <Text className="text-sm  text-center text-primario-600">
                       Por favor, completa el formulario para registrar una
                       visita
                     </Text>

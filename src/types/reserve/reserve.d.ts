@@ -21,6 +21,7 @@ export interface IReservation {
   filename: string;
   idhousing?: string;
   type: "web" | "app";
+  message: string;
 }
 
 export interface IDetailDate {
@@ -37,4 +38,4 @@ interface IStatusReservation2 {
   name: "Rechazado" | "Aprobado" | "Pendiente";
 }
 
-type IStatusReservation = "Rechazado" | "Aprobado" | "Pendiente";
+type IStatusReservation = "Rechazado" | "Aprobado" | "Pendiente" | "Finalizado";

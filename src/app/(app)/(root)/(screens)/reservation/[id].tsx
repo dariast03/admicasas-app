@@ -33,9 +33,10 @@ import { useReserve } from "@/hooks/useReservation";
 import { detailDate } from "@/helpers/detailDate";
 import { useAppContext } from "@/hooks/useAppContext";
 import Tag from "@/components/Tag";
+import { statusColorReservation } from "@/data/statusColor";
 
 const FormReservation = () => {
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{ id: string }>();
 
   const shadow = {
     shadowColor: "#000",
@@ -54,6 +55,7 @@ const FormReservation = () => {
     start: addMinutes(new Date(), 5),
     end: addMinutes(new Date(), 5),
   });
+  const { selectedHousing } = useAppContext();
 
   const {
     control,
@@ -66,13 +68,14 @@ const FormReservation = () => {
   } = useForm<IReservation>({
     mode: "onChange",
     defaultValues: {
+      state: "Pendiente",
+      idhousing: selectedHousing || "",
+      type: "app",
       start: new Date(),
       end: new Date(),
     },
   });
   const { user } = useSessionContext();
-
-  const { selectedHousing } = useAppContext();
 
   const [priceSelect, setPriceSelect] = useState<number | null>(null);
 
@@ -81,25 +84,25 @@ const FormReservation = () => {
     params: { idcondominium: user.account.idcondominium },
   });
 
-  const { reservationCreateMutation, reservationUpdateMutation } = useReserve({
-    params: { idcondominium: user.account.idcondominium },
-  });
+  const {
+    reservationCreateMutation,
+    reservationUpdateMutation,
+    reservationQuery,
+  } = useReserve({ id });
 
   const onSubmit = async (data: IReservation) => {
     delete data.area;
     delete data.reservedBy;
-    data.idusuario = user.id;
-    data.idhousing = selectedHousing;
-    data.state = "Pendiente";
-    data.type = "app";
+
     // const file = uploadRef.current?.getFiles();
 
-    if (!id) {
+    if (id) {
       await reservationUpdateMutation.mutateAsync({
         data,
         //requiredPayment:needPay
       });
-    } else {
+      data.idusuario = user.id;
+
       await reservationCreateMutation.mutateAsync({
         data,
         requiredPayment: needPay,
@@ -112,6 +115,13 @@ const FormReservation = () => {
     // });
     router.back();
   };
+
+  useEffect(() => {
+    if (reservationQuery.data) {
+      //setValue("date", reservationsQuery.data.date);
+      reset(reservationQuery.data);
+    }
+  }, [reservationQuery.data]);
 
   // const onSubmit = async (data: any) => {
   //   if (isEdit) {
@@ -207,12 +217,27 @@ const FormReservation = () => {
                 </View>
 
                 <View className="mb-4">
-                  <AlertCard
-                    value={
-                      "Tu solicitud se encuentra en revisión. Aun puedes editar la informacion proporcionada"
-                    }
-                    severity={"warning"}
-                  />
+                  <View className="mb-4">
+                    {reservationQuery.data &&
+                      reservationQuery.data.state === "Pendiente" && (
+                        <AlertCard
+                          value={
+                            "Tu solicitud se encuentra en revisión. Aun puedes editar la informacion proporcionada"
+                          }
+                          severity={"warning"}
+                        />
+                      )}
+
+                    {reservationQuery.data &&
+                      reservationQuery.data.state !== "Pendiente" && (
+                        <AlertCard
+                          value={reservationQuery.data.message}
+                          severity={
+                            statusColorReservation[reservationQuery.data.state]
+                          }
+                        />
+                      )}
+                  </View>
                 </View>
 
                 <View className="gap-2">

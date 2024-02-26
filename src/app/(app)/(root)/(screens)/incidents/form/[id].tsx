@@ -6,7 +6,7 @@ import {
   Keyboard,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { router, useLocalSearchParams } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { IIncident } from "@/types/Incidents/incidents";
 import DefaultLayout from "@/layout/DefaultLayout";
@@ -32,7 +32,8 @@ import { useHousing } from "@/hooks/useHousing";
 import { useSessionContext } from "@/hooks/useSessionContext";
 import { useAppContext } from "@/hooks/useAppContext";
 import AlertCard from "@/components/AlertCard";
-import { statusColorIncident } from "@/data/statusColorIncident";
+import { statusColorIncident } from "@/data/statusColor";
+import Colors from "@/constants/Colors";
 
 const shadow = {
   shadowColor: "#000",
@@ -170,6 +171,28 @@ const FormIncident = () => {
   return (
     <>
       <DefaultLayout>
+        <Stack.Screen
+          options={{
+            headerShadowVisible: false,
+            headerTitleAlign: "center",
+
+            title: "Nuevo Incidente",
+            headerStyle: {
+              backgroundColor: Colors.primario[600],
+            },
+            headerTintColor: "white",
+            headerLeft: () => (
+              <Icon
+                color={"white"}
+                icon={{
+                  type: IconType.Ionicon,
+                  name: "chevron-back-outline",
+                }}
+                onPress={() => router.back()}
+              />
+            ),
+          }}
+        />
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={undefined}
@@ -183,12 +206,12 @@ const FormIncident = () => {
                   style={shadow}
                 >
                   <View className="items-center mb-4">
-                    <Text className="text-2xl font-bold mb-2  ">
-                      Registra un incidente
+                    <Text className="text-2xl font-bold mb-2 text-primario-600">
+                      Registro de Incidente
                     </Text>
-                    <Text className="text-lg  text-center  ">
+                    <Text className="text-md  text-center text-primario-600 ">
                       Por favor, completa el formulario para reportar un
-                      incidente
+                      incidente.
                     </Text>
                   </View>
 

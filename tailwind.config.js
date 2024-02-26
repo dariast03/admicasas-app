@@ -1,27 +1,29 @@
+const Colors = require("./src/constants/Colors");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
+
   theme: {
     extend: {
       colors: {
         primario: {
-          '50': '#eeeeff',
-          '100': '#e0e1ff',
-          '200': '#c7c8fe',
-          '300': '#a5a7fc',
-          '400': '#8184f8',
-          '500': '#6366f1',
-          '600': '#4649e5',
-          '700': '#383bca',
-          '800': '#3032a3',
-          '900': '#2e3081',
-          '950': '#1b1c4b',
-          'dark': '#1b1c4b'
+          50: Colors.default.primario[50],
+          100: Colors.default.primario[100],
+          200: Colors.default.primario[200],
+          300: Colors.default.primario[300],
+          400: Colors.default.primario[400],
+          500: Colors.default.primario[500],
+          600: Colors.default.primario[600],
+          700: Colors.default.primario[700],
+          800: Colors.default.primario[800],
+          900: Colors.default.primario[900],
+          950: Colors.default.primario[950],
+          dark: Colors.default.primario[950],
         },
-      }
+      },
     },
   },
   plugins: [],
-}
-
+};

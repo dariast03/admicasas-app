@@ -9,7 +9,7 @@ import React from "react";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link } from "expo-router";
-
+import Colors from "@/constants/Colors";
 type Menu = {
   icon: any;
   title: string;
@@ -18,17 +18,17 @@ type Menu = {
 
 const menu: Menu[] = [
   {
-    icon: <FontAwesome name="warning" size={50} color="#4f46e5" />,
+    icon: <FontAwesome name="warning" size={50} color={Colors.primario[600]} />,
     title: "INCIDENTES",
     to: "/incidents",
   },
   {
-    icon: <FontAwesome name="group" size={50} color="#4f46e5" />,
+    icon: <FontAwesome name="group" size={50} color={Colors.primario[600]} />,
     title: "LIBRO VISITAS",
     to: "/visits",
   },
   {
-    icon: <FontAwesome name="group" size={50} color="#4f46e5" />,
+    icon: <FontAwesome name="group" size={50} color={Colors.primario[600]} />,
     title: "REUNIONES",
     to: "/otromas",
   },

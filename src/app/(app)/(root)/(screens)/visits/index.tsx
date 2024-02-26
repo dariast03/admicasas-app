@@ -2,13 +2,15 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { FontAwesome } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { Link, Stack, router } from "expo-router";
 import { useVisits } from "@/hooks/useVisits";
 import { FlatList } from "react-native-gesture-handler";
 import Tag from "@/components/Tag";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useSessionContext } from "@/hooks/useSessionContext";
 import clsx from "clsx";
+import Colors from "@/constants/Colors";
+import Icon, { IconType } from "@/components/Icon";
 
 const Visits = () => {
   const { selectedHousing } = useAppContext();
@@ -29,6 +31,28 @@ const Visits = () => {
 
   return (
     <DefaultLayout>
+      <Stack.Screen
+        options={{
+          headerShadowVisible: false,
+          headerTitleAlign: "center",
+
+          title: "Libro de Visitas",
+          headerStyle: {
+            backgroundColor: Colors.primario[600],
+          },
+          headerTintColor: "white",
+          headerLeft: () => (
+            <Icon
+              color={"white"}
+              icon={{
+                type: IconType.Ionicon,
+                name: "chevron-back-outline",
+              }}
+              onPress={() => router.back()}
+            />
+          ),
+        }}
+      />
       <FlatList
         data={visits}
         ListHeaderComponent={() => (
@@ -64,7 +88,9 @@ const Visits = () => {
         )}
         //     ItemSeparatorComponent={() => <View className="mb-1" />}
         ListEmptyComponent={() => (
-          <Text>Aun no tienes visitas en la vivienda</Text>
+          <Text className="text-center">
+            ¡Todavía no tienes visitas programadas para esta vivienda!
+          </Text>
         )}
       />
 

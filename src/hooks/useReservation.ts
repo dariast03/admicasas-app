@@ -34,7 +34,7 @@ type PropsUpdate = {
   requiredPayment: boolean;
 };
 
-export const useReserve = ({ id = undefined, params }: Props) => {
+export const useReserve = ({ id, params }: Props = {}) => {
   const client = useQueryClient();
 
   /*
@@ -50,11 +50,11 @@ export const useReserve = ({ id = undefined, params }: Props) => {
     queryFn: () => reservationService.getAllData(params),
   });
 
-  // const reservationQuery = useQuery({
-  //   queryKey: ["reservations", id],
-  //   queryFn: () => reservationService.getData(id || ""),
-  //   enabled: !!id,
-  // });
+  const reservationQuery = useQuery({
+    queryKey: ["reservations", id],
+    queryFn: () => reservationService.getData(id || ""),
+    enabled: !!id,
+  });
 
   const reservationCreateMutation = useMutation({
     mutationFn: async (data: PropsCreate) => {
@@ -176,7 +176,7 @@ export const useReserve = ({ id = undefined, params }: Props) => {
 
   return {
     reservationsQuery,
-    //reservationQuery,
+    reservationQuery,
     reservationCreateMutation,
     reservationUpdateMutation,
     // reservationDeleteMutation,
