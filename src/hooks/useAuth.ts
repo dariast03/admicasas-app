@@ -4,6 +4,7 @@ import authService from "../services/authService";
 import { IFormLogin, IFormRegister } from "../types/user";
 import { useSessionContext } from "./useSessionContext";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import Toast from "react-native-toast-message";
 
 const useAuth = () => {
   // const { setLogin, user, status, setLogout, setCondominium } = useAuthStore();
@@ -28,11 +29,31 @@ const useAuth = () => {
         },
       }); */
 
-      console.log("LOGIN");
       const response = await authService.login(data);
-      if (!response) return;
-      console.log(response, 222);
-      signIn(response);
+
+      // return console.log("🚀 ~ onLogin ~ response:", response);
+      if (response && !response.error) {
+        signIn(response);
+        Toast.show({
+          type: "success",
+          text1: "Éxito",
+          text2: "Has iniciado sesión correctamente",
+        });
+      } else if (response.error) {
+        Toast.show({
+          type: "error",
+          text1: "Mensaje",
+          text2: response.error,
+        });
+      } else {
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "Hubo un error. Contacta con soporte",
+        });
+      }
+
+      //signIn(response);
     } finally {
       setIsLoading(false);
     }

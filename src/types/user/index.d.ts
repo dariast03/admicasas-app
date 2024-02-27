@@ -15,10 +15,11 @@ export interface IAccount {
   condominiums: [];
 }
 export interface IUser {
-  id: string;
-  displayName: string;
-  email: string;
-  account: IAccount;
+  id?: string;
+  displayName?: string;
+  email?: string;
+  account?: IAccount;
+  error?: string;
 }
 
 export interface IUserAccount {
@@ -43,5 +44,6 @@ export interface IFormRegister {
   name: string;
   email: string;
   password: string;
+
   rememberEmail: boolean;
 }

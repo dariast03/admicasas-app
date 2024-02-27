@@ -155,9 +155,20 @@ const Login = () => {
             </View>
           </TouchableOpacity> */}
             <View className="p-2">
-              <TouchableOpacity onPress={handleSubmit(onSubmit)}>
+              <TouchableOpacity
+                onPress={handleSubmit(onSubmit)}
+                disabled={isLoading}
+              >
                 <View className="border border-primario-200 p-3 rounded-md items-center">
-                  <Text className="text-primario-100 text-xl">Login</Text>
+                  {isLoading ? (
+                    <Text className="text-primario-100 text-xl">
+                      Autenticando...
+                    </Text>
+                  ) : (
+                    <Text className="text-primario-100 text-xl">
+                      Iniciar Sesión
+                    </Text>
+                  )}
                 </View>
               </TouchableOpacity>
             </View>
