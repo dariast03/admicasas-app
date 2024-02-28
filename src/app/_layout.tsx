@@ -13,6 +13,7 @@ import "../global.css";
 import "../output.css";
 import Toast from "react-native-toast-message";
 import messaging from "@react-native-firebase/messaging";
+import { toastConfig } from "@/components/Toast";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -66,7 +67,7 @@ function RootLayoutNav() {
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         </Stack>
       </ThemeProvider>
-      <Toast />
+      <Toast config={toastConfig} />
     </SessionProvider>
   );
 }

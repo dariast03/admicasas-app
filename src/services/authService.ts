@@ -4,7 +4,7 @@ import firestore from "@react-native-firebase/firestore";
 import { IAccount, IFormLogin, IFormRegister } from "../types/user";
 
 import { IUser } from "../types/user/index";
-import { firestoreErrors } from "@/helpers/firestoreErrors";
+import { firebaseError } from "@/helpers/firestoreErrors";
 
 const FirestoreKey = "Users";
 
@@ -29,20 +29,22 @@ const login = async (data: IFormLogin): Promise<IUser> => {
         };
       } catch (error: any) {
         console.log("🚀 ~ login ~ error:", error);
-
-        if (error.code === "auth/wrong-password") {
-          return {
-            error:
-              "La contraseña ingresada es incorrecta. Por favor, intenta de nuevo.",
-          };
-        } else if (error.code === "auth/invalid-login") {
-          return {
-            error:
-              "La combinación de correo electrónico y contraseña es inválida. Por favor, verifica la información e intenta de nuevo.",
-          };
-        } else {
-          throw new Error(error.code);
-        }
+        return {
+          error: firebaseError[error.code],
+        };
+        // if (error.code === "auth/wrong-password") {
+        //   return {
+        //     error:
+        //       "La contraseña ingresada es incorrecta. Por favor, intenta de nuevo.",
+        //   };
+        // } else if (error.code === "auth/invalid-login") {
+        //   return {
+        //     error:
+        //       "La combinación de correo electrónico y contraseña es inválida. Por favor, verifica la información e intenta de nuevo.",
+        //   };
+        // } else {
+        //   throw new Error(error.code);
+        // }
       }
     } else {
       return {
