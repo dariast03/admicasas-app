@@ -30,7 +30,7 @@ const menu: Menu[] = [
   {
     icon: <FontAwesome name="group" size={50} color={Colors.primario[600]} />,
     title: "REUNIONES",
-    to: "/otromas",
+    to: "/meeting",
   },
 ];
 const Community = () => {

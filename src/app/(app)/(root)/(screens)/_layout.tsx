@@ -82,6 +82,29 @@ export default function UnprotectedLayout() {
           }}
         />
 
+        <Stack.Screen
+          name="meeting/index"
+          options={{
+            headerShadowVisible: false,
+            headerTitleAlign: "center",
+            title: "Reuniones",
+            headerStyle: {
+              backgroundColor: Colors.primario[600],
+            },
+            headerTintColor: "white",
+            headerLeft: () => (
+              <Icon
+                color={"white"}
+                icon={{
+                  type: IconType.Ionicon,
+                  name: "chevron-back-outline",
+                }}
+                onPress={() => router.back()}
+              />
+            ),
+          }}
+        />
+
         <Stack.Screen name="areas/index" options={{}} />
 
         <Stack.Screen name="profile/index" />
