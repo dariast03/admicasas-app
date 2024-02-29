@@ -149,14 +149,13 @@ const Icon = ({ icon, ...props }: TIcon) => {
 
       {icon.type === IconType.Feather && (
         <Feather
-          {...props}
           name={icon.name}
-          size={20}
-          color={color}
+          size={props.size ? props.size : 20}
+          color={props.color ? props.color : color}
           style={{
-            fontSize: 22,
             marginRight: 10,
           }}
+          {...props}
         />
       )}
       {icon.type === IconType.FontAwesome5 && (
