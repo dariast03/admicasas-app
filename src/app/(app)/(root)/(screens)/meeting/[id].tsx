@@ -66,19 +66,21 @@ const MeetingDetail = () => {
           </View>
         </View>
 
-        <TouchableOpacity activeOpacity={0.8} onPress={downloadFile}>
-          <View className="flex items-center justify-center mt-10 bg-primario-500 rounded-xl flex-row p-4 gap-3">
-            <Text className="text-white font-bold">Descargar Acta</Text>
+        {urlAct && (
+          <TouchableOpacity activeOpacity={0.8} onPress={downloadFile}>
+            <View className="flex items-center justify-center mt-10 bg-primario-500 rounded-xl flex-row p-4 gap-3">
+              <Text className="text-white font-bold">Descargar Acta</Text>
 
-            <Icon
-              color={"#fff"}
-              icon={{
-                type: IconType.Feather,
-                name: "download-cloud",
-              }}
-            />
-          </View>
-        </TouchableOpacity>
+              <Icon
+                color={"#fff"}
+                icon={{
+                  type: IconType.Feather,
+                  name: "download-cloud",
+                }}
+              />
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
     </FixedScroll>
   );
