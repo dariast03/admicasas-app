@@ -18,7 +18,7 @@ export interface IUser {
   id?: string;
   displayName?: string;
   email?: string;
-  account?: IAccount;
+  account: IAccount;
   error?: string;
 }
 

@@ -50,6 +50,12 @@ export const useReserve = ({ id, params }: Props = {}) => {
     queryFn: () => reservationService.getAllData(params),
   });
 
+  // const reservationsDayQuery = useQuery({
+  //   queryKey: ["reservations", params],
+  //   queryFn: () => reservationService.getAllDayData(params),
+  //   enabled: !!params,
+  // });
+
   const reservationQuery = useQuery({
     queryKey: ["reservations", id],
     queryFn: () => reservationService.getData(id || ""),
@@ -176,6 +182,7 @@ export const useReserve = ({ id, params }: Props = {}) => {
 
   return {
     reservationsQuery,
+    //reservationsDayQuery,
     reservationQuery,
     reservationCreateMutation,
     reservationUpdateMutation,

@@ -22,12 +22,29 @@ const getData = async (id: string) => {
   try {
     const docRef = firestore().collection(FirestoreKey).doc(id);
     const docSnap = await docRef.get();
-    const data = { ...(docSnap.data() as IArea), id: docSnap.id } as IArea;
-    return data;
+
+    const data = docSnap.data() as IArea;
+
+    return {
+      ...data,
+      id: docSnap.id,
+    };
   } catch (e) {
     console.log(e);
   }
 };
+
+// const getData = async (id: string) => {
+//   try {
+//     const docRef = firestore().collection(FirestoreKey).doc(id);
+//     const docSnap = await docRef.get();
+
+//     const data = { ...(docSnap.data() as IArea), id: docSnap.id } as IArea;
+//     return data;
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
 
 type GetDataQueryParams = {
   idcondominium: string;

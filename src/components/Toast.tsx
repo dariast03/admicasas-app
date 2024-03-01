@@ -1,3 +1,4 @@
+import Colors from "@/constants/Colors";
 import { Text, View } from "react-native";
 import Toast, {
   BaseToast,
@@ -16,10 +17,14 @@ export const toastConfig: ToastConfig = {
   success: (props) => (
     <BaseToast
       {...props}
-      style={{ borderLeftColor: "pink" }}
+      style={{ borderLeftColor: "green" }}
       contentContainerStyle={{ paddingHorizontal: 15 }}
       text1Style={{
         fontSize: 15,
+        fontWeight: "400",
+      }}
+      text2Style={{
+        fontSize: 12,
         fontWeight: "400",
       }}
     />
@@ -33,9 +38,11 @@ export const toastConfig: ToastConfig = {
       {...props}
       text1Style={{
         fontSize: 15,
+        fontWeight: "400",
       }}
       text2Style={{
         fontSize: 12,
+        fontWeight: "400",
       }}
       text2NumberOfLines={3}
       style={{

@@ -1,6 +1,8 @@
 import { IReservation } from "../types/reserve/reserve";
 import { isWithinInterval, startOfMonth } from "date-fns";
 import firestore from "@react-native-firebase/firestore";
+import areaService from "./areaService";
+import { IArea } from "@/types/area/area";
 
 const FirestoreKey = "Reservation";
 
@@ -16,6 +18,44 @@ const getAllData = async (
     let queryRef = firestore()
       .collection(FirestoreKey)
       .where("idcondominium", "==", idcondominium);
+
+    const querySnapshot = await queryRef.get();
+
+    const dataPromises: Promise<IReservation>[] = querySnapshot.docs.map(
+      async (doc) => {
+        const dataRef = doc.data() as IReservation;
+
+        const area = await areaService.getData(dataRef.idarea);
+
+        return {
+          ...dataRef,
+          areaName: area?.name,
+          id: doc.id,
+          //@ts-ignore
+          start: new Date(dataRef.start.toDate()),
+          //@ts-ignore
+          end: new Date(dataRef.end.toDate()),
+        } as IReservation;
+      }
+    );
+
+    const data = await Promise.all(dataPromises);
+    data.sort((a, b) => a.end.getTime() - b.end.getTime());
+    return data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const getAllDayData = async (
+  { idcondominium, selectedDate }: GetAllDataQueryParams = { idcondominium: "" }
+) => {
+  try {
+    let queryRef = firestore()
+      .collection(FirestoreKey)
+      .where("idcondominium", "==", idcondominium)
+      .where("start", "==", selectedDate)
+      .where("end", "==", selectedDate);
 
     const querySnapshot = await queryRef.get();
 
@@ -160,6 +200,7 @@ const insertData = async (data: IReservation) => {
 
 export default {
   getAllData,
+  getAllDayData,
   getData,
   insertData,
   updateData,

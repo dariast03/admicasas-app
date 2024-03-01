@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Calendar, LocaleConfig } from "@/components/ui/calendar";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { useSessionContext } from "@/hooks/useSessionContext";
@@ -22,28 +22,42 @@ import {
 } from "@/components/ui/bottom-sheet";
 
 import Icon, { IconType } from "@/components/Icon";
-import {} from "react-native-calendars";
 
 import { Button } from "@/components/ui/button";
 
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { IReservation } from "@/types/reserve/reserve";
 import { useAreas } from "@/hooks/useAreas";
 import Tag from "@/components/Tag";
-import { ScrollView } from "react-native-gesture-handler";
 
 LocaleConfig.defaultLocale = "es";
 const Reservations = () => {
   const router = useRouter();
   const { user } = useSessionContext();
+
+  const [selectedDate, setSelectedDate] = useState<Date>();
+
   const { reservationsQuery } = useReserve({
     params: { idcondominium: user.account.idcondominium },
   });
+
+  // const { reservationsDayQuery } = useReserve({
+  //   params: { idcondominium: user.account.idcondominium, selectedDate },
+  // });
+
   const visible = useRef<BottomSheetContentRef>(null);
+  const [reservationsData, setReservationsData] = useState<IReservation[]>([]);
 
   const handleDayPress = (date: Date) => {
+    setSelectedDate(date);
     visible.current?.present();
   };
+
+  const filterReservation = reservationsQuery.data?.filter(
+    (x) =>
+      x.start.toLocaleDateString() === selectedDate?.toLocaleDateString() ||
+      x.end.toLocaleDateString() === selectedDate?.toLocaleDateString()
+  );
 
   const markedDates: { [key: string]: any } = {};
 
@@ -61,10 +75,54 @@ const Reservations = () => {
     }
   });
 
-  const renderItem = ({ item }: { item: any }) => (
-    <View className="flex-1">
-      <Text>{item.id}</Text>
+  const renderItem = ({ item }: { item: IReservation }) => (
+    <View className="flex-1 pb-2 gap-6">
+      <View className="p-2">
+        <View className="flex-row">
+          <View className="flex-row">
+            <Icon
+              icon={{
+                type: IconType.FontAweomseIcon,
+                name: "check-square-o",
+              }}
+            />
+            <Text className="font-semibold mr-2 text-primario-600">Area:</Text>
+          </View>
+          <Text className={"pb-2.5"}>{item.areaName.toLocaleUpperCase()}</Text>
+        </View>
+        <View className="flex-row">
+          <View className="flex-row">
+            <Icon
+              icon={{
+                type: IconType.FontAweomseIcon,
+                name: "calendar",
+              }}
+            />
+            <Text className="font-semibold mr-2 text-primario-600">
+              Fecha Inicio:
+            </Text>
+          </View>
+          <Text className={"pb-2.5"}>{item.start.toLocaleString()}</Text>
+        </View>
+        <View className="flex-row">
+          <View className="flex-row">
+            <Icon
+              icon={{
+                type: IconType.FontAweomseIcon,
+                name: "calendar",
+              }}
+            />
+            <Text className="font-semibold mr-2 text-primario-600">
+              Fecha Fin:
+            </Text>
+          </View>
+          <Text className={"pb-2.5"}>{item.end.toLocaleString()}</Text>
+        </View>
+      </View>
     </View>
+    // <View className="flex-1">
+    //   <Text>{item.title}</Text>
+    // </View>
   );
 
   const handlePress = () => {
@@ -109,6 +167,9 @@ const Reservations = () => {
   const renderReservation = ({ item }: { item: IReservation }) => (
     <RenderItemReservation item={item} />
   );
+  const itemSeparator = () => {
+    <View className="border-b border-primario-600"></View>;
+  };
 
   return (
     <DefaultLayout>
@@ -121,33 +182,15 @@ const Reservations = () => {
           </BottomSheetHeader>
 
           <BottomSheetView className="gap-5 pt-6">
-            <View className="pb-2 gap-6">
-              <View className="flex-row justify-around">
-                <View className="flex-row">
-                  <Icon
-                    icon={{
-                      type: IconType.FontAweomseIcon,
-                      name: "check-square-o",
-                    }}
-                  />
-                  <Text className={"pb-2.5"}>Piscina</Text>
-                </View>
-                <Text>{new Date(Date.now()).toDateString()}</Text>
-              </View>
-              <View className="flex-row justify-around">
-                <View className="flex-row">
-                  <Icon
-                    icon={{
-                      type: IconType.FontAweomseIcon,
-                      name: "check-square-o",
-                    }}
-                  />
-                  <Text>Parrillero</Text>
-                </View>
+            <FlatList
+              data={filterReservation}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id || ""}
+              ItemSeparatorComponent={() => (
+                <View className="border-primario-600 border-b" />
+              )}
+            />
 
-                <Text>{new Date(Date.now()).toDateString()}</Text>
-              </View>
-            </View>
             {/* <View className={cn(Platform.OS === "android" && "pb-2")}>
                 <BottomSheetCloseTrigger>
                   <Text>Save Changes</Text>
@@ -198,7 +241,7 @@ const Reservations = () => {
                 className="p-1 m-4"
                 ListHeaderComponent={
                   <Text className="text-center text-lg text-primario-600 rounded-t-md font-semibold ">
-                    Lista de Reservas
+                    Mis Reservas
                   </Text>
                 }
                 data={reservationsQuery.data}

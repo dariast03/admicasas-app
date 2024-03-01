@@ -101,7 +101,7 @@ const FormReservation = () => {
         data,
         //requiredPayment:needPay
       });
-      data.idusuario = user.id;
+      data.idusuario = user.id || "";
 
       await reservationCreateMutation.mutateAsync({
         data,

@@ -22,6 +22,7 @@ export interface IReservation {
   idhousing?: string;
   type: "web" | "app";
   message: string;
+  areaName: string;
 }
 
 export interface IDetailDate {
