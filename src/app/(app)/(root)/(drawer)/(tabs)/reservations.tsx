@@ -5,6 +5,7 @@ import { useSessionContext } from "@/hooks/useSessionContext";
 import { useReserve } from "@/hooks/useReservation";
 import {
   FlatList,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,6 +14,7 @@ import {
 import Colors from "@/constants/Colors";
 import {
   BottomSheet,
+  BottomSheetCloseTrigger,
   BottomSheetContent,
   BottomSheetContentRef,
   BottomSheetFlatList,
@@ -29,6 +31,7 @@ import { useRouter } from "expo-router";
 import { IReservation } from "@/types/reserve/reserve";
 import { useAreas } from "@/hooks/useAreas";
 import Tag from "@/components/Tag";
+import { cn } from "@/lib/utils";
 
 LocaleConfig.defaultLocale = "es";
 const Reservations = () => {
@@ -40,10 +43,6 @@ const Reservations = () => {
   const { reservationsQuery } = useReserve({
     params: { idcondominium: user.account.idcondominium },
   });
-
-  // const { reservationsDayQuery } = useReserve({
-  //   params: { idcondominium: user.account.idcondominium, selectedDate },
-  // });
 
   const visible = useRef<BottomSheetContentRef>(null);
   const [reservationsData, setReservationsData] = useState<IReservation[]>([]);
@@ -120,9 +119,6 @@ const Reservations = () => {
         </View>
       </View>
     </View>
-    // <View className="flex-1">
-    //   <Text>{item.title}</Text>
-    // </View>
   );
 
   const handlePress = () => {
@@ -133,8 +129,6 @@ const Reservations = () => {
     const { areaCommonQuery } = useAreas({
       id: item.idarea,
     });
-
-    // const routeView = "/reservation/" + item.id;
 
     const navigateToReservation = () => {
       router.push(`/(app)/(root)/(screens)/reservation/${item.id}`);
@@ -191,11 +185,11 @@ const Reservations = () => {
               )}
             />
 
-            {/* <View className={cn(Platform.OS === "android" && "pb-2")}>
-                <BottomSheetCloseTrigger>
-                  <Text>Save Changes</Text>
-                </BottomSheetCloseTrigger>
-              </View> */}
+            <View className={cn(Platform.OS === "android" && "pb-2 pr-2")}>
+              <BottomSheetCloseTrigger>
+                <Text className="text-red-500 text-right">Cerrar</Text>
+              </BottomSheetCloseTrigger>
+            </View>
           </BottomSheetView>
         </BottomSheetContent>
       </BottomSheet>
@@ -235,7 +229,6 @@ const Reservations = () => {
               markingType="multi-dot"
               markedDates={markedDates}
             />
-            {/* <View className="mx-4 rounded-lg bg-white mb-2" style={styles.shadowCard}> */}
             {reservationsQuery.data && (
               <FlatList
                 className="p-1 m-4"
