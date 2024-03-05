@@ -1,9 +1,29 @@
 import Colors from "@/constants/Colors";
 
 import { Stack, router } from "expo-router";
+
 import Icon, { IconType } from "@/components/Icon";
 
 export default function UnprotectedLayout() {
+  const config: any = {
+    headerShadowVisible: false,
+    headerTitleAlign: "center",
+    headerStyle: {
+      backgroundColor: Colors.primario[600],
+    },
+    headerTintColor: "white",
+    headerLeft: () => (
+      <Icon
+        color={"white"}
+        icon={{
+          type: IconType.Ionicon,
+          name: "chevron-back-outline",
+        }}
+        onPress={() => router.back()}
+      />
+    ),
+  };
+
   return (
     <>
       <Stack>
@@ -59,6 +79,7 @@ export default function UnprotectedLayout() {
             ),
           }}
         />
+
         <Stack.Screen
           name="meeting/[id]"
           options={{
@@ -105,11 +126,18 @@ export default function UnprotectedLayout() {
           }}
         />
 
+        <Stack.Screen
+          name="notifications/index"
+          options={{
+            ...config,
+            title: "Notificaciones",
+          }}
+        />
+
         <Stack.Screen name="areas/index" options={{}} />
 
         <Stack.Screen name="profile/index" />
 
-        <Stack.Screen name="notifications/index" />
         {/*   <Stack.Screen
         name="index"
         options={{
