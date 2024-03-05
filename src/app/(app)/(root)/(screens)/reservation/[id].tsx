@@ -37,6 +37,7 @@ import { statusColorReservation } from "@/data/statusColor";
 
 const FormReservation = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
+  console.log("🚀 ~ FormReservation ~ id:", id);
 
   const shadow = {
     shadowColor: "#000",
@@ -56,6 +57,7 @@ const FormReservation = () => {
     end: addMinutes(new Date(), 5),
   });
   const { selectedHousing } = useAppContext();
+  const { user } = useSessionContext();
 
   const {
     control,
@@ -70,12 +72,12 @@ const FormReservation = () => {
     defaultValues: {
       state: "Pendiente",
       idhousing: selectedHousing || "",
+      idcondominium: user.account.idcondominium,
       type: "app",
       start: new Date(),
       end: new Date(),
     },
   });
-  const { user } = useSessionContext();
 
   const [priceSelect, setPriceSelect] = useState<number | null>(null);
 
@@ -84,24 +86,29 @@ const FormReservation = () => {
     params: { idcondominium: user.account.idcondominium },
   });
 
+  const isEdit = id !== "create";
+  const newId = isEdit ? id : "";
+
   const {
     reservationCreateMutation,
     reservationUpdateMutation,
     reservationQuery,
-  } = useReserve({ id });
+  } = useReserve({ id: newId });
 
   const onSubmit = async (data: IReservation) => {
     delete data.area;
     delete data.reservedBy;
 
+    data.idusuario = user.id || "";
     // const file = uploadRef.current?.getFiles();
 
-    if (id) {
+    if (isEdit) {
       await reservationUpdateMutation.mutateAsync({
         data,
         //requiredPayment:needPay
       });
-      data.idusuario = user.id || "";
+    } else {
+      data.idcondominium = user.account.idcondominium;
 
       await reservationCreateMutation.mutateAsync({
         data,

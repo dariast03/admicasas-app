@@ -189,6 +189,7 @@ const updateData = async (
 };
 
 const insertData = async (data: IReservation) => {
+  console.log("🚀 ~ insertData ~ data:", data);
   await validateReservation(data);
   try {
     const doc = await firestore().collection(FirestoreKey).add(data);

@@ -91,7 +91,6 @@ export const useReserve = ({ id, params }: Props = {}) => {
         // }
         await reservationService.insertData({
           ...data.data,
-          idcondominium: params?.idcondominium || "",
         });
       };
       return creacion();

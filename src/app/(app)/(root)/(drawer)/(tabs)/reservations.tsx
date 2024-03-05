@@ -122,7 +122,7 @@ const Reservations = () => {
   );
 
   const handlePress = () => {
-    router.push(`/(app)/(root)/(screens)/reservation/${null}`);
+    router.push("/(app)/(root)/(screens)/reservation/create");
   };
 
   const RenderItemReservation = ({ item }: { item: IReservation }) => {
