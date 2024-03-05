@@ -13,6 +13,7 @@ export interface IAccount {
   idcompany: string;
   idhousing: string;
   condominiums: [];
+  id: string;
 }
 export interface IUser {
   id?: string;
