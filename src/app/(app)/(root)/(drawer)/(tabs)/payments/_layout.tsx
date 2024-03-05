@@ -7,6 +7,8 @@ import { MaterialTopTabs } from "@/navigator/top-tabs";
 // import LayoutWithTopBar from "../../../../../layout/LayoutWithTopBar";
 
 import Colors from "@/constants/Colors";
+import { useCharges } from "@/hooks/useCharges";
+import { useAppContext } from "@/hooks/useAppContext";
 
 const av = new Animated.Value(0);
 av.addListener(() => {
@@ -14,6 +16,10 @@ av.addListener(() => {
 });
 
 export default function Layout() {
+  const { selectedHousing } = useAppContext();
+  const { chargesQuery } = useCharges({
+    params: { idhousing: selectedHousing },
+  });
   return (
     <>
       <StatusBar
@@ -53,8 +59,14 @@ export default function Layout() {
       >
         <MaterialTopTabs.Screen
           name="paymentsMain"
+          listeners={{
+            focus: () => {
+              chargesQuery.refetch();
+            },
+          }}
           options={{
             title: "Pagos",
+
             // tabBarIcon: ({ color }) => (
             //   <MaterialIcons name="donut-small" color={color} size={20} />
             // ),
