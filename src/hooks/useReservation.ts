@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import reservationService from "../services/reservationService";
 import { IReservation } from "../types/reserve/reserve";
@@ -13,6 +18,7 @@ type Props = {
   params?: {
     idcondominium: string;
     selectedDate?: Date;
+    limitResults?: number;
   };
 };
 
@@ -45,9 +51,33 @@ export const useReserve = ({ id, params }: Props = {}) => {
       enabled: query.includes()
     }); */
 
-  const reservationsQuery = useQuery({
-    queryKey: ["reservations", params?.idcondominium],
-    queryFn: () => reservationService.getAllData(params),
+  // const reservationsQuery = useQuery({
+  //   queryKey: ["reservations", params?.idcondominium],
+  //   queryFn: () => reservationService.getAllData(params),
+  // });
+
+  // const reservationsQuery = useInfiniteQuery(
+  //   ["reservations", "infinite", params],
+  //    reservationService.getAllData,{
+  //     getNextPageParam: (lastPage, pages) => {
+  //       if (!lastPage?.lastDoc?.id) return;
+
+  //       return lastPage.lastDoc;
+  //     }
+  //   }
+  // );
+
+  const reservationsQuery = useInfiniteQuery({
+    queryKey: ["reservations", "infinite", params],
+    queryFn: reservationService.getAllData,
+    initialPageParam: null,
+    // getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) =>
+    // lastPage.nextCursor,
+    getNextPageParam: (lastPage, pages) => {
+      if (!lastPage?.lastDoc?.id) return;
+
+      return lastPage.lastDoc;
+    },
   });
 
   // const reservationsDayQuery = useQuery({

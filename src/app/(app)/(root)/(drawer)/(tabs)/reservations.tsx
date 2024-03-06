@@ -44,6 +44,9 @@ const Reservations = () => {
     params: { idcondominium: user.account.idcondominium },
   });
 
+  const dataReservations =
+    reservationsQuery.data?.pages?.flatMap((page) => page.data) ?? [];
+
   const visible = useRef<BottomSheetContentRef>(null);
   const [reservationsData, setReservationsData] = useState<IReservation[]>([]);
 
@@ -52,7 +55,7 @@ const Reservations = () => {
     visible.current?.present();
   };
 
-  const filterReservation = reservationsQuery.data?.filter(
+  const filterReservation = dataReservations.filter(
     (x) =>
       x.start.toLocaleDateString() === selectedDate?.toLocaleDateString() ||
       x.end.toLocaleDateString() === selectedDate?.toLocaleDateString()
@@ -60,7 +63,7 @@ const Reservations = () => {
 
   const markedDates: { [key: string]: any } = {};
 
-  reservationsQuery.data?.forEach((reservation, index) => {
+  dataReservations.forEach((reservation, index) => {
     const dateString = new Date(reservation.start).toISOString().split("T")[0];
     if (!markedDates[dateString]) {
       markedDates[dateString] = {
@@ -194,8 +197,18 @@ const Reservations = () => {
         </BottomSheetContent>
       </BottomSheet>
       <FlatList
+        className="mb-5"
         data={null}
         renderItem={null}
+        onEndReached={() => {
+          reservationsQuery.fetchNextPage();
+        }}
+        onEndReachedThreshold={1}
+        ListFooterComponent={
+          reservationsQuery.isFetchingNextPage ? (
+            <Text className="text-center text-primario-600">Cargado...</Text>
+          ) : null
+        }
         ListHeaderComponent={
           <>
             <View className="flex-row justify-around items-center p-2  mt-2">
@@ -237,7 +250,7 @@ const Reservations = () => {
                     Mis Reservas
                   </Text>
                 }
-                data={reservationsQuery.data}
+                data={dataReservations}
                 renderItem={renderReservation}
                 keyExtractor={(item) => item.id || ""}
               />

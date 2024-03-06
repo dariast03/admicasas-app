@@ -1,23 +1,53 @@
 import { IReservation } from "../types/reserve/reserve";
 import { isWithinInterval, startOfMonth } from "date-fns";
-import firestore from "@react-native-firebase/firestore";
+import firestore, {
+  FirebaseFirestoreTypes,
+} from "@react-native-firebase/firestore";
 import areaService from "./areaService";
 import { IArea } from "@/types/area/area";
+import { QueryFunctionContext } from "@tanstack/react-query";
 
 const FirestoreKey = "Reservation";
 
 type GetAllDataQueryParams = {
   idcondominium: string;
   selectedDate?: Date;
+  limitResults?: number;
 };
 
-const getAllData = async (
-  { idcondominium, selectedDate }: GetAllDataQueryParams = { idcondominium: "" }
-) => {
+// type contextType= {
+//   queryKey: (string | {
+//       idcondominium: string;
+//       selectedDate?: Date | undefined;
+//       limitResults?: number | undefined;
+//   } | undefined)[];
+
+//   pageParam: null | FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>;
+
+// }
+
+type QueryContext = QueryFunctionContext<
+  (string | GetAllDataQueryParams)[],
+  any
+>;
+
+export const getAllData = async (context: any) => {
   try {
+    //const Filter = firestore.Filter;
+    const { pageParam = undefined, queryKey } = context;
+    const [, , args] = queryKey;
+    const { idcondominium, selectedDate, limitResults } =
+      args as GetAllDataQueryParams;
+
     let queryRef = firestore()
       .collection(FirestoreKey)
       .where("idcondominium", "==", idcondominium);
+
+    if (pageParam) {
+      queryRef = queryRef.startAfter(pageParam);
+    }
+
+    queryRef = queryRef.limit(limitResults || 3);
 
     const querySnapshot = await queryRef.get();
 
@@ -41,42 +71,85 @@ const getAllData = async (
 
     const data = await Promise.all(dataPromises);
     data.sort((a, b) => a.end.getTime() - b.end.getTime());
-    return data;
-  } catch (e) {
+
+    const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+
+    return {
+      data,
+      lastDoc,
+    };
+  } catch (e: any) {
     console.log(e);
+    throw new Error(e);
   }
 };
 
-const getAllDayData = async (
-  { idcondominium, selectedDate }: GetAllDataQueryParams = { idcondominium: "" }
-) => {
-  try {
-    let queryRef = firestore()
-      .collection(FirestoreKey)
-      .where("idcondominium", "==", idcondominium)
-      .where("start", "==", selectedDate)
-      .where("end", "==", selectedDate);
+// const getAllData = async (
+//   { idcondominium, selectedDate }: GetAllDataQueryParams = { idcondominium: "" }
+// ) => {
+//   try {
+//     let queryRef = firestore()
+//       .collection(FirestoreKey)
+//       .where("idcondominium", "==", idcondominium);
 
-    const querySnapshot = await queryRef.get();
+//     const querySnapshot = await queryRef.get();
 
-    const data: IReservation[] = querySnapshot.docs.map((doc) => {
-      const data = doc.data() as IReservation;
+//     const dataPromises: Promise<IReservation>[] = querySnapshot.docs.map(
+//       async (doc) => {
+//         const dataRef = doc.data() as IReservation;
 
-      return {
-        ...data,
-        id: doc.id,
-        //@ts-ignore
-        start: new Date(data.start.toDate()),
-        //@ts-ignore
-        end: new Date(data.end.toDate()),
-      };
-    });
+//         const area = await areaService.getData(dataRef.idarea);
 
-    return data;
-  } catch (e) {
-    console.log(e);
-  }
-};
+//         return {
+//           ...dataRef,
+//           areaName: area?.name,
+//           id: doc.id,
+//           //@ts-ignore
+//           start: new Date(dataRef.start.toDate()),
+//           //@ts-ignore
+//           end: new Date(dataRef.end.toDate()),
+//         } as IReservation;
+//       }
+//     );
+
+//     const data = await Promise.all(dataPromises);
+//     data.sort((a, b) => a.end.getTime() - b.end.getTime());
+//     return data;
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
+
+// const getAllDayData = async (
+//   { idcondominium, selectedDate }: GetAllDataQueryParams = { idcondominium: "" }
+// ) => {
+//   try {
+//     let queryRef = firestore()
+//       .collection(FirestoreKey)
+//       .where("idcondominium", "==", idcondominium)
+//       .where("start", "==", selectedDate)
+//       .where("end", "==", selectedDate);
+
+//     const querySnapshot = await queryRef.get();
+
+//     const data: IReservation[] = querySnapshot.docs.map((doc) => {
+//       const data = doc.data() as IReservation;
+
+//       return {
+//         ...data,
+//         id: doc.id,
+//         //@ts-ignore
+//         start: new Date(data.start.toDate()),
+//         //@ts-ignore
+//         end: new Date(data.end.toDate()),
+//       };
+//     });
+
+//     return data;
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
 
 const getData = async (id: string) => {
   try {
@@ -201,7 +274,7 @@ const insertData = async (data: IReservation) => {
 
 export default {
   getAllData,
-  getAllDayData,
+  // getAllDayData,
   getData,
   insertData,
   updateData,
