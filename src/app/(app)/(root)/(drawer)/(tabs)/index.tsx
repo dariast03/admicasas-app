@@ -98,7 +98,7 @@ const Home = () => {
             <View className="mb-5">
               <Dropdown
                 placeholder="Seleccionar vivienda"
-                label="Selector global de vivienda para ir probando"
+                label="Seleccionar Vivienda:"
                 valueField={"id"}
                 value={selectedHousing}
                 labelField={"code"}

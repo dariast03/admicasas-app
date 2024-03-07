@@ -58,6 +58,8 @@ const DetailAnnocenment = () => {
 
   const [image, setImage] = useState<ImagePicker.ImagePickerAsset | null>(null);
 
+  const [imageError, setImageError] = useState<string | null>(null);
+
   const isEdit = id !== "create";
 
   const pickImage = async () => {
@@ -83,6 +85,11 @@ const DetailAnnocenment = () => {
   };
 
   const onSubmit = async (data: IPayments) => {
+    if (!image) {
+      setImageError("Por favor selecciona una imagen.");
+      return;
+    }
+
     if (paymentQuery.data?.id) {
       data.id = paymentQuery.data?.id;
       data.state = "Pendiente";
@@ -286,6 +293,9 @@ const DetailAnnocenment = () => {
                           </View>
                         }
                       />
+                      {!image && imageError && (
+                        <Text className="text-red-600 p-2">{imageError}</Text>
+                      )}
                     </View>
                   )}
                 </View>

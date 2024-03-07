@@ -42,17 +42,15 @@ export default function Layout() {
         }}
         tabBarPosition="top"
         screenOptions={{
-          //   lazy: true,
-          //tabBarItemStyle: { padding: 6 },
+          lazy: true,
+          tabBarItemStyle: { padding: 6 },
 
-          /*  tabBarStyle: {
-               backgroundColor: isDarkMode ? COLORS.dark.secondary : '#FFF',
-             }, */
           tabBarLabelStyle: { margin: 0, padding: 0, fontSize: 12 },
 
-          /*  tabBarActiveTintColor: isDarkMode
-               ? '#FFF'
-               : COLORS.light.background, */
+          tabBarActiveTintColor: Colors.primario[600],
+          tabBarIndicatorStyle: {
+            backgroundColor: Colors.primario[600],
+          },
 
           // API Reference: https://reactnavigation.org/docs/material-top-tab-navigator#options
         }}
