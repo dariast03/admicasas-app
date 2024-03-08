@@ -66,9 +66,12 @@ const getAllData = async (
     if (!idcondominium) {
       return [];
     }
+    const currentDate = new Date();
+    console.log("🚀 ~ currentDate:", currentDate);
     let queryRef = firestore()
       .collection("Announcements")
-      .where("idcondominiums", "array-contains", idcondominium);
+      .where("idcondominiums", "array-contains", idcondominium)
+      .where("end", ">=", currentDate);
 
     if (q) {
       queryRef = queryRef

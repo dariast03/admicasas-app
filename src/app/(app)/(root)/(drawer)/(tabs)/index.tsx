@@ -100,7 +100,9 @@ const Home = () => {
                 placeholder="Seleccionar vivienda"
                 label="Seleccionar Vivienda:"
                 valueField={"id"}
-                value={selectedHousing}
+                value={
+                  selectedHousing ? selectedHousing : user?.account?.idhousing
+                }
                 labelField={"code"}
                 data={housingsByPropietaryQuery.data || []}
                 onChange={(e) => updateHousing(e.id)}

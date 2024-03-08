@@ -202,193 +202,185 @@ const FormReservation = () => {
           ),
         }}
       />
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={undefined}
-        keyboardVerticalOffset={50}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView>
-            <View className="flex-1  p-4">
-              <View
-                className="bg-white dark:bg-primario-800 p-4 rounded-lg mb-4"
-                style={shadow}
-              >
-                <View className="items-center mb-4">
-                  <Text className="text-2xl font-bold mb-2  ">
-                    Crear Reserva
-                  </Text>
-                  <Text className="text-sm  text-center  ">
-                    Por favor, completa el formulario para crear una reserva
-                  </Text>
-                </View>
 
-                <View className="mb-4">
-                  <View className="mb-4">
-                    {reservationQuery.data &&
-                      reservationQuery.data.state === "Pendiente" && (
-                        <AlertCard
-                          value={
-                            "Tu solicitud se encuentra en revisión. Aun puedes editar la informacion proporcionada"
-                          }
-                          severity={"warning"}
-                        />
-                      )}
+      <ScrollView>
+        <View className="flex-1  p-4">
+          <View
+            className="bg-white dark:bg-primario-800 p-4 rounded-lg mb-4"
+            style={shadow}
+          >
+            <View className="items-center mb-4">
+              <Text className="text-2xl font-bold mb-2  ">Crear Reserva</Text>
+              <Text className="text-sm  text-center  ">
+                Por favor, completa el formulario para crear una reserva
+              </Text>
+            </View>
 
-                    {reservationQuery.data &&
-                      reservationQuery.data.state !== "Pendiente" &&
-                      reservationQuery.data.state !== "Finalizado" && (
-                        <AlertCard
-                          value={reservationQuery.data.message}
-                          severity={
-                            statusColorReservation[reservationQuery.data.state]
-                          }
-                        />
-                      )}
-                  </View>
-                </View>
+            <View className="mb-4">
+              <View className="mb-4">
+                {reservationQuery.data &&
+                  reservationQuery.data.state === "Pendiente" && (
+                    <AlertCard
+                      value={
+                        "Tu solicitud se encuentra en revisión. Aun puedes editar la informacion proporcionada"
+                      }
+                      severity={"warning"}
+                    />
+                  )}
 
-                <View className="gap-2">
-                  <View>
-                    <Controller
-                      name="title"
-                      control={control}
-                      rules={{
-                        required: "La descripcion es requerida",
-                      }}
-                      render={({ field, fieldState: { error } }) => (
-                        <>
-                          <InputText
-                            ref={field.ref}
-                            value={field.value}
-                            onChangeText={(e) => field.onChange(e)}
-                            withAsterisk
-                            label="Descripcion"
-                            placeholder="Descripcion de la reserva"
-                            error={error?.message}
-                            multiline
-                            numberOfLines={3}
-                          />
-                        </>
-                      )}
+                {reservationQuery.data &&
+                  reservationQuery.data.state !== "Pendiente" &&
+                  reservationQuery.data.state !== "Finalizado" && (
+                    <AlertCard
+                      value={reservationQuery.data.message}
+                      severity={
+                        statusColorReservation[reservationQuery.data.state]
+                      }
                     />
-                  </View>
+                  )}
+              </View>
+            </View>
 
-                  <View>
-                    <Controller
-                      name="start"
-                      control={control}
-                      rules={{
-                        required: "La fecha de inicio es requerida",
-                      }}
-                      render={({ field, fieldState: { error } }) => (
-                        <>
-                          <InputDatePicker
-                            ref={field.ref}
-                            value={format(field.value, "dd/MM/yyyy HH:mm a")}
-                            onChangeText={(e) => field.onChange(e)}
-                            withAsterisk
-                            icon={{
-                              type: IconType.MaterialCommunityIcons,
-                              name: "clock-outline",
-                            }}
-                            label="Fecha Inicio:"
-                            error={error?.message}
-                          />
-                        </>
-                      )}
-                    />
-                  </View>
-                  <View>
-                    <Controller
-                      name="end"
-                      control={control}
-                      rules={{
-                        required: "La fecha de fin es requerida",
-                      }}
-                      render={({ field, fieldState: { error } }) => (
-                        <>
-                          <InputDatePicker
-                            ref={field.ref}
-                            value={format(field.value, "dd/MM/yyyy HH:mm a")}
-                            onChangeText={(e) => field.onChange(e)}
-                            withAsterisk
-                            icon={{
-                              type: IconType.MaterialCommunityIcons,
-                              name: "clock-outline",
-                            }}
-                            label="Fecha Fin:"
-                            error={error?.message}
-                          />
-                        </>
-                      )}
-                    />
-                  </View>
-                  <View>
-                    <Controller
-                      name="idarea"
-                      control={control}
-                      rules={{
-                        required: "La area es requerida",
-                      }}
-                      render={({ field, fieldState: { error } }) => {
-                        return (
-                          <>
-                            <Dropdown
-                              withAsterisk
-                              placeholder="Selecciona una area"
-                              dropdownRef={ref}
-                              label="Area Común"
-                              valueField={"id"}
-                              error={error?.message}
-                              labelField={"name"}
-                              value={field.value}
-                              data={areaCommonsAllQuery.data || []}
-                              onChange={(e) => {
-                                field.onChange(e.id);
-                                const selectedArea =
-                                  areaCommonsAllQuery.data?.find(
-                                    (area) => area.id === e.id
-                                  );
-                                if (selectedArea) {
-                                  setValue(
-                                    "area.price",
-                                    selectedArea.price.toString()
-                                  );
-                                }
-                              }}
-                              icon={{
-                                type: IconType.MaterialCommunityIcons,
-                                name: "account-group-outline",
-                              }}
-                            />
-                          </>
-                        );
-                      }}
-                    />
-                  </View>
-                  <View>
-                    {watch("area.price") > 0 ? (
-                      <Controller
-                        name="area.price"
-                        control={control}
-                        render={({ field, fieldState: { error } }) => (
-                          <>
-                            <InputText
-                              ref={field.ref}
-                              value={field.value}
-                              onChangeText={(e) => field.onChange(e)}
-                              withAsterisk
-                              label="Precio"
-                              placeholder="precio"
-                              error={error?.message}
-                            />
-                          </>
-                        )}
+            <View className="gap-2">
+              <View>
+                <Controller
+                  name="title"
+                  control={control}
+                  rules={{
+                    required: "La descripcion es requerida",
+                  }}
+                  render={({ field, fieldState: { error } }) => (
+                    <>
+                      <InputText
+                        ref={field.ref}
+                        value={field.value}
+                        onChangeText={(e) => field.onChange(e)}
+                        withAsterisk
+                        label="Descripcion"
+                        placeholder="Descripcion de la reserva"
+                        error={error?.message}
+                        multiline
+                        numberOfLines={3}
                       />
-                    ) : null}
-                  </View>
-                  {/* <View className="w-full">
+                    </>
+                  )}
+                />
+              </View>
+
+              <View>
+                <Controller
+                  name="start"
+                  control={control}
+                  rules={{
+                    required: "La fecha de inicio es requerida",
+                  }}
+                  render={({ field, fieldState: { error } }) => (
+                    <>
+                      <InputDatePicker
+                        ref={field.ref}
+                        value={format(field.value, "dd/MM/yyyy HH:mm a")}
+                        onChangeText={(e) => field.onChange(e)}
+                        withAsterisk
+                        icon={{
+                          type: IconType.MaterialCommunityIcons,
+                          name: "clock-outline",
+                        }}
+                        label="Fecha Inicio:"
+                        error={error?.message}
+                      />
+                    </>
+                  )}
+                />
+              </View>
+              <View>
+                <Controller
+                  name="end"
+                  control={control}
+                  rules={{
+                    required: "La fecha de fin es requerida",
+                  }}
+                  render={({ field, fieldState: { error } }) => (
+                    <>
+                      <InputDatePicker
+                        ref={field.ref}
+                        value={format(field.value, "dd/MM/yyyy HH:mm a")}
+                        onChangeText={(e) => field.onChange(e)}
+                        withAsterisk
+                        icon={{
+                          type: IconType.MaterialCommunityIcons,
+                          name: "clock-outline",
+                        }}
+                        label="Fecha Fin:"
+                        error={error?.message}
+                      />
+                    </>
+                  )}
+                />
+              </View>
+              <View>
+                <Controller
+                  name="idarea"
+                  control={control}
+                  rules={{
+                    required: "La area es requerida",
+                  }}
+                  render={({ field, fieldState: { error } }) => {
+                    return (
+                      <>
+                        <Dropdown
+                          withAsterisk
+                          placeholder="Selecciona una area"
+                          dropdownRef={ref}
+                          label="Area Común"
+                          valueField={"id"}
+                          error={error?.message}
+                          labelField={"name"}
+                          value={field.value}
+                          data={areaCommonsAllQuery.data || []}
+                          onChange={(e) => {
+                            field.onChange(e.id);
+                            const selectedArea = areaCommonsAllQuery.data?.find(
+                              (area) => area.id === e.id
+                            );
+                            if (selectedArea) {
+                              setValue(
+                                "area.price",
+                                selectedArea.price.toString()
+                              );
+                            }
+                          }}
+                          icon={{
+                            type: IconType.MaterialCommunityIcons,
+                            name: "account-group-outline",
+                          }}
+                        />
+                      </>
+                    );
+                  }}
+                />
+              </View>
+              <View>
+                {watch("area.price") > 0 ? (
+                  <Controller
+                    name="area.price"
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <>
+                        <InputText
+                          ref={field.ref}
+                          value={field.value}
+                          onChangeText={(e) => field.onChange(e)}
+                          withAsterisk
+                          label="Precio"
+                          placeholder="precio"
+                          error={error?.message}
+                        />
+                      </>
+                    )}
+                  />
+                ) : null}
+              </View>
+              {/* <View className="w-full">
                     <InputCustom
                       icon={{
                         type: IconType.MaterialCommunityIcons,
@@ -411,33 +403,31 @@ const FormReservation = () => {
                       }
                     />
                   </View> */}
-                  <View className="mt-2">
-                    <ButtonLoader
-                      className="items-center"
-                      onPress={handleSubmit(onSubmit)}
-                      // disabled={paymentQuery.data?.state === "Pendiente"}
+              <View className="mt-2">
+                <ButtonLoader
+                  className="items-center"
+                  onPress={handleSubmit(onSubmit)}
+                  // disabled={paymentQuery.data?.state === "Pendiente"}
 
-                      // style={{
-                      //   opacity:
-                      //     paymentQuery.data?.state === "Pendiente" ||
-                      //     paymentQuery.data?.state === "Aprobado"
-                      //       ? 0.5
-                      //       : 1,
-                      // }}
-                      // loading={paymentCreateMutation.isPending}
-                    >
-                      <Text className="text-white text-center text-xl font-bold">
-                        {/* {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"} */}
-                        Guardar
-                      </Text>
-                    </ButtonLoader>
-                  </View>
-                </View>
+                  // style={{
+                  //   opacity:
+                  //     paymentQuery.data?.state === "Pendiente" ||
+                  //     paymentQuery.data?.state === "Aprobado"
+                  //       ? 0.5
+                  //       : 1,
+                  // }}
+                  // loading={paymentCreateMutation.isPending}
+                >
+                  <Text className="text-white text-center text-xl font-bold">
+                    {/* {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"} */}
+                    Guardar
+                  </Text>
+                </ButtonLoader>
               </View>
             </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+          </View>
+        </View>
+      </ScrollView>
     </DefaultLayout>
   );
 };

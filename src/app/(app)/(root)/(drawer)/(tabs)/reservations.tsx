@@ -32,6 +32,7 @@ import { IReservation } from "@/types/reserve/reserve";
 import { useAreas } from "@/hooks/useAreas";
 import Tag from "@/components/Tag";
 import { cn } from "@/lib/utils";
+import SkeletonFlatList from "@/components/SkeletonFlatList";
 
 LocaleConfig.defaultLocale = "es";
 const Reservations = () => {
@@ -65,6 +66,7 @@ const Reservations = () => {
 
   dataReservations.forEach((reservation, index) => {
     const dateString = new Date(reservation.start).toISOString().split("T")[0];
+
     if (!markedDates[dateString]) {
       markedDates[dateString] = {
         dots: [{ key: dateString, color: "blue" }],
@@ -165,7 +167,7 @@ const Reservations = () => {
     <RenderItemReservation item={item} />
   );
   const itemSeparator = () => {
-    <View className="border-b border-primario-600"></View>;
+    return <View className="border-b-[0.5] border-primario-600"></View>;
   };
 
   return (
@@ -241,8 +243,12 @@ const Reservations = () => {
               onDayPress={(day) => handleDayPress(new Date(day.dateString))}
               markingType="multi-dot"
               markedDates={markedDates}
+              displayLoadingIndicator={reservationsQuery.isLoading}
             />
-            {reservationsQuery.data && (
+
+            {reservationsQuery.isLoading ? (
+              <SkeletonFlatList title="Mis Reservas" />
+            ) : (
               <FlatList
                 className="p-1 m-4"
                 ListHeaderComponent={
@@ -253,6 +259,7 @@ const Reservations = () => {
                 data={dataReservations}
                 renderItem={renderReservation}
                 keyExtractor={(item) => item.id || ""}
+                ItemSeparatorComponent={() => itemSeparator()}
               />
             )}
           </>

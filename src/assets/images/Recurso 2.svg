@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 137.5 124">
+  <defs>
+    <style>
+      .cls-1 {
+        opacity: .7;
+      }
+
+      .cls-1, .cls-2 {
+        mix-blend-mode: multiply;
+      }
+
+      .cls-3 {
+        fill: #90d1f1;
+      }
+
+      .cls-4, .cls-2 {
+        fill: #0180c5;
+      }
+
+      .cls-5 {
+        fill: #fe9a00;
+      }
+
+      .cls-6 {
+        isolation: isolate;
+      }
+
+      .cls-7 {
+        fill: #f3b98d;
+      }
+
+      .cls-8 {
+        fill: #4c4b4d;
+      }
+
+      .cls-2 {
+        opacity: .3;
+      }
+
+      .cls-9 {
+        clip-path: url(#clippath);
+      }
+
+      .cls-10 {
+        stroke: #fff;
+        stroke-miterlimit: 10;
+        stroke-width: 6px;
+      }
+
+      .cls-10, .cls-11 {
+        fill: none;
+      }
+
+      .cls-12 {
+        fill: #ddc724;
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="cls-11" y="9" width="130" height="106" rx="10" ry="10"/>
+    </clipPath>
+  </defs>
+  <g class="cls-6">
+    <g id="Capa_2" data-name="Capa 2">
+      <g id="OBJECTS">
+        <g>
+          <g>
+            <g>
+              <rect class="cls-4" y="9" width="130" height="106" rx="10" ry="10"/>
+              <g class="cls-9">
+                <rect class="cls-3" x="-14" y="-18" width="161" height="53"/>
+              </g>
+              <g class="cls-1">
+                <path class="cls-8" d="M26.95,24.4c0,3.35-2.72,6.06-6.07,6.06s-6.06-2.72-6.06-6.06,2.72-6.06,6.06-6.06,6.07,2.72,6.07,6.06Z"/>
+                <path class="cls-8" d="M56.36,24.4c0,3.35-2.72,6.06-6.07,6.06s-6.06-2.72-6.06-6.06,2.72-6.06,6.06-6.06,6.07,2.72,6.07,6.06Z"/>
+                <path class="cls-8" d="M85.77,24.4c0,3.35-2.72,6.06-6.07,6.06s-6.06-2.72-6.06-6.06,2.72-6.06,6.06-6.06,6.07,2.72,6.07,6.06Z"/>
+                <path class="cls-8" d="M115.18,24.4c0,3.35-2.72,6.06-6.07,6.06s-6.06-2.72-6.06-6.06,2.72-6.06,6.06-6.06,6.07,2.72,6.07,6.06Z"/>
+              </g>
+              <g>
+                <rect class="cls-4" x="17.5" width="7" height="26" rx="3.25" ry="3.25"/>
+                <rect class="cls-4" x="46.83" width="7" height="26" rx="3.25" ry="3.25"/>
+                <rect class="cls-4" x="76.17" width="7" height="26" rx="3.25" ry="3.25"/>
+                <rect class="cls-4" x="105.5" width="7" height="26" rx="3.25" ry="3.25"/>
+              </g>
+              <g>
+                <g>
+                  <rect class="cls-3" x="30" y="46" width="13" height="12"/>
+                  <rect class="cls-3" x="49" y="46" width="13" height="12"/>
+                  <rect class="cls-3" x="68" y="46" width="13" height="12"/>
+                  <rect class="cls-3" x="87" y="46" width="13" height="12"/>
+                  <rect class="cls-3" x="106" y="46" width="13" height="12"/>
+                </g>
+                <g>
+                  <rect class="cls-3" x="11" y="65" width="13" height="12"/>
+                  <rect class="cls-3" x="30" y="65" width="13" height="12"/>
+                  <rect class="cls-3" x="49" y="65" width="13" height="12"/>
+                  <rect class="cls-7" x="68" y="65" width="13" height="12"/>
+                  <rect class="cls-5" x="87" y="65" width="13" height="12"/>
+                  <rect class="cls-7" x="106" y="65" width="13" height="12"/>
+                </g>
+                <g>
+                  <rect class="cls-7" x="11" y="84" width="13" height="12"/>
+                  <rect class="cls-7" x="30" y="84" width="13" height="12"/>
+                  <rect class="cls-5" x="49" y="84" width="13" height="12"/>
+                  <rect class="cls-3" x="68" y="84" width="13" height="12"/>
+                  <rect class="cls-3" x="87" y="84" width="13" height="12"/>
+                  <rect class="cls-3" x="106" y="84" width="13" height="12"/>
+                </g>
+              </g>
+            </g>
+            <path class="cls-2" d="M84.19,104.66c-37.11,0-67.19-30.08-67.19-67.19,0-10.18,2.28-19.82,6.33-28.47H10C4.48,9,0,13.48,0,19V105c0,5.52,4.48,10,10,10H120c5.52,0,10-4.48,10-10v-18.4c-12,11.2-28.1,18.06-45.81,18.06Z"/>
+          </g>
+          <g>
+            <circle class="cls-12" cx="119.5" cy="106" r="18"/>
+            <polyline class="cls-10" points="110 104.84 116.35 113.44 130.78 101.75"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
