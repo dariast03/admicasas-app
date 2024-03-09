@@ -24,5 +24,5 @@ export default function UnprotectedLayout() {
     return <Redirect href="/auth/login/" />;
   }
 
-  return <Stack />;
+  return <Stack></Stack>;
 }
