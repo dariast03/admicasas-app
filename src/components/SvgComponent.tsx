@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useWindowDimensions } from "react-native";
 import Svg, { Path, Defs, G, Use, Circle, Mask } from "react-native-svg";
+import CONSTANTS from "expo-constants";
 
 function SvgComponent(props: any) {
   const { height, width } = useWindowDimensions();
@@ -98,7 +99,7 @@ function SvgComponent(props: any) {
     <Svg
       xmlns="http://www.w3.org/2000/svg"
       width={width}
-      height={height}
+      height={height + CONSTANTS.statusBarHeight * 2}
       preserveAspectRatio="none"
       viewBox="0 0 1080 1920"
       {...props}

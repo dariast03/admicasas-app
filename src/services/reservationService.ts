@@ -1,5 +1,5 @@
 import { IReservation } from "../types/reserve/reserve";
-import { isWithinInterval, startOfMonth } from "date-fns";
+import { isWithinInterval, startOfMonth, subHours } from "date-fns";
 import firestore, {
   FirebaseFirestoreTypes,
 } from "@react-native-firebase/firestore";
@@ -63,9 +63,9 @@ export const getAllData = async (context: any) => {
           areaName: area?.name,
           id: doc.id,
           //@ts-ignore
-          start: new Date(dataRef.start.toDate()),
+          start: subHours(dataRef.start.toDate(), 4),
           //@ts-ignore
-          end: new Date(dataRef.end.toDate()),
+          end: subHours(dataRef.end.toDate(), 4),
         } as IReservation;
       }
     );

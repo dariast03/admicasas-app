@@ -4,6 +4,7 @@ import { Animated, useColorScheme } from "react-native";
 import { MaterialTopTabs } from "../../../../../navigator/top-tabs";
 import LayoutWithTopBar from "../../../../../layout/LayoutWithTopBar";
 import Colors from "@/constants/Colors";
+import { Platform } from "react-native";
 
 const av = new Animated.Value(0);
 av.addListener(() => {
@@ -18,7 +19,10 @@ export default function Layout() {
           /*  isDarkMode ? COLORS.dark.secondary : COLORS.light.background */
           Colors.primario[600]
         }
-        style="light"
+        style={Platform.select({
+          ios: "dark",
+          android: "light",
+        })}
       />
 
       <LayoutWithTopBar>

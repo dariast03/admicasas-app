@@ -33,7 +33,8 @@ import { useAreas } from "@/hooks/useAreas";
 import Tag from "@/components/Tag";
 import { cn } from "@/lib/utils";
 import SkeletonFlatList from "@/components/SkeletonFlatList";
-
+import { isSameDay, startOfDay } from "date-fns";
+import { DateData } from "react-native-calendars";
 LocaleConfig.defaultLocale = "es";
 const Reservations = () => {
   const router = useRouter();
@@ -54,16 +55,27 @@ const Reservations = () => {
   const visible = useRef<BottomSheetContentRef>(null);
   const [reservationsData, setReservationsData] = useState<IReservation[]>([]);
 
-  const handleDayPress = (date: Date) => {
-    setSelectedDate(date);
+  const handleDayPress = (date: DateData) => {
+    const { year, month, day } = date;
+    setSelectedDate(new Date(year, month - 1, day));
+
     visible.current?.present();
   };
 
-  const filterReservation = dataReservations.filter(
-    (x) =>
-      x.start.toLocaleDateString() === selectedDate?.toLocaleDateString() ||
-      x.end.toLocaleDateString() === selectedDate?.toLocaleDateString()
-  );
+  const filterReservation = dataReservations.filter((x) => {
+    if (!selectedDate) return [];
+
+    const { start, end } = x;
+
+    const selectedDateUTC = startOfDay(selectedDate);
+    const startUTC = startOfDay(start);
+    const endUTC = startOfDay(end);
+
+    const isSameDayStart = selectedDateUTC.getTime() === startUTC.getTime();
+    const isSameDayEnd = selectedDateUTC.getTime() === endUTC.getTime();
+
+    return isSameDayStart || isSameDayEnd;
+  });
 
   const markedDates: { [key: string]: any } = {};
 
@@ -243,7 +255,7 @@ const Reservations = () => {
                 margin: 20,
                 ...styles.shadowCard,
               }}
-              onDayPress={(day) => handleDayPress(new Date(day.dateString))}
+              onDayPress={handleDayPress}
               markingType="multi-dot"
               markedDates={markedDates}
               displayLoadingIndicator={reservationsQuery.isLoading}

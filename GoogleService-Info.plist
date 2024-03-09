@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>302500073375-drshf9raoeoo84cdsit78176mtgleasa.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.302500073375-drshf9raoeoo84cdsit78176mtgleasa</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>302500073375-qvu5740gtmlec06ai8f13di0fgjl37sd.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBVQz6ufvEtJpvKtUUHimqf8feY_d1tGZo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>302500073375</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.admicasas.app</string>
+	<key>PROJECT_ID</key>
+	<string>admicasas-ae666</string>
+	<key>STORAGE_BUCKET</key>
+	<string>admicasas-ae666.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:302500073375:ios:b17966ea270a090e45f7aa</string>
+</dict>
+</plist>
