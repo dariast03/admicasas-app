@@ -42,7 +42,10 @@ const Reservations = () => {
   const [selectedDate, setSelectedDate] = useState<Date>();
 
   const { reservationsQuery } = useReserve({
-    params: { idcondominium: user.account.idcondominium },
+    params: {
+      idcondominium: user.account.idcondominium,
+      idhousing: user.account.idhousing,
+    },
   });
 
   const dataReservations =

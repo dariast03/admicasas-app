@@ -40,7 +40,7 @@ const PaymentCard = () => {
             }}
           />
           <Text className="text-stone-400 my-2">
-            {data?.start?.toLocaleDateString()}
+            {data?.end?.toLocaleDateString()}
           </Text>
         </View>
 

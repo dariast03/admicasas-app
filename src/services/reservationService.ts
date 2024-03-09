@@ -10,6 +10,7 @@ import { QueryFunctionContext } from "@tanstack/react-query";
 const FirestoreKey = "Reservation";
 
 type GetAllDataQueryParams = {
+  idhousing?: string;
   idcondominium: string;
   selectedDate?: Date;
   limitResults?: number;
@@ -36,12 +37,12 @@ export const getAllData = async (context: any) => {
     //const Filter = firestore.Filter;
     const { pageParam = undefined, queryKey } = context;
     const [, , args] = queryKey;
-    const { idcondominium, selectedDate, limitResults } =
+    const { idcondominium, selectedDate, limitResults, idhousing } =
       args as GetAllDataQueryParams;
 
     let queryRef = firestore()
       .collection(FirestoreKey)
-      .where("idcondominium", "==", idcondominium);
+      .where("idhousing", "==", idhousing);
 
     if (pageParam) {
       queryRef = queryRef.startAfter(pageParam);

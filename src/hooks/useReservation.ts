@@ -16,6 +16,7 @@ type Props = {
   enabled?: boolean;
   id?: string;
   params?: {
+    idhousing?: string;
     idcondominium: string;
     selectedDate?: Date;
     limitResults?: number;
