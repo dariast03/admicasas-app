@@ -37,7 +37,7 @@ export const getAllData = async (context: any) => {
     //const Filter = firestore.Filter;
     const { pageParam = undefined, queryKey } = context;
     const [, , args] = queryKey;
-    const { idcondominium, selectedDate, limitResults, idhousing } =
+    const { selectedDate, limitResults, idhousing } =
       args as GetAllDataQueryParams;
 
     let queryRef = firestore()

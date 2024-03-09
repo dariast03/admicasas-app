@@ -26,6 +26,7 @@ import { InputCustom } from "@/components/CustomInput";
 import { ButtonLoader } from "@/components/ButtonLoader";
 import { useCharges } from "@/hooks/useCharges";
 import { useAppContext } from "@/hooks/useAppContext";
+import Colors from "@/constants/Colors";
 
 const DetailAnnocenment = () => {
   const { id } = useLocalSearchParams();
@@ -183,7 +184,7 @@ const DetailAnnocenment = () => {
   if (announcementDetailQuery.isLoading)
     return (
       <View className="p-5">
-        <ActivityIndicator color={"#4648E5"} size={20} />
+        <ActivityIndicator color={Colors.primario[600]} size={20} />
         <Text className="text-center text-primario-600">Cargando..</Text>
       </View>
     );
@@ -211,7 +212,7 @@ const DetailAnnocenment = () => {
               }
             />
 
-            <View className="flex-row justify-start px-4 py-3 bg-indigo-600">
+            <View className="flex-row justify-start px-4 py-3 bg-primario-600">
               <Icon
                 color={"white"}
                 icon={{

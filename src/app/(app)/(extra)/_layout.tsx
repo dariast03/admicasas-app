@@ -16,6 +16,7 @@ export default function UnprotectedLayout() {
     showWelcomeScreen == "true" &&
     user?.account?.idcondominium
   ) {
+    //return <Redirect href="/welcome/" />;
     return <Redirect href="/" />;
   }
 

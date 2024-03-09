@@ -13,6 +13,8 @@ import {
 import { useSessionContext } from "@/hooks/useSessionContext";
 
 import Icon, { IconType } from "@/components/Icon";
+import { ColorProperties } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
+import Colors from "@/constants/Colors";
 
 const DetailAnnocenment = () => {
   const { id } = useLocalSearchParams();
@@ -33,7 +35,7 @@ const DetailAnnocenment = () => {
   if (announcementQuery.isLoading)
     return (
       <View className="p-5">
-        <ActivityIndicator color={"#4648E5"} size={20} />
+        <ActivityIndicator color={Colors.primario[600]} size={20} />
         <Text className="text-center text-primario-600">Cargando Anuncio</Text>
       </View>
     );
@@ -52,7 +54,7 @@ const DetailAnnocenment = () => {
               source={announcementQuery.data?.urlimg}
             />
 
-            <View className="flex-row justify-start px-4 py-3 bg-indigo-600">
+            <View className="flex-row justify-start px-4 py-3 bg-primario-600">
               <Icon
                 color={"white"}
                 icon={{
