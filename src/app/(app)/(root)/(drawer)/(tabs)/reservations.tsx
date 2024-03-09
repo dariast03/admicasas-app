@@ -35,6 +35,7 @@ import { cn } from "@/lib/utils";
 import SkeletonFlatList from "@/components/SkeletonFlatList";
 import { isSameDay, startOfDay } from "date-fns";
 import { DateData } from "react-native-calendars";
+import { Skeleton } from "@/components/ui/skeleton";
 LocaleConfig.defaultLocale = "es";
 const Reservations = () => {
   const router = useRouter();
@@ -157,9 +158,13 @@ const Reservations = () => {
     return (
       <TouchableOpacity onPress={navigateToReservation}>
         <View className="flex-row justify-between border-b border-primario-600 p-4">
-          <Text className="text-black">
-            {areaCommonQuery.data?.name.toLocaleUpperCase()}
-          </Text>
+          {areaCommonQuery.isLoading ? (
+            <Skeleton className="bg-primario-100 h-4 w-32" />
+          ) : (
+            <Text className="text-black text-sm">
+              {areaCommonQuery.data?.name.toLocaleUpperCase()}
+            </Text>
+          )}
           <View className="flex-row">
             <Tag
               severity={

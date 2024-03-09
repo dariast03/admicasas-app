@@ -4,6 +4,7 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useSessionContext } from "../../../../hooks/useSessionContext";
 import { Redirect } from "expo-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Colors from "@/constants/Colors";
 
 const LayoutDrawer = () => {
   return (
@@ -18,7 +19,7 @@ const LayoutDrawer = () => {
           fontFamily: "LatoRegular",
           fontSize: 15,
         },
-        headerTintColor: "red",
+        headerTintColor: Colors.primario[600],
       }}
 
       // drawerContent={(x) => <CustomDrawer {...x} />}

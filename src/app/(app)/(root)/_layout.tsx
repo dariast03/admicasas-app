@@ -3,13 +3,19 @@ import { useSessionContext } from "../../../hooks/useSessionContext";
 import { useStorageState } from "../../../hooks/useStorageState";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text } from "react-native";
+import { View } from "lucide-react-native";
+import Loader from "@/components/Loader";
 
 export default function UnprotectedLayout() {
   const { status, isLoadingShowWelcomeScreen, showWelcomeScreen, user } =
     useSessionContext();
 
   if (status == "pending" || isLoadingShowWelcomeScreen) {
-    return <Text>Loading...</Text>;
+    return (
+      <View className="flex-1 flex items-center justify-center">
+        <Loader />
+      </View>
+    );
   }
 
   if (!showWelcomeScreen) {

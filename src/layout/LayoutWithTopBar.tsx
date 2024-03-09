@@ -4,6 +4,7 @@ import DefaultLayout from "./DefaultLayout";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Link } from "expo-router";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
 
 const LayoutWithTopBar: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
@@ -12,7 +13,10 @@ const LayoutWithTopBar: React.FC<React.PropsWithChildren> = ({ children }) => {
         className="bg-primario-600 flex-row justify-between items-center p-2"
         /*  style={{ backgroundColor: "ue" }} */
       >
-        <DrawerToggleButton tintColor="#fff" pressColor="red" />
+        <DrawerToggleButton
+          tintColor="#fff"
+          pressColor="#fff"
+        />
 
         <View className="flex-row items-center">
           <Link href="/notifications" asChild>

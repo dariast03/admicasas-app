@@ -122,7 +122,7 @@ const Home = () => {
               ListEmptyComponent={() => (
                 <>
                   {announcementsQuery.isLoading ? (
-                    <Loader />
+                    <Loader name="Anuncios" />
                   ) : (
                     <Text>No hay anuncios</Text>
                   )}

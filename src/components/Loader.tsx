@@ -6,12 +6,15 @@ interface Props {
   height?: DimensionValue;
   containerProps?: ViewProps;
   activityIndicator?: ActivityIndicatorProps;
+  name?: string;
 }
 const Loader: React.FC<Props> = ({
   activityIndicator,
   containerProps,
   height = "auto",
+  name = "",
 }) => {
+  console.log("🚀 ~ name:", name);
   return (
     <View
       className="flex-1 items-center justify-center"
@@ -19,10 +22,15 @@ const Loader: React.FC<Props> = ({
       {...containerProps}
     >
       <ActivityIndicator
-        color={Colors.primario[700]}
+        color={Colors.primario[600]}
         size={40}
         {...activityIndicator}
       />
+      {name !== "" ? (
+        <Text className="text-sm text-primario-600">Cargando {name}...</Text>
+      ) : (
+        <Text className="text-sm text-primario-600">Cargando...</Text>
+      )}
     </View>
   );
 };

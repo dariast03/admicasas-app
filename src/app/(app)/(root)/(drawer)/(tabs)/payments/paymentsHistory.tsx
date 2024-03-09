@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/bottom-sheet";
 
 import Icon, { IconType } from "@/components/Icon";
+import { Skeleton } from "@/components/ui/skeleton";
+import SkeletonFlatList from "@/components/SkeletonFlatList";
 
 interface typePayments {
   id?: string | undefined;
@@ -44,13 +46,19 @@ const PaymentItem = ({ item }: { item: IPayments }) => {
   });
 
   return (
-    <View className="p-4 border-b border-primario-400">
+    <View className="p-4">
       <TouchableOpacity className="cursor-pointer">
         <BottomSheet>
           <BottomSheetOpenTrigger asChild>
             <TouchableOpacity>
-              <View className="flex-row justify-between">
-                <Text className="text-black">{chargeQuery.data?.name}</Text>
+              <View className="flex-row justify-between items-center">
+                {chargeQuery.isLoading ? (
+                  <Skeleton className="bg-primario-100 h-4 w-32" />
+                ) : (
+                  <Text className="text-black text-sm">
+                    {chargeQuery.data?.name.toLocaleUpperCase()}
+                  </Text>
+                )}
                 <View className="flex-row">
                   <Tag severity="info" value={item.state} />
                 </View>
@@ -75,7 +83,9 @@ const PaymentItem = ({ item }: { item: IPayments }) => {
                     />
                     <Text className={"pb-2.5"}>Monto</Text>
                   </View>
-                  <Text className={"pb-2.5"}>{chargeQuery.data?.amount}</Text>
+                  <Text className={"pb-2.5"}>
+                    Bs. {chargeQuery.data?.amount}
+                  </Text>
                 </View>
                 <View className="flex-row justify-around">
                   <View className="flex-row">
@@ -88,7 +98,7 @@ const PaymentItem = ({ item }: { item: IPayments }) => {
                     <Text>Fecha Registro</Text>
                   </View>
 
-                  <Text>{item.date.toDateString()}</Text>
+                  <Text>{item.date.toLocaleDateString()}</Text>
                 </View>
               </View>
               {/* <View className={cn(Platform.OS === "android" && "pb-2")}>
@@ -115,17 +125,26 @@ const PaymentsHistory = () => {
   const renderItem = ({ item }: { item: IPayments }) => (
     <PaymentItem item={item} />
   );
+  const itemSeparator = () => {
+    return <View className="border-b border-primario-600"></View>;
+  };
 
   return (
     <DefaultLayout>
-      {paymentsQuery.data ? (
+      {paymentsQuery.isLoading ? (
+        <SkeletonFlatList />
+      ) : (
         <FlatList
+          ListHeaderComponent={() => (
+            <Text className="text-center text-primario-600 text-sm mt-6">
+              MIS PAGOS
+            </Text>
+          )}
           data={paymentsQuery.data}
           renderItem={renderItem}
           keyExtractor={(item) => item.id || ""}
+          ItemSeparatorComponent={() => itemSeparator()}
         />
-      ) : (
-        <Text>No se encontro pagos</Text>
       )}
     </DefaultLayout>
   );

@@ -70,7 +70,7 @@ const PaymentCard = () => {
               ListEmptyComponent={() => (
                 <>
                   {chargesQuery.isLoading ? (
-                    <Loader />
+                    <Loader name="Pagos" />
                   ) : (
                     <Text className="text-center flex-row p-2 text-gray-400">
                       No hay pagos pendientes
