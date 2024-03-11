@@ -9,8 +9,9 @@ import messaging from "@react-native-firebase/messaging";
 import { Alert, PermissionsAndroid, Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import { router } from "expo-router";
-import { useRootNavigationState } from "expo-router/src/hooks";
+import { useRootNavigationState } from "expo-router";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const queryClient = new QueryClient();
 
@@ -154,13 +155,15 @@ const Layout = () => {
 
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <AppProvider>
-          <BottomSheetModalProvider>
-            <Slot />
-          </BottomSheetModalProvider>
-        </AppProvider>
-      </QueryClientProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <QueryClientProvider client={queryClient}>
+          <AppProvider>
+            <BottomSheetModalProvider>
+              <Slot />
+            </BottomSheetModalProvider>
+          </AppProvider>
+        </QueryClientProvider>
+      </GestureHandlerRootView>
     </>
   );
 };
