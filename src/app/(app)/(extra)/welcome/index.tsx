@@ -15,8 +15,10 @@ const WelcomeScreen = () => {
   const { handleShowWelcomeScreen } = useSessionContext();
   const { width } = useWindowDimensions();
   return (
-    // <View>
-    //   <Text>WelcomeScreen</Text>
+    <>
+      {/* 
+   <View>
+       <Text>WelcomeScreen</Text>
 
     //   <Button
     //     title="VER WELCOME"
@@ -24,7 +26,7 @@ const WelcomeScreen = () => {
     //   />
     // </View>
 
-    <OnboardFlow
+   <OnboardFlow
       pages={[
         {
           title: " ¡Bienvenido a Admicasas!",
