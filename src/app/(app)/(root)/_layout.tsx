@@ -1,7 +1,6 @@
 import { Redirect, Stack } from "expo-router";
 import { useSessionContext } from "../../../hooks/useSessionContext";
-import { useStorageState } from "../../../hooks/useStorageState";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 import { StyleSheet, Text } from "react-native";
 import { View } from "lucide-react-native";
 import Loader from "@/components/Loader";
