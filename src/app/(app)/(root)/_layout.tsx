@@ -2,7 +2,7 @@ import { Redirect, Stack } from "expo-router";
 import { useSessionContext } from "../../../hooks/useSessionContext";
 import { useStorageState } from "../../../hooks/useStorageState";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { View } from "lucide-react-native";
 import Loader from "@/components/Loader";
 
@@ -12,7 +12,7 @@ export default function UnprotectedLayout() {
 
   if (status == "pending" || isLoadingShowWelcomeScreen) {
     return (
-      <View className="flex-1 flex items-center justify-center">
+      <View style={styles.container}>
         <Loader />
       </View>
     );
@@ -49,3 +49,10 @@ export default function UnprotectedLayout() {
     </>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
