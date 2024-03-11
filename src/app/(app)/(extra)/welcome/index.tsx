@@ -18,8 +18,10 @@ const WelcomeScreen = () => {
   const { handleShowWelcomeScreen } = useSessionContext();
 
   return (
-    // <View>
-    //   <Text>WelcomeScreen</Text>
+    <>
+      {/* 
+   <View>
+       <Text>WelcomeScreen</Text>
 
     //   <Button
     //     title="VER WELCOME"
@@ -27,7 +29,7 @@ const WelcomeScreen = () => {
     //   />
     // </View>
 
-    <OnboardFlow
+   <OnboardFlow
       pages={[
         {
           title: " ¡Bienvenido a Admicasas!",
@@ -64,22 +66,18 @@ const WelcomeScreen = () => {
       PrimaryButtonComponent={() => (
         <TouchableOpacity activeOpacity={0.8}>
           <View className="bg-primario-400 w-16 h-16 rounded-full items-center justify-center">
-            {/* <FontAwesome name="plus" size={20} color="#fff" /> */}
+           
           </View>
         </TouchableOpacity>
       )}
-    />
-    // <View className="flex-1 items-center justify-center bg-white">
-    //   <Stack.Screen options={{ headerShown: false }} />
-    //   <View className="h-80 w-80">
-    //     <SvgResource />
-    //   </View>
-    //   <View className="p-10">
-    //     <Text className="text-lg text-center">
-    //
-    //     </Text>
-    //   </View>
-    // </View>
+      /> */}
+      <View className="flex-1 items-center justify-center bg-white">
+        <Button
+          title="NEXT WLC"
+          onPress={() => handleShowWelcomeScreen("true")}
+        />
+      </View>
+    </>
   );
 };
 export default WelcomeScreen;
