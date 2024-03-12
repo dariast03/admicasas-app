@@ -1,4 +1,4 @@
-rootProject.name = 'admicasas-app'
+rootProject.name = 'AdmiCasas'
 
 dependencyResolutionManagement {
   versionCatalogs {
