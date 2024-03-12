@@ -1,11 +1,15 @@
 {
   "expo": {
     "name": "AdmiCasas",
+<<<<<<< HEAD
     "slug": "admicasas-app",
+=======
+    "slug": "admicasas",
+>>>>>>> 48b63092042246a42878f5a709f927034ed41d15
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/icon.png",
-    "scheme": "admicasas-app",
+    "scheme": "admicasas",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./src/assets/images/splash.png",
