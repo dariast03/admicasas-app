@@ -24,7 +24,7 @@ const AlertCard: React.FC<Props> = ({ severity = "primary", value }) => {
     >
       <Text
         className={clsx([
-          "",
+          "text-center",
           {
             "text-white": [
               "success",

@@ -6,6 +6,7 @@ import {
   useWindowDimensions,
   TouchableOpacity,
   StyleSheet,
+  RefreshControl,
 } from "react-native";
 
 import { Image } from "expo-image";
@@ -18,6 +19,7 @@ import Dropdown from "@/components/DropDown";
 import { useAppContext } from "@/hooks/useAppContext";
 import Loader from "@/components/Loader";
 import DefaultLayout from "@/layout/DefaultLayout";
+import SubTitle from "@/components/SubTitle";
 
 type Props = {
   data: IAnnouncement;
@@ -93,6 +95,12 @@ const Home = () => {
         data={null}
         renderItem={() => null}
         contentContainerClassName="p-5"
+        refreshControl={
+          <RefreshControl
+            refreshing={announcementsQuery.isLoading}
+            onRefresh={announcementsQuery.refetch}
+          />
+        }
         ListHeaderComponent={
           <>
             <View className="mb-5">
@@ -124,7 +132,7 @@ const Home = () => {
                   {announcementsQuery.isLoading ? (
                     <Loader name="Anuncios" />
                   ) : (
-                    <Text>No hay anuncios</Text>
+                    <SubTitle text="No hay anuncios" />
                   )}
                 </>
               )}

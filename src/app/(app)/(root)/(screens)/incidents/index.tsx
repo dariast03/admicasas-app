@@ -13,6 +13,7 @@ import { useSessionContext } from "@/hooks/useSessionContext";
 import { statusColorIncident } from "@/data/statusColor";
 import Colors from "@/constants/Colors";
 import Icon, { IconType } from "@/components/Icon";
+import SubTitle from "@/components/SubTitle";
 
 const Incidents = () => {
   const { selectedHousing } = useAppContext();
@@ -71,8 +72,12 @@ const Incidents = () => {
           <>
             <Link href={`/incidents/form/${item.id}`} asChild>
               <TouchableOpacity activeOpacity={0.6}>
-                <View className="bg-primario-50 dark:bg-primario-400 p-4 flex-row color={Colors.primario[600]}">
-                  <Text className="dark:text-white">{item.description}</Text>
+                <View className="bg-primario-50 dark:bg-primario-400 p-4 flex-row justify-between px-3">
+                  <Text className="dark:text-white">
+                    {item.description.length > 40
+                      ? `${item.description.substring(0, 40)}...`
+                      : item.description}
+                  </Text>
 
                   <Tag
                     value={item.state}
@@ -85,14 +90,11 @@ const Incidents = () => {
         )}
         ItemSeparatorComponent={() => <View className="mb-1" />}
         ListEmptyComponent={() => (
-          <Text>
-            Aun no tienes incidentes en la vivienda{" "}
-            {
-              housingsByPropietaryQuery.data?.find(
-                (x) => x.id == selectedHousing
-              )?.code
-            }
-          </Text>
+          <SubTitle
+            text={`No incidentes aún para la vivienda ${housingsByPropietaryQuery.data?.find(
+              (x) => x.id == selectedHousing
+            )}`}
+          />
         )}
       />
 

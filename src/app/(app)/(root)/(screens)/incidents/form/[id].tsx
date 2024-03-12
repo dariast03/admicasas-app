@@ -47,16 +47,16 @@ const shadow = {
   elevation: 14,
 };
 
-const housings: Partial<IHousing>[] = [
-  {
-    id: "1231",
-    code: "Casas 1",
-  },
-  {
-    id: "12faw31",
-    code: "Casa 2",
-  },
-];
+// const housings: Partial<IHousing>[] = [
+//   {
+//     id: "1231",
+//     code: "Casas 1",
+//   },
+//   {
+//     id: "12faw31",
+//     code: "Casa 2",
+//   },
+// ];
 
 const FormIncident = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -209,7 +209,7 @@ const FormIncident = () => {
                     <Text className="text-2xl font-bold mb-2 text-primario-600">
                       Registro de Incidente
                     </Text>
-                    <Text className="text-md  text-center text-primario-600 ">
+                    <Text className="text-md text-center text-primario-600 ">
                       Por favor, completa el formulario para reportar un
                       incidente.
                     </Text>

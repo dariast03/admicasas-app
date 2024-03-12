@@ -13,7 +13,6 @@ import {
 import { useSessionContext } from "@/hooks/useSessionContext";
 
 import Icon, { IconType } from "@/components/Icon";
-import { ColorProperties } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
 import Colors from "@/constants/Colors";
 
 const DetailAnnocenment = () => {

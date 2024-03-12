@@ -6,6 +6,8 @@ import {
   Button,
   ImageBackground,
   StyleSheet,
+  Image,
+  ActivityIndicator,
 } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
@@ -87,7 +89,17 @@ const Login = () => {
               <Text className="text-4xl font-bold mb-2 text-white">
                 Bienvenido
               </Text>
-              {/* <Image source={logo} className="h-24 w-24 mb-2" /> */}
+              <View className="justify-center items-center ">
+                <Image
+                  style={{
+                    height: 150,
+                    width: 150,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  source={require("../../../../../assets/images/logoblanco.png")}
+                />
+              </View>
               <Text className="text-lg font-bold text-white">
                 Inicia sesión con tu cuenta
               </Text>
@@ -161,9 +173,12 @@ const Login = () => {
               >
                 <View className="border border-primario-200 p-3 rounded-md items-center">
                   {isLoading ? (
-                    <Text className="text-primario-100 text-xl">
-                      Autenticando...
-                    </Text>
+                    <View className="flex-row">
+                      <ActivityIndicator className="text-white mr-3" />
+                      <Text className="text-primario-100 text-xl">
+                        Autenticando...
+                      </Text>
+                    </View>
                   ) : (
                     <Text className="text-primario-100 text-xl">
                       Iniciar Sesión
