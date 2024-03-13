@@ -97,7 +97,7 @@ const Home = () => {
         contentContainerClassName="p-5"
         refreshControl={
           <RefreshControl
-            refreshing={announcementsQuery.isLoading}
+            refreshing={announcementsQuery.isRefetching}
             onRefresh={announcementsQuery.refetch}
           />
         }

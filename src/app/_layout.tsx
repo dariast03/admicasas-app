@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { SessionProvider } from "../context/SessionContext";
 import "../global.css";
-import "../output.css";
+//import "../output.css";
 import Toast from "react-native-toast-message";
 import messaging from "@react-native-firebase/messaging";
 import { toastConfig } from "@/components/Toast";
