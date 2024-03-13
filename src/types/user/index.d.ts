@@ -15,6 +15,7 @@ export interface IAccount {
   condominiums: [];
   id: string;
 }
+
 export interface IUser {
   id?: string;
   displayName?: string;

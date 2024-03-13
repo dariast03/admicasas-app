@@ -18,7 +18,7 @@ type Props = {
 };
 
 type PropsUpdate = {
-  data: Partial<IUserAccount>;
+  data?: Partial<IUserAccount>;
   userAcount: Partial<IAccount>;
 };
 

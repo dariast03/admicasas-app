@@ -11,6 +11,7 @@ import { useHousing } from "@/hooks/useHousing";
 import { IHousing } from "@/types/housing/housing";
 import { ButtonLoader } from "@/components/ButtonLoader";
 import DefaultLayout from "@/layout/DefaultLayout";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Profile = () => {
   const { onLogout, user } = useAuth();
@@ -45,7 +46,7 @@ const Profile = () => {
           }}
         />
 
-        <View className="flex-row mt-5 bg-primario-600 w-full p-4 items-center pb-10">
+        <View className="flex-row  bg-primario-600 w-full pt-14 pb-8 items-center px-5">
           <Avatar
             rounded
             size="large"
@@ -53,7 +54,7 @@ const Profile = () => {
               uri: "https://th.bing.com/th/id/OIP.l0brqMrdiKjD2t5Ab4ZkCAHaHa?rs=1&pid=ImgDetMain",
             }}
           />
-          <View className="p-4  gap-2">
+          <View className="p-2 gap-2">
             <Text className="text-xl  text-white">{user.account.name}</Text>
             <Text className="text-white">{user.email}</Text>
           </View>
@@ -68,16 +69,33 @@ const Profile = () => {
                   name: "building-o",
                 }}
               />
-              <Text>{condominiumQuery.data?.name}</Text>
+              {condominiumQuery.isLoading ? (
+                <Skeleton className="h-4 w-full bg-primario-100" />
+              ) : (
+                <Text>{condominiumQuery.data?.name}</Text>
+              )}
             </View>
             <View className="w-full border-b-2 border-b-primario-300"></View>
           </View>
           <View className="p-4 px-6">
-            <FlatList
-              data={housingsQuery.data}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id || ""}
-            />
+            {housingsQuery.isLoading ? (
+              <View className="flex-row gap-2">
+                <Icon
+                  color={Colors.primario[600]}
+                  icon={{
+                    type: IconType.MaterialCommunityIcons,
+                    name: "warehouse",
+                  }}
+                />
+                <Skeleton className="h-4 w-full bg-primario-100" />
+              </View>
+            ) : (
+              <FlatList
+                data={housingsQuery.data}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id || ""}
+              />
+            )}
 
             <View className="w-full border-b-2 border-b-primario-300"></View>
           </View>

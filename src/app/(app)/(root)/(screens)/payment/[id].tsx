@@ -1,7 +1,7 @@
 import { useAnnouncement } from "@/hooks/useAnnouncement";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { Image } from "expo-image";
-import { Redirect, Stack, useLocalSearchParams } from "expo-router";
+import { Redirect, Stack, router, useLocalSearchParams } from "expo-router";
 import {
   ActivityIndicator,
   ScrollView,
@@ -103,7 +103,7 @@ const DetailAnnocenment = () => {
       });
     } else {
       data.iduser = user.id;
-      data.idhousing = user.account.idhousing;
+      data.idhousing = selectedHousing;
       data.idcharge = id + "";
       data.state = "Pendiente";
       data.idcondominium = user.account.idcondominium;
@@ -116,6 +116,7 @@ const DetailAnnocenment = () => {
         },
       });
     }
+    router.push("/(app)/(root)/(drawer)/(tabs)/payments/paymentsHistory");
   };
 
   const [downloadProgress, setDownloadProgress] = useState(0);

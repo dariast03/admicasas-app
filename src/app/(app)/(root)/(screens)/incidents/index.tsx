@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, RefreshControl } from "react-native";
 import React from "react";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { FontAwesome } from "@expo/vector-icons";
@@ -67,6 +67,12 @@ const Incidents = () => {
             </Text>
           </>
         )}
+        refreshControl={
+          <RefreshControl
+            refreshing={incidentsQuery.isRefetching}
+            onRefresh={incidentsQuery.refetch}
+          />
+        }
         contentContainerClassName="p-2"
         renderItem={({ item }) => (
           <>
@@ -91,9 +97,11 @@ const Incidents = () => {
         ItemSeparatorComponent={() => <View className="mb-1" />}
         ListEmptyComponent={() => (
           <SubTitle
-            text={`No incidentes aún para la vivienda ${housingsByPropietaryQuery.data?.find(
-              (x) => x.id == selectedHousing
-            )}`}
+            text={`No hay incidentes reportados hasta el momento para la vivienda:  ${
+              housingsByPropietaryQuery.data?.find(
+                (x) => x.id == selectedHousing
+              )?.code
+            }`}
           />
         )}
       />

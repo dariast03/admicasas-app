@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -86,6 +86,16 @@ const Home = () => {
     },
   });
 
+  useEffect(() => {
+    if (!selectedHousing) updateHousing(user.account.idhousing);
+  }, [isLoadingSelectedHousing]);
+  console.log(
+    "🚀 ~ useEffect ~ selectedHousing:",
+    selectedHousing,
+    "idhougsing:",
+    user.account.idhousing
+  );
+
   return (
     <DefaultLayout>
       <Text className="bg-primario-600 p-6 rounded-b-3xl text-white font-black">
@@ -108,9 +118,7 @@ const Home = () => {
                 placeholder="Seleccionar vivienda"
                 label="Seleccionar Vivienda:"
                 valueField={"id"}
-                value={
-                  selectedHousing ? selectedHousing : user?.account?.idhousing
-                }
+                value={selectedHousing}
                 labelField={"code"}
                 data={housingsByPropietaryQuery.data || []}
                 onChange={(e) => updateHousing(e.id)}

@@ -1,9 +1,10 @@
-import { IUser, IUserAccount } from "../types/user";
+import { IAccount, IUser, IUserAccount } from "../types/user";
 import firestore from "@react-native-firebase/firestore";
 
 const FirestoreKey = "Users";
 
-const updateData = async (data: Partial<IUserAccount>) => {
+// const updateData = async (data: Partial<IUserAccount>) => {
+const updateData = async (data: Partial<IAccount>) => {
   try {
     const id = data.id;
     delete data.id;

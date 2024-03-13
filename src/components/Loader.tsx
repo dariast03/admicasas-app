@@ -14,7 +14,6 @@ const Loader: React.FC<Props> = ({
   height = "auto",
   name = "",
 }) => {
-  console.log("🚀 ~ name:", name);
   return (
     <View
       className="flex-1 items-center justify-center"

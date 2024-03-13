@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, RefreshControl } from "react-native";
 import React from "react";
 
 import DefaultLayout from "@/layout/DefaultLayout";
@@ -12,6 +12,7 @@ import { ButtonLoader } from "@/components/ButtonLoader";
 import { useSessionContext } from "@/hooks/useSessionContext";
 import Icon, { IconType } from "@/components/Icon";
 import { useAppContext } from "@/hooks/useAppContext";
+import SubTitle from "@/components/SubTitle";
 
 type Props = {
   data: ICharge;
@@ -60,21 +61,24 @@ const PaymentCard = () => {
         data={null}
         renderItem={() => null}
         contentContainerClassName="p-5"
+        refreshControl={
+          <RefreshControl
+            refreshing={chargesQuery.isRefetching}
+            onRefresh={chargesQuery.refetch}
+          />
+        }
         ListHeaderComponent={
           <>
             <FlatList
               data={chargesQuery.data}
               renderItem={({ item }) => <Card data={item} />}
-              ItemSeparatorComponent={() => <View className="mb-5" />}
               keyExtractor={(item) => item.id || ""}
               ListEmptyComponent={() => (
                 <>
                   {chargesQuery.isLoading ? (
                     <Loader name="Pagos" />
                   ) : (
-                    <Text className="text-center flex-row p-2 text-gray-400">
-                      No hay pagos pendientes
-                    </Text>
+                    <SubTitle text="No hay pagos pendientes en este momento." />
                   )}
                 </>
               )}

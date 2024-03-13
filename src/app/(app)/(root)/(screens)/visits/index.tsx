@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, RefreshControl } from "react-native";
 import React from "react";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { FontAwesome } from "@expo/vector-icons";
@@ -11,6 +11,8 @@ import { useSessionContext } from "@/hooks/useSessionContext";
 import clsx from "clsx";
 import Colors from "@/constants/Colors";
 import Icon, { IconType } from "@/components/Icon";
+import SubTitle from "@/components/SubTitle";
+import { useHousing } from "@/hooks/useHousing";
 
 const Visits = () => {
   const { selectedHousing } = useAppContext();
@@ -21,6 +23,12 @@ const Visits = () => {
       idhousing: selectedHousing,
     },
     query: ["visitsQuery"],
+  });
+
+  const { housingsByPropietaryQuery } = useHousing({
+    params: {
+      idproprietary: user.id,
+    },
   });
 
   if (visitsQuery.isPending) return <Text>A LA ESPERA.</Text>;
@@ -57,11 +65,17 @@ const Visits = () => {
         data={visits}
         ListHeaderComponent={() => (
           <>
-            <Text className="text-center font-bold text-xl p-4">
-              TUS VISITAS
+            <Text className="text-center text-primario-600 text-xl p-5">
+              Mis Visitas
             </Text>
           </>
         )}
+        refreshControl={
+          <RefreshControl
+            refreshing={visitsQuery.isRefetching}
+            onRefresh={visitsQuery.refetch}
+          />
+        }
         contentContainerClassName="p-2"
         renderItem={({ item, index }) => (
           <>
@@ -86,11 +100,15 @@ const Visits = () => {
             </Link>
           </>
         )}
-        //     ItemSeparatorComponent={() => <View className="mb-1" />}
+        ItemSeparatorComponent={() => <View className="mb-2" />}
         ListEmptyComponent={() => (
-          <Text className="text-center">
-            ¡Todavía no tienes visitas programadas para esta vivienda!
-          </Text>
+          <SubTitle
+            text={`No hay visistas registradas hasta el momento para la vivienda ${
+              housingsByPropietaryQuery.data?.find(
+                (x) => x.id == selectedHousing
+              )?.code
+            }`}
+          />
         )}
       />
 
@@ -107,4 +125,4 @@ const Visits = () => {
   );
 };
 
-export default Visits; // Update the component name
+export default Visits;

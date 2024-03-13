@@ -50,6 +50,7 @@ const getAllData = async ({
       const paymentQuerySnapshot = await firestore()
         .collection("Payments")
         .where("idcharge", "==", doc.id)
+        .where("idhousing", "==", idhousing)
         .get();
 
       const paymentExists = paymentQuerySnapshot.docs.some((paymentDoc) => {

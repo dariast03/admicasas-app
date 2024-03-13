@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
+  RefreshControl,
 } from "react-native";
 import { usePayments } from "@/hooks/usePayments";
 import { useCharges } from "@/hooks/useCharges";
@@ -30,6 +31,7 @@ import {
 import Icon, { IconType } from "@/components/Icon";
 import { Skeleton } from "@/components/ui/skeleton";
 import SkeletonFlatList from "@/components/SkeletonFlatList";
+import { cn } from "@/lib/utils";
 
 interface typePayments {
   id?: string | undefined;
@@ -60,7 +62,18 @@ const PaymentItem = ({ item }: { item: IPayments }) => {
                   </Text>
                 )}
                 <View className="flex-row">
-                  <Tag severity="info" value={item.state} />
+                  <Tag
+                    severity={
+                      item.state === "Aprobado"
+                        ? "success"
+                        : item.state === "Pendiente"
+                        ? "warning"
+                        : item.state === "Rechazado"
+                        ? "error"
+                        : "info"
+                    }
+                    value={item.state}
+                  />
                 </View>
               </View>
             </TouchableOpacity>
@@ -101,11 +114,13 @@ const PaymentItem = ({ item }: { item: IPayments }) => {
                   <Text>{item.date.toLocaleDateString()}</Text>
                 </View>
               </View>
-              {/* <View className={cn(Platform.OS === "android" && "pb-2")}>
+              <View className={cn(Platform.OS === "android" && "pb-2 pr-2")}>
                 <BottomSheetCloseTrigger>
-                  <Text>Save Changes</Text>
+                  <Text className=" text-red-600 text-right text-lg font-medium rounded-full ">
+                    Cerrar
+                  </Text>
                 </BottomSheetCloseTrigger>
-              </View> */}
+              </View>
             </BottomSheetView>
           </BottomSheetContent>
         </BottomSheet>
@@ -136,14 +151,20 @@ const PaymentsHistory = () => {
       ) : (
         <FlatList
           ListHeaderComponent={() => (
-            <Text className="text-center text-primario-600 text-sm mt-6">
-              MIS PAGOS
+            <Text className="text-center text-primario-600 mt-6">
+              Mis Pagos
             </Text>
           )}
           data={paymentsQuery.data}
           renderItem={renderItem}
           keyExtractor={(item) => item.id || ""}
-          ItemSeparatorComponent={() => itemSeparator()}
+          ItemSeparatorComponent={itemSeparator}
+          refreshControl={
+            <RefreshControl
+              refreshing={paymentsQuery.isRefetching}
+              onRefresh={paymentsQuery.refetch}
+            />
+          }
         />
       )}
     </DefaultLayout>
