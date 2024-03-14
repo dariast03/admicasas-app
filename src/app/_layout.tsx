@@ -5,7 +5,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
+import { Slot, SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { SessionProvider } from "../context/SessionContext";
@@ -15,6 +15,10 @@ import messaging from "@react-native-firebase/messaging";
 import { toastConfig } from "@/components/Toast";
 import "../global.css";
 import "../output.css";
+import { AppProvider } from "@/context/AppContext";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -32,6 +36,8 @@ SplashScreen.preventAutoHideAsync();
 messaging().setBackgroundMessageHandler(async (msg) => {
   console.log("NOTIFICATION ON BACKGROUND", msg.data);
 });
+
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -61,15 +67,17 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <SessionProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(app)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        </Stack>
-      </ThemeProvider>
-      <Toast config={toastConfig} />
-    </SessionProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <AppProvider>
+          <SessionProvider>
+            <BottomSheetModalProvider>
+              <Slot />
+            </BottomSheetModalProvider>
+          </SessionProvider>
+        </AppProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 }
 
