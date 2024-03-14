@@ -5,12 +5,13 @@ import { IFormLogin, IFormRegister } from "../types/user";
 import { useSessionContext } from "./useSessionContext";
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import Toast from "react-native-toast-message";
+import { useAppContext } from "./useAppContext";
 
 const useAuth = () => {
   // const { setLogin, user, status, setLogout, setCondominium } = useAuthStore();
   const { signIn, signOut, user, status } = useSessionContext();
   const [isLoading, setIsLoading] = useState(false);
-
+  const { updateHousing } = useAppContext();
   const onLogin = async (data: IFormLogin) => {
     setIsLoading(true);
 
@@ -112,6 +113,7 @@ const useAuth = () => {
   };
 
   const onLogout = async () => {
+    updateHousing("");
     signOut();
     await authService.logout();
   };

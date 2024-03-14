@@ -10,13 +10,10 @@ const LayoutWithTopBar: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <DefaultLayout withSafeArea>
       <View
-        className="bg-primario-600 flex-row justify-between items-center p-2"
+        className="bg-primario-600 dark:bg-primario-900 flex-row justify-between items-center p-2"
         /*  style={{ backgroundColor: "ue" }} */
       >
-        <DrawerToggleButton
-          tintColor="#fff"
-          pressColor="#fff"
-        />
+        <DrawerToggleButton tintColor="#fff" pressColor="#fff" />
 
         <View className="flex-row items-center">
           <Link href="/notifications" asChild>

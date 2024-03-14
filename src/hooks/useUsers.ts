@@ -48,8 +48,9 @@ export const useUsers = ({ id = undefined, params, params1 }: Props = {}) => {
   });
   const acountUpdateMutation = useMutation({
     mutationFn: (data: PropsUpdate) => {
+      console.log("🚀 ~ useUsers ~ data:", data);
       const creacion = async () => {
-        await userService.updateData({ ...data.data });
+        await userService.updateData({ ...data.userAcount });
       };
       return creacion();
     },
