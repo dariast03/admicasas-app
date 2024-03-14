@@ -36,7 +36,7 @@ const Dropdown: React.FC<Props> = ({
 
   return (
     <View style={styles.container}>
-      <Text className="mb-1 text-md  font-bold">
+      <Text className="mb-1 text-md text-primario-600 dark:text-white font-bold">
         {label} {withAsterisk && <Text className="text-red-400">*</Text>}
       </Text>
 
@@ -54,7 +54,7 @@ const Dropdown: React.FC<Props> = ({
             isError && { borderColor: "red" },
             isFocus && { borderColor: Colors.primario[700] },
             isDark
-              ? { backgroundColor: Colors.primario[500] }
+              ? { backgroundColor: Colors.primario[800] }
               : { backgroundColor: Colors.primario[100] },
           ]}
           placeholderStyle={[
@@ -65,9 +65,7 @@ const Dropdown: React.FC<Props> = ({
           ]}
           selectedTextStyle={[
             styles.selectedTextStyle,
-            isDark
-              ? { color: Colors.primario[100] }
-              : { color: Colors.primario[600] },
+            isDark ? { color: "white" } : { color: Colors.primario[600] },
           ]}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
@@ -81,7 +79,7 @@ const Dropdown: React.FC<Props> = ({
                 <Icon
                   icon={icon}
                   style={{
-                    color: isDark ? Colors.primario[100] : Colors.primario[600],
+                    color: isDark ? Colors.primario[900] : Colors.primario[100],
                     fontSize: 22,
                     marginRight: 10,
                   }}

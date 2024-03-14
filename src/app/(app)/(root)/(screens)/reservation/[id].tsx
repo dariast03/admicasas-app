@@ -37,7 +37,6 @@ import { statusColorReservation } from "@/data/statusColor";
 
 const FormReservation = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  console.log("🚀 ~ FormReservation ~ id:", id);
 
   const shadow = {
     shadowColor: "#000",

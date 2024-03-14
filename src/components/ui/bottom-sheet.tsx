@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import { NAV_THEME } from "@/lib/constants";
 import * as Slot from "@/lib/rn-primitives/slot/slot-native";
 import { cn } from "@/lib/utils";
+import Colors from "@/constants/Colors";
 
 type BottomSheetRef = React.ElementRef<typeof View>;
 type BottomSheetProps = React.ComponentPropsWithoutRef<typeof View>;
@@ -143,7 +144,11 @@ const BottomSheetContent = React.forwardRef<
         backdropComponent={renderBackdrop}
         enableDynamicSizing={enableDynamicSizing}
         backgroundStyle={[
-          { backgroundColor: NAV_THEME[colorScheme].card },
+          // { backgroundColor: NAV_THEME[colorScheme].card },
+          {
+            backgroundColor:
+              colorScheme === "dark" ? Colors.primario[800] : "#fff",
+          },
           backgroundStyle,
         ]}
         handleIndicatorStyle={{

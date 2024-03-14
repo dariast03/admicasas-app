@@ -13,6 +13,9 @@ import { useSessionContext } from "@/hooks/useSessionContext";
 import Icon, { IconType } from "@/components/Icon";
 import { useAppContext } from "@/hooks/useAppContext";
 import SubTitle from "@/components/SubTitle";
+import Colors from "@/constants/Colors";
+import { useColorScheme } from "nativewind";
+import GlobalStyles from "@/constants/GlobalStyle";
 
 type Props = {
   data: ICharge;
@@ -28,11 +31,20 @@ const PaymentCard = () => {
   const Card = ({ data }: Props) => {
     const routeView: any = "/payment/" + data.id;
     return (
-      <View className="p-5 m-3 rounded-lg bg-white" style={styles.shadowCard}>
-        <Text className="text-xl font-bold">{data.name}</Text>
-        <Text className="text-base text-gray-600">{data.description}</Text>
-        <View className="border-b border-stone-400 my-5"></View>
-        <Text className="text-base text-gray-600">Fecha limite</Text>
+      <View
+        className="p-5 m-3 rounded-lg bg-white dark:bg-primario-600"
+        style={GlobalStyles()}
+      >
+        <Text className="text-xl font-bold text-primario-600 dark:text-white">
+          {data.name}
+        </Text>
+        <Text className="text-base text-gray-600 dark:text-white">
+          {data.description}
+        </Text>
+        <View className="border-b border-stone-400 dark:border-white my-5"></View>
+        <Text className="text-base text-gray-600 dark:text-white">
+          Fecha limite
+        </Text>
         <View className="flex-row items-center">
           <Icon
             icon={{
@@ -40,12 +52,12 @@ const PaymentCard = () => {
               name: "calendar",
             }}
           />
-          <Text className="text-stone-400 my-2">
+          <Text className="text-stone-400 dark:text-white my-2">
             {data?.end?.toLocaleDateString()}
           </Text>
         </View>
 
-        <Text className="text-lg text-gray-700 my-3">
+        <Text className="text-lg text-gray-700 dark:text-white my-3">
           Monto a pagar: {data.amount}
         </Text>
         <ButtonLoader onPress={() => router.push(routeView)}>
@@ -101,18 +113,5 @@ const PaymentCard = () => {
     // </View>
   );
 };
-
-const styles = StyleSheet.create({
-  shadowCard: {
-    shadowColor: "#4f46e5",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 5.62,
-    elevation: 7,
-  },
-});
 
 export default PaymentCard;

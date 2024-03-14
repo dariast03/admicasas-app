@@ -20,54 +20,54 @@ import { useAppContext } from "@/hooks/useAppContext";
 import Loader from "@/components/Loader";
 import DefaultLayout from "@/layout/DefaultLayout";
 import SubTitle from "@/components/SubTitle";
+import Colors from "@/constants/Colors";
 
 type Props = {
   data: IAnnouncement;
 };
 
-const Card = ({ data }: Props) => {
-  const { width } = useWindowDimensions();
-  let routeView: any;
-  if (data.type === "charge") {
-    routeView = "/payment/" + data.idcharge;
-  } else if (data.type === "meeting") {
-    routeView = "/meeting/" + data.id;
-  } else {
-    routeView = "/annoucement/" + data.id;
-  }
-
-  return (
-    <View
-      style={styles.shadowCard}
-      className="w-full bg-white border border-gray-200 rounded-2xl overflow-hidden"
-    >
-      <Link href={routeView} asChild>
-        <TouchableOpacity>
-          <Image
-            source={data.urlimg}
-            style={{
-              maxWidth: width,
-              height: 200,
-            }}
-          />
-
-          <View className="p-5">
-            <View>
-              <Text className="mb-1 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                {data.title}
-              </Text>
-              <Text className="text-sm font-light tracking-tight text-gray-700 dark:text-gray-300">
-                {data.description}
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </Link>
-    </View>
-  );
-};
-
 const Home = () => {
+  const Card = ({ data }: Props) => {
+    const { width } = useWindowDimensions();
+    let routeView: any;
+    if (data.type === "charge") {
+      routeView = "/payment/" + data.idcharge;
+    } else if (data.type === "meeting") {
+      routeView = "/meeting/" + data.id;
+    } else {
+      routeView = "/annoucement/" + data.id;
+    }
+
+    return (
+      <View
+        style={styles.shadowCard}
+        className="w-full bg-white dark:bg-primario-800 rounded-2xl overflow-hidden"
+      >
+        <Link href={routeView} asChild>
+          <TouchableOpacity>
+            <Image
+              source={data.urlimg}
+              style={{
+                maxWidth: width,
+                height: 200,
+              }}
+            />
+
+            <View className="p-5">
+              <View>
+                <Text className="mb-1 text-xl font-bold  text-primario-800 dark:text-white">
+                  {data.title}
+                </Text>
+                <Text className=" font-light  text-primario-800 dark:text-gray-100">
+                  {data.description}
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </Link>
+      </View>
+    );
+  };
   const { user } = useSessionContext();
   const { isLoadingSelectedHousing, selectedHousing, updateHousing } =
     useAppContext();
@@ -89,16 +89,10 @@ const Home = () => {
   useEffect(() => {
     if (!selectedHousing) updateHousing(user.account.idhousing);
   }, [isLoadingSelectedHousing]);
-  console.log(
-    "🚀 ~ useEffect ~ selectedHousing:",
-    selectedHousing,
-    "idhougsing:",
-    user.account.idhousing
-  );
 
   return (
     <DefaultLayout>
-      <Text className="bg-primario-600 p-6 rounded-b-3xl text-white font-black">
+      <Text className="bg-primario-600 dark:bg-primario-800 p-6 rounded-b-3xl text-white font-black">
         ADMICASAS
       </Text>
       <FlatList
@@ -154,14 +148,23 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   shadowCard: {
-    shadowColor: "#4f46e5",
+    //   shadowColor: "#fff",
+    //   shadowOffset: {
+    //     width: 0,
+    //     height: 5,
+    //   },
+    //   shadowOpacity: 0.2,
+    //   shadowRadius: 5.62,
+    //   elevation: 7,
+    // },
+    shadowColor: Colors.primario[800],
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 2,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 5.62,
-    elevation: 7,
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
   },
 });
 

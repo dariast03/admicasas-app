@@ -3,19 +3,30 @@ import React from "react";
 import DefaultLayout from "./DefaultLayout";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Link } from "expo-router";
-import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { Feather, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
+import { useColorScheme } from "nativewind";
 
 const LayoutWithTopBar: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const { toggleColorScheme, colorScheme } = useColorScheme();
   return (
     <DefaultLayout withSafeArea>
       <View
-        className="bg-primario-600 dark:bg-primario-900 flex-row justify-between items-center p-2"
+        className="bg-primario-600 dark:bg-primario-800 flex-row justify-between items-center p-2"
         /*  style={{ backgroundColor: "ue" }} */
       >
         <DrawerToggleButton tintColor="#fff" pressColor="#fff" />
 
         <View className="flex-row items-center">
+          <TouchableOpacity onPress={toggleColorScheme}>
+            <View className="p-2">
+              {colorScheme === "dark" ? (
+                <Feather name="sun" size={23} color="#fff" />
+              ) : (
+                <MaterialIcons name="dark-mode" size={23} color="#fff" />
+              )}
+            </View>
+          </TouchableOpacity>
           <Link href="/notifications" asChild>
             <TouchableOpacity>
               <View className="p-2 ">

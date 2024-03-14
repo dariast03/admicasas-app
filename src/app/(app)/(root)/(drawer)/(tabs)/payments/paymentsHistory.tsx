@@ -39,109 +39,110 @@ interface typePayments {
   state: string;
 }
 
-const PaymentItem = ({ item }: { item: IPayments }) => {
-  const { selectedHousing } = useAppContext();
-
-  const { chargeQuery } = useCharges({
-    id: item.idcharge || "",
-    params: { idhousing: selectedHousing },
-  });
-
-  return (
-    <View className="p-4">
-      <TouchableOpacity className="cursor-pointer">
-        <BottomSheet>
-          <BottomSheetOpenTrigger asChild>
-            <TouchableOpacity>
-              <View className="flex-row justify-between items-center">
-                {chargeQuery.isLoading ? (
-                  <Skeleton className="bg-primario-100 h-4 w-32" />
-                ) : (
-                  <Text className="text-black text-sm">
-                    {chargeQuery.data?.name.toLocaleUpperCase()}
-                  </Text>
-                )}
-                <View className="flex-row">
-                  <Tag
-                    severity={
-                      item.state === "Aprobado"
-                        ? "success"
-                        : item.state === "Pendiente"
-                        ? "warning"
-                        : item.state === "Rechazado"
-                        ? "error"
-                        : "info"
-                    }
-                    value={item.state}
-                  />
-                </View>
-              </View>
-            </TouchableOpacity>
-          </BottomSheetOpenTrigger>
-          <BottomSheetContent>
-            <BottomSheetHeader>
-              <Text className="text-foreground text-xl font-bold text-center pb-1 text-primario-600">
-                Detalle de Pago
-              </Text>
-            </BottomSheetHeader>
-            <BottomSheetView className="gap-5 pt-6">
-              <View className="pb-2 gap-6">
-                <View className="flex-row justify-around">
-                  <View className="flex-row">
-                    <Icon
-                      icon={{
-                        type: IconType.FontAweomseIcon,
-                        name: "money",
-                      }}
-                    />
-                    <Text className={"pb-2.5"}>Monto</Text>
-                  </View>
-                  <Text className={"pb-2.5"}>
-                    Bs. {chargeQuery.data?.amount}
-                  </Text>
-                </View>
-                <View className="flex-row justify-around">
-                  <View className="flex-row">
-                    <Icon
-                      icon={{
-                        type: IconType.AntDesign,
-                        name: "calendar",
-                      }}
-                    />
-                    <Text>Fecha Registro</Text>
-                  </View>
-
-                  <Text>{item.date.toLocaleDateString()}</Text>
-                </View>
-              </View>
-              <View className={cn(Platform.OS === "android" && "pb-2 pr-2")}>
-                <BottomSheetCloseTrigger>
-                  <Text className=" text-red-600 text-right text-lg font-medium rounded-full ">
-                    Cerrar
-                  </Text>
-                </BottomSheetCloseTrigger>
-              </View>
-            </BottomSheetView>
-          </BottomSheetContent>
-        </BottomSheet>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
 const PaymentsHistory = () => {
-  const { user } = useSessionContext();
   const { selectedHousing } = useAppContext();
 
   const { paymentsQuery } = usePayments({
     params: { idhousing: selectedHousing },
   });
+  const PaymentItem = ({ item }: { item: IPayments }) => {
+    const { selectedHousing } = useAppContext();
 
+    const { chargeQuery } = useCharges({
+      id: item.idcharge || "",
+      params: { idhousing: selectedHousing },
+    });
+
+    return (
+      <View className="p-4">
+        <TouchableOpacity className="cursor-pointer">
+          <BottomSheet>
+            <BottomSheetOpenTrigger asChild>
+              <TouchableOpacity>
+                <View className="flex-row justify-between items-center">
+                  {chargeQuery.isLoading ? (
+                    <Skeleton className="bg-gray-200 dark:bg-primario-600 h-4 w-32" />
+                  ) : (
+                    <Text className="text-black dark:text-white text-sm">
+                      {chargeQuery.data?.name.toLocaleUpperCase()}
+                    </Text>
+                  )}
+                  <View className="flex-row">
+                    <Tag
+                      severity={
+                        item.state === "Aprobado"
+                          ? "success"
+                          : item.state === "Pendiente"
+                          ? "warning"
+                          : item.state === "Rechazado"
+                          ? "error"
+                          : "info"
+                      }
+                      value={item.state}
+                    />
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </BottomSheetOpenTrigger>
+            <BottomSheetContent>
+              <BottomSheetHeader>
+                <Text className="text-foreground text-xl font-bold text-center pb-1 text-primario-600 dark:text-white">
+                  Detalle de Pago
+                </Text>
+              </BottomSheetHeader>
+              <BottomSheetView className="gap-5 pt-6">
+                <View className="pb-2 gap-6">
+                  <View className="flex-row justify-around">
+                    <View className="flex-row">
+                      <Icon
+                        icon={{
+                          type: IconType.FontAweomseIcon,
+                          name: "money",
+                        }}
+                      />
+                      <Text className={"pb-2.5 dark:text-white"}>Monto</Text>
+                    </View>
+                    <Text className={"pb-2.5 dark:text-white"}>
+                      Bs. {chargeQuery.data?.amount}
+                    </Text>
+                  </View>
+                  <View className="flex-row justify-around">
+                    <View className="flex-row">
+                      <Icon
+                        icon={{
+                          type: IconType.AntDesign,
+                          name: "calendar",
+                        }}
+                      />
+                      <Text className="dark:text-white">Fecha Registro</Text>
+                    </View>
+
+                    <Text className="dark:text-white">
+                      {item.date.toLocaleDateString()}
+                    </Text>
+                  </View>
+                </View>
+                <View className={cn(Platform.OS === "android" && "pb-2 pr-2")}>
+                  <BottomSheetCloseTrigger>
+                    <Text className=" text-red-500 text-right text-lg font-bold ">
+                      Cerrar
+                    </Text>
+                  </BottomSheetCloseTrigger>
+                </View>
+              </BottomSheetView>
+            </BottomSheetContent>
+          </BottomSheet>
+        </TouchableOpacity>
+      </View>
+    );
+  };
   const renderItem = ({ item }: { item: IPayments }) => (
     <PaymentItem item={item} />
   );
   const itemSeparator = () => {
-    return <View className="border-b border-primario-600"></View>;
+    return (
+      <View className="border-b border-primario-600 dark:border-white"></View>
+    );
   };
 
   return (
@@ -151,7 +152,7 @@ const PaymentsHistory = () => {
       ) : (
         <FlatList
           ListHeaderComponent={() => (
-            <Text className="text-center text-primario-600 mt-6">
+            <Text className="text-center text-primario-600 dark:text-white mt-6">
               Mis Pagos
             </Text>
           )}

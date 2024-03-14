@@ -10,33 +10,54 @@ import DefaultLayout from "@/layout/DefaultLayout";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import Colors from "@/constants/Colors";
+import { useColorScheme } from "nativewind";
+import GlobalStyles from "@/constants/GlobalStyle";
 type Menu = {
   icon: any;
   title: string;
   to: any;
 };
 
-const menu: Menu[] = [
-  {
-    icon: <FontAwesome name="warning" size={50} color={Colors.primario[600]} />,
-    title: "INCIDENTES",
-    to: "/incidents",
-  },
-  {
-    icon: <FontAwesome name="group" size={50} color={Colors.primario[600]} />,
-    title: "LIBRO VISITAS",
-    to: "/visits",
-  },
-  {
-    icon: <FontAwesome name="group" size={50} color={Colors.primario[600]} />,
-    title: "REUNIONES",
-    to: "/meeting",
-  },
-];
 const Community = () => {
+  const isDark = useColorScheme().colorScheme === "dark";
+  const menu: Menu[] = [
+    {
+      icon: (
+        <FontAwesome
+          name="warning"
+          size={50}
+          color={isDark ? "#fff" : Colors.primario[600]}
+        />
+      ),
+      title: "INCIDENTES",
+      to: "/incidents",
+    },
+    {
+      icon: (
+        <FontAwesome
+          name="group"
+          size={50}
+          color={isDark ? "#fff" : Colors.primario[600]}
+        />
+      ),
+      title: "LIBRO VISITAS",
+      to: "/visits",
+    },
+    {
+      icon: (
+        <FontAwesome
+          name="group"
+          size={50}
+          color={isDark ? "#fff" : Colors.primario[600]}
+        />
+      ),
+      title: "REUNIONES",
+      to: "/meeting",
+    },
+  ];
   return (
     <DefaultLayout withSafeArea={false}>
-      <Text className="text-center text-primario-600 text-2xl mt-10">
+      <Text className="text-center text-primario-600 dark:text-white font-bold text-2xl mt-10">
         COMUNIDAD
       </Text>
       <FlatList
@@ -66,24 +87,13 @@ type CardProps = {
 const Card: React.FC<CardProps> = ({ icon, title }) => {
   return (
     <View
-      className="bg-white p-5 items-center  justify-center gap-3 rounded-2xl w-44 h-44 border border-gray-200"
-      style={styles.shadowCard}
+      className="bg-white dark:bg-primario-800 p-5 items-center  justify-center gap-3 rounded-2xl w-44 h-44 border border-gray-200 dark:border-primario-800"
+      style={GlobalStyles()}
     >
       {icon}
-      <Text className="text-primario-600">{title}</Text>
+      <Text className="text-primario-600 dark:text-white">{title}</Text>
     </View>
   );
 };
-const styles = StyleSheet.create({
-  shadowCard: {
-    shadowColor: "#4f46e5",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 5.62,
-    elevation: 7,
-  },
-});
+
 export default Community;

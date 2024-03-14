@@ -1,10 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Animated, useColorScheme } from "react-native";
+import { Animated } from "react-native";
 import { MaterialTopTabs } from "../../../../../navigator/top-tabs";
 import LayoutWithTopBar from "../../../../../layout/LayoutWithTopBar";
 import Colors from "@/constants/Colors";
 import { Platform } from "react-native";
+import { useColorScheme } from "nativewind";
 
 const av = new Animated.Value(0);
 av.addListener(() => {
@@ -12,13 +13,11 @@ av.addListener(() => {
 });
 
 export default function Layout() {
+  const isDark = useColorScheme().colorScheme === "dark";
   return (
     <>
       <StatusBar
-        backgroundColor={
-          /*  isDarkMode ? COLORS.dark.secondary : COLORS.light.background */
-          Colors.primario[600]
-        }
+        backgroundColor={isDark ? Colors.primario[800] : Colors.primario[600]}
         style={Platform.select({
           ios: "dark",
           android: "light",
@@ -41,14 +40,12 @@ export default function Layout() {
             lazy: true,
             //tabBarItemStyle: { padding: 6 },
 
-            /*  tabBarStyle: {
-               backgroundColor: isDarkMode ? COLORS.dark.secondary : '#FFF',
-             }, */
+            tabBarStyle: {
+              backgroundColor: isDark ? Colors.primario[800] : "white",
+            },
             tabBarLabelStyle: { margin: 0, padding: 0, fontSize: 12 },
-            tabBarActiveTintColor: Colors.primario[700],
-            /*  tabBarActiveTintColor: isDarkMode
-               ? '#FFF'
-               : COLORS.light.background, */
+            //tabBarActiveTintColor: Colors.primario[700],
+            tabBarActiveTintColor: isDark ? "#FFF" : Colors.primario[800],
 
             // API Reference: https://reactnavigation.org/docs/material-top-tab-navigator#options
           }}

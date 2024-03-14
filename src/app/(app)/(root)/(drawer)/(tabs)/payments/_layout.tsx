@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Animated, useColorScheme } from "react-native";
+import { Animated } from "react-native";
 import { MaterialTopTabs } from "@/navigator/top-tabs";
 // import TopBar from "../../../../../layout/TopBar";
 // import DefaultLayout from "../../../../../layout/DefaultLayout";
@@ -9,6 +9,7 @@ import { MaterialTopTabs } from "@/navigator/top-tabs";
 import Colors from "@/constants/Colors";
 import { useCharges } from "@/hooks/useCharges";
 import { useAppContext } from "@/hooks/useAppContext";
+import { useColorScheme } from "nativewind";
 
 const av = new Animated.Value(0);
 av.addListener(() => {
@@ -17,18 +18,16 @@ av.addListener(() => {
 
 export default function Layout() {
   const { selectedHousing } = useAppContext();
-  const { chargesQuery } = useCharges({
-    params: { idhousing: selectedHousing },
-  });
+  const isDark = useColorScheme().colorScheme === "dark";
+  // const { chargesQuery } = useCharges({
+  //   params: { idhousing: selectedHousing },
+  // });
   return (
     <>
-      <StatusBar
-        backgroundColor={
-          /*  isDarkMode ? COLORS.dark.secondary : COLORS.light.background */
-          Colors.primario[600]
-        }
+      {/* <StatusBar
+        backgroundColor={isDark ? Colors.primario[800] : Colors.primario[600]}
         style="light"
-      />
+      />  */}
 
       <MaterialTopTabs
         screenListeners={{
@@ -43,25 +42,30 @@ export default function Layout() {
         tabBarPosition="top"
         screenOptions={{
           lazy: true,
-          tabBarItemStyle: { padding: 6 },
-
-          tabBarLabelStyle: { margin: 0, padding: 0, fontSize: 12 },
-
-          tabBarActiveTintColor: Colors.primario[600],
-          tabBarIndicatorStyle: {
-            backgroundColor: Colors.primario[600],
+          // tabBarItemStyle: {
+          //   backgroundColor: "#fff",
+          // },
+          tabBarStyle: {
+            backgroundColor: isDark ? Colors.primario[800] : "#fff",
           },
-
+          tabBarLabelStyle: {
+            fontSize: 12,
+            color: isDark ? "#fff" : Colors.primario[600],
+          },
+          // tabBarActiveTintColor: "#000",
+          tabBarIndicatorStyle: {
+            backgroundColor: isDark ? "#fff" : Colors.primario[600],
+          },
           // API Reference: https://reactnavigation.org/docs/material-top-tab-navigator#options
         }}
       >
         <MaterialTopTabs.Screen
           name="paymentsMain"
-          listeners={{
-            focus: () => {
-              chargesQuery.refetch();
-            },
-          }}
+          // listeners={{
+          //   focus: () => {
+          //     chargesQuery.refetch();
+          //   },
+          // }}
           options={{
             title: "Pagos",
 

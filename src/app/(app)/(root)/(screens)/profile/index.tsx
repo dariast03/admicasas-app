@@ -12,6 +12,7 @@ import { IHousing } from "@/types/housing/housing";
 import { ButtonLoader } from "@/components/ButtonLoader";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useColorScheme } from "nativewind";
 
 const Profile = () => {
   const { onLogout, user } = useAuth();
@@ -25,16 +26,18 @@ const Profile = () => {
     },
   });
 
+  const isDark = useColorScheme().colorScheme === "dark";
+
   const renderItem = ({ item }: { item: IHousing }) => (
-    <View className="flex-row p-2 items-center bg-white">
+    <View className="flex-row p-2 items-center ">
       <Icon
-        color={Colors.primario[600]}
+        color={isDark ? "#fff" : Colors.primario[600]}
         icon={{
           type: IconType.MaterialCommunityIcons,
           name: "warehouse",
         }}
       />
-      <Text>{item.code}</Text>
+      <Text className="dark:text-white">{item.code}</Text>
     </View>
   );
   return (
@@ -46,7 +49,7 @@ const Profile = () => {
           }}
         />
 
-        <View className="flex-row  bg-primario-600 w-full pt-14 pb-8 items-center px-5">
+        <View className="flex-row  bg-primario-600  w-full pt-14 pb-8 items-center px-5">
           <Avatar
             rounded
             size="large"
@@ -63,16 +66,18 @@ const Profile = () => {
           <View className="px-6 pt-4">
             <View className="flex-row p-2">
               <Icon
-                color={Colors.primario[600]}
+                color={isDark ? "#fff" : Colors.primario[600]}
                 icon={{
                   type: IconType.FontAweomseIcon,
                   name: "building-o",
                 }}
               />
               {condominiumQuery.isLoading ? (
-                <Skeleton className="h-4 w-full bg-primario-100" />
+                <Skeleton className="h-4 w-full bg-white dark:bg-primario-600" />
               ) : (
-                <Text>{condominiumQuery.data?.name}</Text>
+                <Text className="text-white">
+                  {condominiumQuery.data?.name}
+                </Text>
               )}
             </View>
             <View className="w-full border-b-2 border-b-primario-300"></View>
@@ -81,13 +86,13 @@ const Profile = () => {
             {housingsQuery.isLoading ? (
               <View className="flex-row gap-2">
                 <Icon
-                  color={Colors.primario[600]}
+                  color={isDark ? "#fff" : Colors.primario[600]}
                   icon={{
                     type: IconType.MaterialCommunityIcons,
                     name: "warehouse",
                   }}
                 />
-                <Skeleton className="h-4 w-full bg-primario-100" />
+                <Skeleton className="h-4 w-full bg-white dark:bg-primario-600" />
               </View>
             ) : (
               <FlatList

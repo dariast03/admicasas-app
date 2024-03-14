@@ -36,10 +36,13 @@ import SkeletonFlatList from "@/components/SkeletonFlatList";
 import { isSameDay, startOfDay } from "date-fns";
 import { DateData } from "react-native-calendars";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useColorScheme } from "nativewind";
 LocaleConfig.defaultLocale = "es";
 const Reservations = () => {
   const router = useRouter();
   const { user } = useSessionContext();
+
+  const isDark = useColorScheme().colorScheme === "dark";
 
   const [selectedDate, setSelectedDate] = useState<Date>();
 
@@ -85,12 +88,13 @@ const Reservations = () => {
 
     if (!markedDates[dateString]) {
       markedDates[dateString] = {
-        dots: [{ key: dateString, color: "blue" }],
+        dots: [{ key: dateString, color: isDark ? "#60CBEA" : "blue" }],
       };
+      //E4EA60 E4EA60
     } else {
       markedDates[dateString].dots.push({
         key: `${dateString}-${index}`,
-        color: "red",
+        color: isDark ? "#E4EA60" : "yellow",
       });
     }
   });
@@ -106,9 +110,13 @@ const Reservations = () => {
                 name: "check-square-o",
               }}
             />
-            <Text className="font-semibold mr-2 text-primario-600">Area:</Text>
+            <Text className="font-semibold mr-2 text-primario-600 dark:text-white">
+              Area:
+            </Text>
           </View>
-          <Text className={"pb-2.5"}>{item.areaName.toLocaleUpperCase()}</Text>
+          <Text className={"pb-2.5 dark:text-white"}>
+            {item.areaName.toLocaleUpperCase()}
+          </Text>
         </View>
         <View className="flex-row">
           <View className="flex-row">
@@ -118,11 +126,13 @@ const Reservations = () => {
                 name: "calendar",
               }}
             />
-            <Text className="font-semibold mr-2 text-primario-600">
+            <Text className="font-semibold mr-2 text-primario-600 dark:text-white">
               Fecha Inicio:
             </Text>
           </View>
-          <Text className={"pb-2.5"}>{item.start.toLocaleString()}</Text>
+          <Text className={"pb-2.5 dark:text-white"}>
+            {item.start.toLocaleString()}
+          </Text>
         </View>
         <View className="flex-row">
           <View className="flex-row">
@@ -132,11 +142,13 @@ const Reservations = () => {
                 name: "calendar",
               }}
             />
-            <Text className="font-semibold mr-2 text-primario-600">
+            <Text className="font-semibold mr-2 text-primario-600 dark:text-white">
               Fecha Fin:
             </Text>
           </View>
-          <Text className={"pb-2.5"}>{item.end.toLocaleString()}</Text>
+          <Text className={"pb-2.5 dark:text-white"}>
+            {item.end.toLocaleString()}
+          </Text>
         </View>
       </View>
     </View>
@@ -159,9 +171,9 @@ const Reservations = () => {
       <TouchableOpacity onPress={navigateToReservation}>
         <View className="flex-row justify-between border-b border-primario-600 p-4">
           {areaCommonQuery.isLoading ? (
-            <Skeleton className="bg-primario-100 h-4 w-32" />
+            <Skeleton className="bg-gray-200 dark:bg-primario-600 h-4 w-32" />
           ) : (
-            <Text className="text-black text-sm">
+            <Text className="text-black dark:text-white text-sm ">
               {areaCommonQuery.data?.name.toLocaleUpperCase()}
             </Text>
           )}
@@ -187,7 +199,9 @@ const Reservations = () => {
     <RenderItemReservation item={item} />
   );
   const itemSeparator = () => {
-    return <View className="border-b-[0.5] border-primario-600"></View>;
+    return (
+      <View className="border-b-[0.5] border-primario-600 dark:border-white"></View>
+    );
   };
 
   return (
@@ -195,7 +209,7 @@ const Reservations = () => {
       <BottomSheet>
         <BottomSheetContent ref={visible}>
           <BottomSheetHeader>
-            <Text className="text-foreground text-xl font-bold text-center pb-1 text-primario-600">
+            <Text className="text-foreground text-xl font-bold text-center pb-1 text-primario-600 dark:text-white">
               Reservas
             </Text>
           </BottomSheetHeader>
@@ -206,13 +220,15 @@ const Reservations = () => {
               renderItem={renderItem}
               keyExtractor={(item) => item.id || ""}
               ItemSeparatorComponent={() => (
-                <View className="border-primario-600 border-b" />
+                <View className="border-primario-600 dark:border-white border-b" />
               )}
             />
 
             <View className={cn(Platform.OS === "android" && "pb-2 pr-2")}>
               <BottomSheetCloseTrigger>
-                <Text className="text-red-500 text-right">Cerrar</Text>
+                <Text className="text-red-500 text-right font-bold">
+                  Cerrar
+                </Text>
               </BottomSheetCloseTrigger>
             </View>
           </BottomSheetView>
@@ -235,7 +251,9 @@ const Reservations = () => {
           <>
             <View className="flex-row justify-around items-center p-2  mt-2">
               <View className="items-center">
-                <Text className="text-primario-600 text-2xl">Reservas</Text>
+                <Text className="text-primario-600 dark:text-white text-xl font-bold">
+                  RESERVAS
+                </Text>
               </View>
               <Button
                 size={"sm"}
@@ -272,7 +290,7 @@ const Reservations = () => {
               <FlatList
                 className="p-1 m-4"
                 ListHeaderComponent={
-                  <Text className="text-center text-lg text-primario-600 rounded-t-md font-semibold ">
+                  <Text className="text-center text-lg text-primario-600 dark:text-white rounded-t-md font-semibold ">
                     Mis Reservas
                   </Text>
                 }
@@ -292,7 +310,7 @@ const Reservations = () => {
 };
 const styles = StyleSheet.create({
   shadowCard: {
-    shadowColor: Colors.primario[600],
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 5,
