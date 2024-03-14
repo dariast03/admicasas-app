@@ -1,24 +1,16 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Slot, SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { SessionProvider } from "../context/SessionContext";
-//import "../output.css";
-import Toast from "react-native-toast-message";
 import messaging from "@react-native-firebase/messaging";
-import { toastConfig } from "@/components/Toast";
-import "../global.css";
-import "../output.css";
 import { AppProvider } from "@/context/AppContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import "../global.css";
+import "../output.css";
 
 export {
   // Catch any errors thrown by the Layout component.
