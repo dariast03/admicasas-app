@@ -10,8 +10,9 @@ type Props = {
 const SkeletonFlatList: React.FC<Props> = ({ title }) => {
   return (
     <FlatList
-      data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
-      className="p-1 m-4"
+      data={Array.from({ length: 25 }, (_, i) => i)}
+      showsVerticalScrollIndicator={false}
+      contentContainerClassName="p-4"
       keyExtractor={(item) => item.toString()}
       ListHeaderComponent={() => (
         <View className="justify-center items-center p-2">
@@ -19,7 +20,7 @@ const SkeletonFlatList: React.FC<Props> = ({ title }) => {
         </View>
       )}
       renderItem={() => (
-        <View className="flex-1 p-2">
+        <View className="p-2">
           <View className="flex flex-row justify-between gap-4">
             <Skeleton className="h-4 w-32 bg-gray-200" />
             <Skeleton className="h-4 w-32 bg-gray-200" />
