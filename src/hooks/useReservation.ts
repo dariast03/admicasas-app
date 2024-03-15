@@ -95,36 +95,34 @@ export const useReserve = ({ id, params }: Props = {}) => {
 
   const reservationCreateMutation = useMutation({
     mutationFn: async (data: PropsCreate) => {
-      const creacion = async () => {
-        // if (data.requiredPayment && !data.file?.length)
-        //   throw new Error("No se ha subido un comprobante");
+      // if (data.requiredPayment && !data.file?.length)
+      //   throw new Error("No se ha subido un comprobante");
 
-        //  if (data.requiredPayment && data.file?.length) {
-        //   const id = await reservationService.insertData({
-        //     ...data.data,
-        //     idcondominium: params?.idcondominium || "",
-        //   });
-        //   // const urlPayment = await onUploadFile(data.file[0], [id], "payments");
-        //   // await reservationService.updateData(
-        //   //   {
-        //   //     id,
-        //   //     urlPayment,
-        //   //     filename: data.file[0].name,
-        //   //     idcondominium: params?.idcondominium || "",
-        //   //   },
-        //   //   true
-        //   // );
-        // } else {
-        //   await reservationService.insertData({
-        //     ...data.data,
-        //     idcondominium: params?.idcondominium || "",
-        //   });
-        // }
-        await reservationService.insertData({
-          ...data.data,
-        });
-      };
-      return creacion();
+      //  if (data.requiredPayment && data.file?.length) {
+      //   const id = await reservationService.insertData({
+      //     ...data.data,
+      //     idcondominium: params?.idcondominium || "",
+      //   });
+      //   // const urlPayment = await onUploadFile(data.file[0], [id], "payments");
+      //   // await reservationService.updateData(
+      //   //   {
+      //   //     id,
+      //   //     urlPayment,
+      //   //     filename: data.file[0].name,
+      //   //     idcondominium: params?.idcondominium || "",
+      //   //   },
+      //   //   true
+      //   // );
+      // } else {
+      //   await reservationService.insertData({
+      //     ...data.data,
+      //     idcondominium: params?.idcondominium || "",
+      //   });
+      // }
+      return reservationService.insertData({
+        ...data.data,
+      });
+
       // try {
       //   return await toast.promise(creacion(), {
       //     loading: "Creando reserva....",
@@ -153,12 +151,12 @@ export const useReserve = ({ id, params }: Props = {}) => {
       });
     },
     onError: (e: any) => {
+      console.log("🚀 ~ useReserve ~ e:", e);
       Toast.show({
         type: "error",
         text1: "Error",
-        text2: "Hubo un error",
+        text2: e.message || "Hubo un error",
       });
-      console.log(e.message);
     },
   });
 
