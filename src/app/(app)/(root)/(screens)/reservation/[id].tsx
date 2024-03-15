@@ -244,16 +244,12 @@ const FormReservation = () => {
                 <Controller
                   name="title"
                   control={control}
-                  rules={{
-                    required: "La descripcion es requerida",
-                  }}
                   render={({ field, fieldState: { error } }) => (
                     <>
                       <InputText
                         ref={field.ref}
                         value={field.value}
                         onChangeText={(e) => field.onChange(e)}
-                        withAsterisk
                         label="Descripcion"
                         placeholder="Descripcion de la reserva"
                         error={error?.message}
