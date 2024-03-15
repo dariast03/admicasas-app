@@ -11,6 +11,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import "../global.css";
 import "../output.css";
+import Toast from "react-native-toast-message";
+import { toastConfig } from "@/components/Toast";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -66,6 +68,7 @@ function RootLayoutNav() {
             <BottomSheetModalProvider>
               <Slot />
             </BottomSheetModalProvider>
+            <Toast config={toastConfig} />
           </SessionProvider>
         </AppProvider>
       </QueryClientProvider>
