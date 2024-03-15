@@ -144,7 +144,7 @@ export const useReserve = ({ id, params }: Props = {}) => {
       Toast.show({
         type: "success",
         text1: "Exito",
-        text2: "¡Pago registrado exitosamente!",
+        text2: "¡Reserva registrada exitosamente!",
       });
       client.invalidateQueries({
         queryKey: ["reservations"],
@@ -173,13 +173,19 @@ export const useReserve = ({ id, params }: Props = {}) => {
 
         await reservationService.updateData({
           ...data.data,
-          idcondominium: params?.idcondominium,
+          idcondominium: data.data.idcondominium,
         });
       };
 
       return creacion();
     },
     onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: "Exito",
+        text2: "¡Reserva actualizada con éxito!",
+      });
+
       client.invalidateQueries({
         queryKey: ["reservations"],
       });

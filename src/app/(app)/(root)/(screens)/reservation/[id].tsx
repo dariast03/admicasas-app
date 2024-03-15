@@ -99,6 +99,7 @@ const FormReservation = () => {
     delete data.reservedBy;
 
     data.idusuario = user.id || "";
+    data.idcondominium = user.account.idcondominium;
     // const file = uploadRef.current?.getFiles();
 
     if (isEdit) {
@@ -107,8 +108,6 @@ const FormReservation = () => {
         //requiredPayment:needPay
       });
     } else {
-      data.idcondominium = user.account.idcondominium;
-
       await reservationCreateMutation.mutateAsync({
         data,
         requiredPayment: needPay,
