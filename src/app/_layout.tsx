@@ -1,3 +1,5 @@
+import "../global.css";
+import "../output.css";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { Slot, SplashScreen, Stack } from "expo-router";
@@ -9,10 +11,16 @@ import { AppProvider } from "@/context/AppContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import "../global.css";
-import "../output.css";
 import Toast from "react-native-toast-message";
 import { toastConfig } from "@/components/Toast";
+import { PortalHost } from "@/components/primitives/portal";
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs([
+  "Warning: Failed prop type: Invalid prop `color` supplied to `Text`: hsla(0)",
+]);
+
+// Tu código de la aplicación continúa aquí
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -67,6 +75,7 @@ function RootLayoutNav() {
           <SessionProvider>
             <BottomSheetModalProvider>
               <Slot />
+              <PortalHost />
             </BottomSheetModalProvider>
             <Toast config={toastConfig} />
           </SessionProvider>
