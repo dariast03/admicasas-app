@@ -11,33 +11,28 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Colors from "@/constants/Colors";
 import {
   BottomSheet,
   BottomSheetCloseTrigger,
   BottomSheetContent,
   BottomSheetContentRef,
-  BottomSheetFlatList,
   BottomSheetHeader,
-  BottomSheetOpenTrigger,
   BottomSheetView,
 } from "@/components/ui/bottom-sheet";
-
 import Icon, { IconType } from "@/components/Icon";
-
 import { Button } from "@/components/ui/button";
-
 import { useRouter } from "expo-router";
 import { IReservation } from "@/types/reserve/reserve";
 import { useAreas } from "@/hooks/useAreas";
 import Tag from "@/components/Tag";
 import { cn } from "@/lib/utils";
 import SkeletonFlatList from "@/components/SkeletonFlatList";
-import { isSameDay, startOfDay } from "date-fns";
+import {  startOfDay } from "date-fns";
 import { DateData } from "react-native-calendars";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useColorScheme } from "nativewind";
 LocaleConfig.defaultLocale = "es";
+
 const Reservations = () => {
   const router = useRouter();
   const { user } = useSessionContext();
