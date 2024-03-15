@@ -15,7 +15,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   View,
-  Text,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   ScrollView,
@@ -34,6 +33,19 @@ import { detailDate } from "@/helpers/detailDate";
 import { useAppContext } from "@/hooks/useAppContext";
 import Tag from "@/components/Tag";
 import { statusColorReservation } from "@/data/statusColor";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/text";
 
 const FormReservation = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -86,13 +98,19 @@ const FormReservation = () => {
   });
 
   const isEdit = id !== "create";
-  const newId = isEdit ? id : "";
+
+  const [newId, setNewId] = useState(isEdit ? id : "");
 
   const {
     reservationCreateMutation,
     reservationUpdateMutation,
     reservationQuery,
+    reservationDeleteMutation,
   } = useReserve({ id: newId });
+  console.log(
+    "🚀 ~ FormReservation ~ reservationQuery:",
+    reservationQuery.data
+  );
 
   const onSubmit = async (data: IReservation) => {
     delete data.area;
@@ -120,6 +138,15 @@ const FormReservation = () => {
     // });
     router.back();
   };
+
+  const onDelete = async (id: string) => {
+    setNewId("");
+
+    await reservationDeleteMutation.mutateAsync(id);
+    router.push("/reservations/");
+  };
+
+  const isAllowedDelete = reservationQuery.data?.state === "Pendiente";
 
   useEffect(() => {
     if (reservationQuery.data) {
@@ -417,6 +444,34 @@ const FormReservation = () => {
                     Guardar
                   </Text>
                 </ButtonLoader>
+
+                {isAllowedDelete && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive" className="w-full">
+                        <Text>Eliminar</Text>
+                      </Button>
+                    </AlertDialogTrigger>
+
+                    <AlertDialogContent className="bg-white">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Alertas</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Esta accion no puede ser revertidad. Estas seguro de
+                          eliminarlo?
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>
+                          <Text>Cancelar</Text>
+                        </AlertDialogCancel>
+                        <AlertDialogAction onPress={() => onDelete(id)}>
+                          <Text>Continuar</Text>
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
               </View>
             </View>
           </View>

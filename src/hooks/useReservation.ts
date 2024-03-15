@@ -196,6 +196,26 @@ export const useReserve = ({ id, params }: Props = {}) => {
     },
   });
 
+  const reservationDeleteMutation = useMutation({
+    mutationFn: (id: string) => {
+      return reservationService.deleteData(id);
+    },
+    onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: "Exito",
+        text2: "¡La reserva se ha eliminado correctamente!",
+      });
+
+      client.invalidateQueries({
+        queryKey: ["reservations"],
+      });
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
+  });
+
   // const reservationDeleteMutation = useMutation({
   //   mutationFn: (id: string) => {
   //     return toast.promise(reservationService.deleteData(id), {
@@ -220,6 +240,6 @@ export const useReserve = ({ id, params }: Props = {}) => {
     reservationQuery,
     reservationCreateMutation,
     reservationUpdateMutation,
-    // reservationDeleteMutation,
+    reservationDeleteMutation,
   };
 };

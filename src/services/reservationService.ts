@@ -6,6 +6,7 @@ import firestore, {
 import areaService from "./areaService";
 import { IArea } from "@/types/area/area";
 import { QueryFunctionContext } from "@tanstack/react-query";
+import { th } from "date-fns/locale";
 
 const FirestoreKey = "Reservation";
 
@@ -274,10 +275,19 @@ const insertData = async (data: IReservation) => {
   }
 };
 
+const deleteData = async (id: string) => {
+  try {
+    await firestore().collection(FirestoreKey).doc(id).delete();
+  } catch (e) {
+    console.log("🚀 ~ deleteData ~ e:", e);
+    throw new Error("No se pudo eliminar");
+  }
+};
 export default {
   getAllData,
   // getAllDayData,
   getData,
   insertData,
   updateData,
+  deleteData,
 };
