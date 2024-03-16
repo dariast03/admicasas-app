@@ -1,11 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Animated } from "react-native";
+import { Animated, useWindowDimensions } from "react-native";
 import { MaterialTopTabs } from "../../../../../navigator/top-tabs";
 import LayoutWithTopBar from "../../../../../layout/LayoutWithTopBar";
 import Colors from "@/constants/Colors";
 import { Platform } from "react-native";
 import { useColorScheme } from "nativewind";
+import useDeviceSize from "@/hooks/useDeviceSize";
 
 const av = new Animated.Value(0);
 av.addListener(() => {
@@ -14,6 +15,11 @@ av.addListener(() => {
 
 export default function Layout() {
   const isDark = useColorScheme().colorScheme === "dark";
+
+  const deviceSize = useDeviceSize();
+
+  const smallDevice = deviceSize === "xsmall" || deviceSize === "small";
+
   return (
     <>
       <StatusBar
@@ -46,41 +52,24 @@ export default function Layout() {
             tabBarLabelStyle: { margin: 0, padding: 0, fontSize: 12 },
             //tabBarActiveTintColor: Colors.primario[700],
             tabBarActiveTintColor: isDark ? "#FFF" : Colors.primario[800],
-
-            // API Reference: https://reactnavigation.org/docs/material-top-tab-navigator#options
           }}
         >
           <MaterialTopTabs.Screen
             name="index"
             options={{
               title: "Inicio",
+              tabBarShowLabel: !smallDevice,
               tabBarIcon: ({ color }) => (
                 <MaterialIcons name="home" color={color} size={20} />
               ),
             }}
           />
-          {/* 
-                <MaterialTopTabs.Screen
-                    name="two"
-                    options={{
-                        title: 'Estudiante',
-                        tabBarIcon: ({ color }) => <MaterialIcons name="school" color={color} size={20} />,
-                    }}
-                />
 
-                <MaterialTopTabs.Screen
-                    name="perfil"
-                    options={{
-                        title: 'Perfil',
-                        tabBarIcon: ({ color }) => <FontAwesome name="user-circle" color={color} size={20} />,
-
-                    }}
-                />
- */}
           <MaterialTopTabs.Screen
             name="community"
             options={{
               title: "Comunidad",
+              tabBarShowLabel: !smallDevice,
               tabBarIcon: ({ color }) => (
                 <MaterialIcons name="unarchive" color={color} size={20} />
               ),
@@ -91,6 +80,7 @@ export default function Layout() {
             name="payments"
             options={{
               title: "Cargos",
+              tabBarShowLabel: !smallDevice,
               tabBarIcon: ({ color }) => (
                 <MaterialIcons name="payments" color={color} size={20} />
               ),
@@ -101,6 +91,7 @@ export default function Layout() {
             name="reservations"
             options={{
               title: "Reservas",
+              tabBarShowLabel: !smallDevice,
               tabBarIcon: ({ color }) => (
                 <MaterialIcons name="calendar-today" color={color} size={20} />
               ),
