@@ -94,7 +94,7 @@ const FormVisit = () => {
   const ref = useRef<IDropdownRef>(null);
 
   const isAllowedEdit = visitQuery.data?.datevisit
-    ? visitQuery.data.datevisit < new Date()
+    ? visitQuery.data.datevisit > new Date()
     : false;
 
   const onSubmit = async (data: IVisit) => {
