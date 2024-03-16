@@ -23,6 +23,7 @@ import { useAppContext } from "@/hooks/useAppContext";
 import Icon, { IconType } from "@/components/Icon";
 import { IVisit } from "@/types/visits/visits";
 import Colors from "@/constants/Colors";
+import { is } from "date-fns/locale";
 
 const shadow = {
   shadowColor: "#000",
@@ -91,6 +92,10 @@ const FormVisit = () => {
   });
 
   const ref = useRef<IDropdownRef>(null);
+
+  const isAllowedEdit = visitQuery.data?.datevisit
+    ? visitQuery.data.datevisit < new Date()
+    : false;
 
   const onSubmit = async (data: IVisit) => {
     //return console.log(data);
@@ -319,26 +324,28 @@ const FormVisit = () => {
                         />
                       </View>
 
-                      <TouchableOpacity
-                        onPress={handleSubmit(onSubmit)}
-                        disabled={
-                          visitCreateMutation.isPending ||
-                          visitUpdateMutation.isPending
-                        }
-                        style={{
-                          opacity:
+                      {((isEdit && isAllowedEdit) || !isEdit) && (
+                        <TouchableOpacity
+                          onPress={handleSubmit(onSubmit)}
+                          disabled={
                             visitCreateMutation.isPending ||
                             visitUpdateMutation.isPending
-                              ? 0.8
-                              : 1,
-                        }}
-                      >
-                        <View className="rounded-xl bg-primario-800 p-3">
-                          <Text className="text-center text-xl text-white ">
-                            {isEdit ? "ACTUALIZAR" : "REGISTRAR"}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
+                          }
+                          style={{
+                            opacity:
+                              visitCreateMutation.isPending ||
+                              visitUpdateMutation.isPending
+                                ? 0.8
+                                : 1,
+                          }}
+                        >
+                          <View className="rounded-xl bg-primario-800 p-3">
+                            <Text className="text-center text-xl text-white ">
+                              {isEdit ? "ACTUALIZAR" : "REGISTRAR"}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      )}
                     </View>
                   ) : (
                     <Loader height={420} />
