@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -71,6 +71,7 @@ const Home = () => {
   const { user } = useSessionContext();
   const { isLoadingSelectedHousing, selectedHousing, updateHousing } =
     useAppContext();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const { announcementsQuery } = useAnnouncement({
     query: ["announcementsQuery"],
@@ -85,6 +86,16 @@ const Home = () => {
       idproprietary: user.id,
     },
   });
+
+  const onRefresh = () => {
+    setIsRefreshing(true);
+    announcementsQuery.refetch();
+  };
+
+  useEffect(() => {
+    if (isRefreshing && !announcementsQuery.isRefetching)
+      setIsRefreshing(false);
+  }, [announcementsQuery.isRefetching]);
 
   useEffect(() => {
     if (!selectedHousing) updateHousing(user.account.idhousing);
@@ -101,8 +112,8 @@ const Home = () => {
         contentContainerClassName="p-5"
         refreshControl={
           <RefreshControl
-            refreshing={announcementsQuery.isRefetching}
-            onRefresh={announcementsQuery.refetch}
+            refreshing={isRefreshing && announcementsQuery.isRefetching}
+            onRefresh={onRefresh}
           />
         }
         ListHeaderComponent={

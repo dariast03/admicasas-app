@@ -1,5 +1,5 @@
 import { View, Text, Button, StyleSheet, RefreshControl } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import DefaultLayout from "@/layout/DefaultLayout";
 import { FlatList } from "react-native-gesture-handler";
@@ -23,10 +23,21 @@ type Props = {
 
 const PaymentCard = () => {
   const { user } = useSessionContext();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const { selectedHousing } = useAppContext();
   const { chargesQuery } = useCharges({
     params: { idhousing: selectedHousing },
   });
+
+  const onRefresh = () => {
+    setIsRefreshing(true);
+    chargesQuery.refetch();
+  };
+
+  useEffect(() => {
+    if (isRefreshing && !chargesQuery.isRefetching) setIsRefreshing(false);
+  }, [chargesQuery.isRefetching]);
 
   const Card = ({ data }: Props) => {
     const routeView: any = "/payment/" + data.id;
@@ -75,8 +86,8 @@ const PaymentCard = () => {
         contentContainerClassName="p-5"
         refreshControl={
           <RefreshControl
-            refreshing={chargesQuery.isRefetching}
-            onRefresh={chargesQuery.refetch}
+            refreshing={isRefreshing && chargesQuery.isRefetching}
+            onRefresh={onRefresh}
           />
         }
         ListHeaderComponent={

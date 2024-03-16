@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Calendar, LocaleConfig } from "@/components/ui/calendar";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { useSessionContext } from "@/hooks/useSessionContext";
@@ -6,6 +6,7 @@ import { useReserve } from "@/hooks/useReservation";
 import {
   FlatList,
   Platform,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -27,7 +28,7 @@ import { useAreas } from "@/hooks/useAreas";
 import Tag from "@/components/Tag";
 import { cn } from "@/lib/utils";
 import SkeletonFlatList from "@/components/SkeletonFlatList";
-import {  startOfDay } from "date-fns";
+import { startOfDay } from "date-fns";
 import { DateData } from "react-native-calendars";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useColorScheme } from "nativewind";
@@ -53,6 +54,7 @@ const Reservations = () => {
 
   const visible = useRef<BottomSheetContentRef>(null);
   const [reservationsData, setReservationsData] = useState<IReservation[]>([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleDayPress = (date: DateData) => {
     const { year, month, day } = date;
@@ -199,6 +201,15 @@ const Reservations = () => {
     );
   };
 
+  const onRefresh = () => {
+    setIsRefreshing(true);
+    reservationsQuery.refetch();
+  };
+
+  useEffect(() => {
+    if (isRefreshing && !reservationsQuery.isRefetching) setIsRefreshing(false);
+  }, [reservationsQuery.isRefetching]);
+
   return (
     <DefaultLayout>
       <BottomSheet>
@@ -229,6 +240,7 @@ const Reservations = () => {
           </BottomSheetView>
         </BottomSheetContent>
       </BottomSheet>
+
       <FlatList
         className="mb-5"
         data={null}
@@ -236,6 +248,12 @@ const Reservations = () => {
         onEndReached={() => {
           reservationsQuery.fetchNextPage();
         }}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing && reservationsQuery.isRefetching}
+            onRefresh={onRefresh}
+          />
+        }
         onEndReachedThreshold={1}
         ListFooterComponent={
           reservationsQuery.isFetchingNextPage ? (

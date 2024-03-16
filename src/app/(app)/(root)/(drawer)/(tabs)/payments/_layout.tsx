@@ -10,6 +10,8 @@ import Colors from "@/constants/Colors";
 import { useCharges } from "@/hooks/useCharges";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useColorScheme } from "nativewind";
+import { usePayments } from "@/hooks/usePayments";
+import { useQueryClient } from "@tanstack/react-query";
 
 const av = new Animated.Value(0);
 av.addListener(() => {
@@ -19,9 +21,29 @@ av.addListener(() => {
 export default function Layout() {
   const { selectedHousing } = useAppContext();
   const isDark = useColorScheme().colorScheme === "dark";
-  // const { chargesQuery } = useCharges({
-  //   params: { idhousing: selectedHousing },
-  // });
+
+  const client = useQueryClient();
+
+  const invalidateCharges = () => {
+    client.invalidateQueries({
+      queryKey: ["charges"],
+    });
+  };
+
+  const invalidatePayments = () => {
+    client.invalidateQueries({
+      queryKey: ["payments"],
+    });
+  };
+
+  /*   const { chargesQuery } = useCharges({
+    params: { idhousing: selectedHousing },
+  });
+
+  const { paymentsQuery } = usePayments({
+    params: { idhousing: selectedHousing },
+  }); */
+
   return (
     <>
       {/* <StatusBar
@@ -61,11 +83,9 @@ export default function Layout() {
       >
         <MaterialTopTabs.Screen
           name="paymentsMain"
-          // listeners={{
-          //   focus: () => {
-          //     chargesQuery.refetch();
-          //   },
-          // }}
+          listeners={{
+            focus: () => invalidateCharges(),
+          }}
           options={{
             title: "Pagos",
 
@@ -76,6 +96,9 @@ export default function Layout() {
         />
         <MaterialTopTabs.Screen
           name="paymentsHistory"
+          listeners={{
+            focus: () => invalidatePayments(),
+          }}
           options={{
             title: "Historial",
             // tabBarIcon: ({ color }) => (

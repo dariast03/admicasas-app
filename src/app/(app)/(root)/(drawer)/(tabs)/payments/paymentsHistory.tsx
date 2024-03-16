@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -41,10 +41,12 @@ interface typePayments {
 
 const PaymentsHistory = () => {
   const { selectedHousing } = useAppContext();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const { paymentsQuery } = usePayments({
     params: { idhousing: selectedHousing },
   });
+
   const PaymentItem = ({ item }: { item: IPayments }) => {
     const { selectedHousing } = useAppContext();
 
@@ -145,6 +147,15 @@ const PaymentsHistory = () => {
     );
   };
 
+  const onRefresh = () => {
+    setIsRefreshing(true);
+    paymentsQuery.refetch();
+  };
+
+  useEffect(() => {
+    if (isRefreshing && !paymentsQuery.isRefetching) setIsRefreshing(false);
+  }, [paymentsQuery.isRefetching]);
+
   return (
     <DefaultLayout>
       {paymentsQuery.isLoading ? (
@@ -162,8 +173,8 @@ const PaymentsHistory = () => {
           ItemSeparatorComponent={itemSeparator}
           refreshControl={
             <RefreshControl
-              refreshing={paymentsQuery.isRefetching}
-              onRefresh={paymentsQuery.refetch}
+              refreshing={isRefreshing && paymentsQuery.isRefetching}
+              onRefresh={onRefresh}
             />
           }
         />
