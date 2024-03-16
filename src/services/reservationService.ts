@@ -86,6 +86,71 @@ export const getAllData = async (context: any) => {
   }
 };
 
+export const getAllDataByCondominium = async (context: any) => {
+  const { pageParam = undefined, queryKey } = context;
+  const [, , args] = queryKey;
+  const {
+    selectedDate,
+    limitResults,
+    idcondominium = "",
+  } = args as GetAllDataQueryParams;
+
+  if (!idcondominium) throw new Error("idcondominium is required");
+
+  let queryRef = firestore()
+    .collection(FirestoreKey)
+    .where("idcondominium", "==", idcondominium);
+
+  if (pageParam) {
+    queryRef = queryRef.startAfter(pageParam);
+  }
+
+  if (selectedDate) {
+    queryRef = queryRef.where(
+      "startDetail.year",
+      "==",
+      selectedDate.getFullYear()
+    );
+    queryRef = queryRef.where(
+      "startDetail.month",
+      "==",
+      selectedDate.getMonth()
+    );
+  }
+
+  queryRef = queryRef.limit(limitResults || 3);
+
+  const querySnapshot = await queryRef.get();
+
+  const dataPromises: Promise<IReservation>[] = querySnapshot.docs.map(
+    async (doc) => {
+      const dataRef = doc.data() as IReservation;
+
+      const area = await areaService.getData(dataRef.idarea);
+
+      return {
+        ...dataRef,
+        areaName: area?.name,
+        id: doc.id,
+        //@ts-ignore
+        start: subHours(dataRef.start.toDate(), 4),
+        //@ts-ignore
+        end: subHours(dataRef.end.toDate(), 4),
+      } as IReservation;
+    }
+  );
+
+  const data = await Promise.all(dataPromises);
+  data.sort((a, b) => a.end.getTime() - b.end.getTime());
+
+  const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+
+  return {
+    data,
+    lastDoc,
+  };
+};
+
 // const getAllData = async (
 //   { idcondominium, selectedDate }: GetAllDataQueryParams = { idcondominium: "" }
 // ) => {
@@ -286,6 +351,7 @@ const deleteData = async (id: string) => {
 export default {
   getAllData,
   // getAllDayData,
+  getAllDataByCondominium,
   getData,
   insertData,
   updateData,

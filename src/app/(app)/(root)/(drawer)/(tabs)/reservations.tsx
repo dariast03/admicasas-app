@@ -41,16 +41,22 @@ const Reservations = () => {
   const isDark = useColorScheme().colorScheme === "dark";
 
   const [selectedDate, setSelectedDate] = useState<Date>();
+  const [selectedMonth, setSelectedMonth] = useState<Date>();
 
   const { reservationsQuery } = useReserve({
     params: {
       idcondominium: user.account.idcondominium,
       idhousing: user.account.idhousing,
+      selectedDate: selectedMonth,
     },
   });
 
   const dataReservations =
     reservationsQuery.data?.pages?.flatMap((page) => page.data) ?? [];
+
+  const filteredReservationsByMe = dataReservations.filter(
+    (r) => r.idhousing === user.account.idhousing
+  );
 
   const visible = useRef<BottomSheetContentRef>(null);
   const [reservationsData, setReservationsData] = useState<IReservation[]>([]);
@@ -85,13 +91,20 @@ const Reservations = () => {
 
     if (!markedDates[dateString]) {
       markedDates[dateString] = {
-        dots: [{ key: dateString, color: isDark ? "#60CBEA" : "blue" }],
+        dots: [
+          {
+            key: dateString,
+            color:
+              reservation.idhousing === user.account.idhousing ? "red" : "blue",
+          },
+        ],
       };
       //E4EA60 E4EA60
     } else {
       markedDates[dateString].dots.push({
         key: `${dateString}-${index}`,
-        color: isDark ? "#E4EA60" : "yellow",
+        color:
+          reservation.idhousing === user.account.idhousing ? "red" : "blue",
       });
     }
   });
@@ -285,6 +298,17 @@ const Reservations = () => {
               </Button>
             </View>
 
+            <View className="px-6">
+              <Text className="dark:text-white text-xs">
+                Mis reservas{" "}
+                <View
+                  className="w-2 h-2 rounded-full"
+                  style={{
+                    backgroundColor: "red",
+                  }}
+                ></View>
+              </Text>
+            </View>
             <Calendar
               style={{
                 borderRadius: 10,
@@ -295,6 +319,9 @@ const Reservations = () => {
               markingType="multi-dot"
               markedDates={markedDates}
               displayLoadingIndicator={reservationsQuery.isLoading}
+              onMonthChange={(date) => {
+                setSelectedMonth(new Date(date.dateString));
+              }}
             />
 
             {reservationsQuery.isLoading ? (
@@ -307,7 +334,7 @@ const Reservations = () => {
                     Mis Reservas
                   </Text>
                 }
-                data={dataReservations}
+                data={filteredReservationsByMe}
                 renderItem={renderReservation}
                 keyExtractor={(item) => item.id || ""}
                 ItemSeparatorComponent={() => itemSeparator()}

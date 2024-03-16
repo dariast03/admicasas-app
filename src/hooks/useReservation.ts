@@ -8,8 +8,6 @@ import Toast from "react-native-toast-message";
 import reservationService from "../services/reservationService";
 import { IReservation } from "../types/reserve/reserve";
 
-//import { firebaseError } from "../data/firebaseError";
-
 type QueryType = "reservationsQuery" | "reservationQuery";
 
 type Props = {
@@ -44,14 +42,6 @@ type PropsUpdate = {
 export const useReserve = ({ id, params }: Props = {}) => {
   const client = useQueryClient();
 
-  /*
-  ! DEPRECATED: Get all data from reservations
-    const reservationsQuery = useQuery({
-      queryKey: ["reservations"],
-      queryFn: () => reservationService.getAllData(),
-      enabled: query.includes()
-    }); */
-
   // const reservationsQuery = useQuery({
   //   queryKey: ["reservations", params?.idcondominium],
   //   queryFn: () => reservationService.getAllData(params),
@@ -70,10 +60,8 @@ export const useReserve = ({ id, params }: Props = {}) => {
 
   const reservationsQuery = useInfiniteQuery({
     queryKey: ["reservations", "infinite", params],
-    queryFn: reservationService.getAllData,
+    queryFn: reservationService.getAllDataByCondominium,
     initialPageParam: null,
-    // getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) =>
-    // lastPage.nextCursor,
     getNextPageParam: (lastPage, pages) => {
       if (!lastPage?.lastDoc?.id) return;
 
