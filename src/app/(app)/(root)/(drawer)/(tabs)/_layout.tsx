@@ -7,6 +7,7 @@ import Colors from "@/constants/Colors";
 import { Platform } from "react-native";
 import { useColorScheme } from "nativewind";
 import useDeviceSize from "@/hooks/useDeviceSize";
+import { useQueryClient } from "@tanstack/react-query";
 
 const av = new Animated.Value(0);
 av.addListener(() => {
@@ -19,6 +20,14 @@ export default function Layout() {
   const deviceSize = useDeviceSize();
 
   const smallDevice = deviceSize === "xsmall" || deviceSize === "small";
+
+  const client = useQueryClient();
+
+  const invalidateAnnouncement = () => {
+    client.invalidateQueries({
+      queryKey: ["announcements"],
+    });
+  };
 
   return (
     <>
@@ -63,6 +72,7 @@ export default function Layout() {
                 <MaterialIcons name="home" color={color} size={20} />
               ),
             }}
+            listeners={{ focus: () => invalidateAnnouncement() }}
           />
 
           <MaterialTopTabs.Screen

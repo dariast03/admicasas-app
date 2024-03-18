@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   RefreshControl,
+  // Image,
 } from "react-native";
-
 import { Image } from "expo-image";
 import { useSessionContext } from "@/hooks/useSessionContext";
 import { useAnnouncement } from "@/hooks/useAnnouncement";
@@ -45,12 +45,27 @@ const Home = () => {
       >
         <Link href={routeView} asChild>
           <TouchableOpacity>
+            {/* <Image
+              source={{
+                uri: data.urlimg,
+              }}
+              // style={{
+              //   maxWidth: width,
+              //   height: 200,
+              // }}
+              resizeMode="contain"
+              style={{
+                height: 100,
+              }}
+            /> */}
+
             <Image
               source={data.urlimg}
               style={{
                 maxWidth: width,
                 height: 200,
               }}
+              contentFit="contain"
             />
 
             <View className="p-5">
