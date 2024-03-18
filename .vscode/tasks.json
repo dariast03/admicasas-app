@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "start:ide",
+      "problemMatcher": [],
+      "label": "npm: start:ide",
+      "detail": "git fetch && expo start --localhost --dev-client",
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ]
+}
