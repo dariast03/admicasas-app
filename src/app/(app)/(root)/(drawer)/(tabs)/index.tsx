@@ -98,7 +98,7 @@ const Home = () => {
   }, [announcementsQuery.isRefetching]);
 
   useEffect(() => {
-    if (!selectedHousing) updateHousing(user.account.idhousing);
+    if (!selectedHousing) updateHousing(user?.account?.idhousing);
   }, [isLoadingSelectedHousing]);
 
   return (
