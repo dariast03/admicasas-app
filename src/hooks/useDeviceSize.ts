@@ -35,8 +35,8 @@ export default function useDeviceSize() {
     ) {
       return "large";
     } else if (
-      (width >= 470 && height >= 320) ||
-      (width >= 320 && height >= 470)
+      (width >= 580 && height >= 320) ||
+      (width >= 320 && height >= 580)
     ) {
       return "normal";
     } else if (
