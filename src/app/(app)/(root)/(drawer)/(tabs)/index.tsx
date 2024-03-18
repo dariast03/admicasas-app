@@ -21,6 +21,7 @@ import Loader from "@/components/Loader";
 import DefaultLayout from "@/layout/DefaultLayout";
 import SubTitle from "@/components/SubTitle";
 import Colors from "@/constants/Colors";
+import { BlurView } from "expo-blur";
 
 type Props = {
   data: IAnnouncement;
@@ -41,32 +42,31 @@ const Home = () => {
     return (
       <View
         style={styles.shadowCard}
-        className="w-full bg-white dark:bg-primario-800 rounded-2xl overflow-hidden"
+        className="w-full bg-white dark:bg-primario-800 rounded-2xl  overflow-hidden"
       >
         <Link href={routeView} asChild>
           <TouchableOpacity>
-            {/* <Image
+            <Image
               source={{
                 uri: data.urlimg,
               }}
-              // style={{
-              //   maxWidth: width,
-              //   height: 200,
-              // }}
-              resizeMode="contain"
               style={{
-                height: 100,
-              }}
-            /> */}
+                width: "100%",
+                height: 200,
 
-            <Image
+                backgroundColor: "#0553",
+              }}
+              contentFit="contain"
+            />
+
+            {/* <Image
               source={data.urlimg}
               style={{
                 maxWidth: width,
                 height: 200,
               }}
               contentFit="contain"
-            />
+            /> */}
 
             <View className="p-5">
               <View>

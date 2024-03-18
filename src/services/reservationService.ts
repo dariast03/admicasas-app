@@ -86,20 +86,20 @@ export const getAllData = async (context: any) => {
   }
 };
 
-export const getAllDataByCondominium = async (context: any) => {
+export const getAllDataByHousing = async (context: any) => {
   const { pageParam = undefined, queryKey } = context;
   const [, , args] = queryKey;
   const {
     selectedDate,
     limitResults,
-    idcondominium = "",
+    idhousing = "",
   } = args as GetAllDataQueryParams;
 
-  if (!idcondominium) throw new Error("idcondominium is required");
+  if (!idhousing) throw new Error("idcondominium is required");
 
   let queryRef = firestore()
     .collection(FirestoreKey)
-    .where("idcondominium", "==", idcondominium);
+    .where("idhousing", "==", idhousing);
 
   if (pageParam) {
     queryRef = queryRef.startAfter(pageParam);
@@ -151,41 +151,41 @@ export const getAllDataByCondominium = async (context: any) => {
   };
 };
 
-// const getAllData = async (
-//   { idcondominium, selectedDate }: GetAllDataQueryParams = { idcondominium: "" }
-// ) => {
-//   try {
-//     let queryRef = firestore()
-//       .collection(FirestoreKey)
-//       .where("idcondominium", "==", idcondominium);
+const getAllDataByCondominium = async (
+  { idcondominium, selectedDate }: GetAllDataQueryParams = { idcondominium: "" }
+) => {
+  try {
+    let queryRef = firestore()
+      .collection(FirestoreKey)
+      .where("idcondominium", "==", idcondominium);
 
-//     const querySnapshot = await queryRef.get();
+    const querySnapshot = await queryRef.get();
 
-//     const dataPromises: Promise<IReservation>[] = querySnapshot.docs.map(
-//       async (doc) => {
-//         const dataRef = doc.data() as IReservation;
+    const dataPromises: Promise<IReservation>[] = querySnapshot.docs.map(
+      async (doc) => {
+        const dataRef = doc.data() as IReservation;
 
-//         const area = await areaService.getData(dataRef.idarea);
+        const area = await areaService.getData(dataRef.idarea);
 
-//         return {
-//           ...dataRef,
-//           areaName: area?.name,
-//           id: doc.id,
-//           //@ts-ignore
-//           start: new Date(dataRef.start.toDate()),
-//           //@ts-ignore
-//           end: new Date(dataRef.end.toDate()),
-//         } as IReservation;
-//       }
-//     );
+        return {
+          ...dataRef,
+          areaName: area?.name,
+          id: doc.id,
+          //@ts-ignore
+          start: new Date(dataRef.start.toDate()),
+          //@ts-ignore
+          end: new Date(dataRef.end.toDate()),
+        } as IReservation;
+      }
+    );
 
-//     const data = await Promise.all(dataPromises);
-//     data.sort((a, b) => a.end.getTime() - b.end.getTime());
-//     return data;
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
+    const data = await Promise.all(dataPromises);
+
+    return data;
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 // const getAllDayData = async (
 //   { idcondominium, selectedDate }: GetAllDataQueryParams = { idcondominium: "" }
@@ -352,6 +352,7 @@ export default {
   getAllData,
   // getAllDayData,
   getAllDataByCondominium,
+  getAllDataByHousing,
   getData,
   insertData,
   updateData,

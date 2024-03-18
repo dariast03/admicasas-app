@@ -6,6 +6,21 @@ import {
 } from "@/components/CustomInput";
 import Dropdown from "@/components/DropDown";
 import { IDropdownRef } from "react-native-element-dropdown";
+import Animated, { FadeIn } from "react-native-reanimated";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import Icon, { IconType } from "@/components/Icon";
 import DefaultLayout from "@/layout/DefaultLayout";
@@ -107,10 +122,6 @@ const FormReservation = () => {
     reservationQuery,
     reservationDeleteMutation,
   } = useReserve({ id: newId });
-  console.log(
-    "🚀 ~ FormReservation ~ reservationQuery:",
-    reservationQuery.data
-  );
 
   const onSubmit = async (data: IReservation) => {
     delete data.area;
@@ -202,6 +213,23 @@ const FormReservation = () => {
   //   }
   // }, [watch("state")]);
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleOptionClick = (option: any) => {
+    console.log(`Option clicked: ${option}`);
+    // Aquí puedes realizar la acción correspondiente para cada opción
+    // Por ejemplo, si una de las opciones es "Eliminar", puedes llamar a una función para eliminar algo
+    // También puedes cerrar el menú después de hacer clic en una opción
+    setIsOpen(false);
+  };
+
+  const [open, setOpen] = React.useState(false);
+  const [openSub, setOpenSub] = React.useState(false);
+
   const needPay = (watch("area")?.price || 0) > 0;
   return (
     <DefaultLayout>
@@ -234,9 +262,73 @@ const FormReservation = () => {
             className="bg-white dark:bg-primario-800 p-4 rounded-lg mb-4"
             style={shadow}
           >
-            <View className="items-center mb-4">
-              <Text className="text-2xl font-bold mb-2  ">Crear Reserva</Text>
-              <Text className="text-sm  text-center  ">
+            <View className="mb-4">
+              <View className="flex-row justify-between items-center">
+                <View className="flex-1 ">
+                  <Text className="text-2xl font-bold mb-2 text-center">
+                    Crear Reserva
+                  </Text>
+                </View>
+
+                <View className="self-end">
+                  <DropdownMenu
+                    open={open}
+                    onOpenChange={(newVal) => {
+                      if (!newVal) {
+                        setOpenSub(false);
+                      }
+                      setOpen(newVal);
+                    }}
+                  >
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline">
+                        <Icon
+                          icon={{
+                            type: IconType.Entypo,
+                            name: "dots-three-vertical",
+                          }}
+                        />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      insets={{
+                        right: 20,
+                      }}
+                      className="w-52 native:w-52"
+                    >
+                      <DropdownMenuLabel>
+                        {isAllowedDelete && (
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Text>Eliminar</Text>
+                            </AlertDialogTrigger>
+
+                            <AlertDialogContent className="bg-white">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Alertas</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Esta accion no puede ser revertidad. Estas
+                                  seguro de eliminarlo?
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>
+                                  <Text>Cancelar</Text>
+                                </AlertDialogCancel>
+                                <AlertDialogAction onPress={() => onDelete(id)}>
+                                  <Text>Continuar</Text>
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        )}
+                      </DropdownMenuLabel>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </View>
+              </View>
+
+              <Text className="text-sm text-center">
                 Por favor, completa el formulario para crear una reserva
               </Text>
             </View>
@@ -445,7 +537,7 @@ const FormReservation = () => {
                   </Text>
                 </ButtonLoader>
 
-                {isAllowedDelete && (
+                {/* {isAllowedDelete && (
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="destructive" className="w-full">
@@ -471,7 +563,7 @@ const FormReservation = () => {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
-                )}
+                )} */}
               </View>
             </View>
           </View>

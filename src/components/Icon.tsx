@@ -9,6 +9,7 @@ import {
   Fontisto,
   Feather,
   FontAwesome5,
+  Entypo,
 } from "@expo/vector-icons";
 import { IconProps } from "@expo/vector-icons/build/createIconSet";
 import { useColorScheme } from "nativewind";
@@ -23,6 +24,7 @@ export enum IconType {
   Fontisto,
   Feather,
   FontAwesome5,
+  Entypo,
 }
 
 export type TIcon = {
@@ -44,6 +46,7 @@ export type TIcon = {
     | { type: IconType.EvilIcons; name: keyof typeof EvilIcons.glyphMap }
     | { type: IconType.Fontisto; name: keyof typeof Fontisto.glyphMap }
     | { type: IconType.Feather; name: keyof typeof Feather.glyphMap }
+    | { type: IconType.Entypo; name: keyof typeof Entypo.glyphMap }
     | { type: IconType.FontAwesome5; name: keyof typeof FontAwesome5.glyphMap };
 } & Omit<IconProps<keyof typeof FontAwesome.glyphMap>, "name">;
 
@@ -149,6 +152,17 @@ const Icon = ({ icon, ...props }: TIcon) => {
 
       {icon.type === IconType.Feather && (
         <Feather
+          name={icon.name}
+          size={props.size ? props.size : 20}
+          color={props.color ? props.color : color}
+          style={{
+            marginRight: 10,
+          }}
+          {...props}
+        />
+      )}
+      {icon.type === IconType.Entypo && (
+        <Entypo
           name={icon.name}
           size={props.size ? props.size : 20}
           color={props.color ? props.color : color}

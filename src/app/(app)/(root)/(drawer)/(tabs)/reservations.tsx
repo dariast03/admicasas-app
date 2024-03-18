@@ -43,16 +43,18 @@ const Reservations = () => {
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedMonth, setSelectedMonth] = useState<Date>();
 
-  const { reservationsQuery } = useReserve({
-    params: {
-      idcondominium: user.account.idcondominium,
-      idhousing: user.account.idhousing,
-      selectedDate: selectedMonth,
-    },
-  });
+  const { reservationsHousingQuery, reservationsCondominiumQuery } = useReserve(
+    {
+      params: {
+        idcondominium: user.account.idcondominium,
+        idhousing: user.account.idhousing,
+        selectedDate: selectedMonth,
+      },
+    }
+  );
 
   const dataReservations =
-    reservationsQuery.data?.pages?.flatMap((page) => page.data) ?? [];
+    reservationsHousingQuery.data?.pages?.flatMap((page) => page.data) ?? [];
 
   const filteredReservationsByMe = dataReservations.filter(
     (r) => r.idhousing === user.account.idhousing
@@ -216,12 +218,13 @@ const Reservations = () => {
 
   const onRefresh = () => {
     setIsRefreshing(true);
-    reservationsQuery.refetch();
+    reservationsHousingQuery.refetch();
   };
 
   useEffect(() => {
-    if (isRefreshing && !reservationsQuery.isRefetching) setIsRefreshing(false);
-  }, [reservationsQuery.isRefetching]);
+    if (isRefreshing && !reservationsHousingQuery.isRefetching)
+      setIsRefreshing(false);
+  }, [reservationsHousingQuery.isRefetching]);
 
   return (
     <DefaultLayout>
@@ -259,17 +262,17 @@ const Reservations = () => {
         data={null}
         renderItem={null}
         onEndReached={() => {
-          reservationsQuery.fetchNextPage();
+          reservationsHousingQuery.fetchNextPage();
         }}
         refreshControl={
           <RefreshControl
-            refreshing={isRefreshing && reservationsQuery.isRefetching}
+            refreshing={isRefreshing && reservationsHousingQuery.isRefetching}
             onRefresh={onRefresh}
           />
         }
         onEndReachedThreshold={1}
         ListFooterComponent={
-          reservationsQuery.isFetchingNextPage ? (
+          reservationsHousingQuery.isFetchingNextPage ? (
             <Text className="text-center text-primario-600">Cargado...</Text>
           ) : null
         }
@@ -318,13 +321,13 @@ const Reservations = () => {
               onDayPress={handleDayPress}
               markingType="multi-dot"
               markedDates={markedDates}
-              displayLoadingIndicator={reservationsQuery.isLoading}
+              displayLoadingIndicator={reservationsCondominiumQuery.isLoading}
               onMonthChange={(date) => {
                 setSelectedMonth(new Date(date.dateString));
               }}
             />
 
-            {reservationsQuery.isLoading ? (
+            {reservationsHousingQuery.isLoading ? (
               <SkeletonFlatList title="Mis Reservas" />
             ) : (
               <FlatList

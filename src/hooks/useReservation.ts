@@ -58,9 +58,9 @@ export const useReserve = ({ id, params }: Props = {}) => {
   //   }
   // );
 
-  const reservationsQuery = useInfiniteQuery({
+  const reservationsHousingQuery = useInfiniteQuery({
     queryKey: ["reservations", "infinite", params],
-    queryFn: reservationService.getAllDataByCondominium,
+    queryFn: reservationService.getAllDataByHousing,
     initialPageParam: null,
     getNextPageParam: (lastPage, pages) => {
       if (!lastPage?.lastDoc?.id) return;
@@ -69,11 +69,11 @@ export const useReserve = ({ id, params }: Props = {}) => {
     },
   });
 
-  // const reservationsDayQuery = useQuery({
-  //   queryKey: ["reservations", params],
-  //   queryFn: () => reservationService.getAllDayData(params),
-  //   enabled: !!params,
-  // });
+  const reservationsCondominiumQuery = useQuery({
+    queryKey: ["reservations", params?.idcondominium],
+    queryFn: () => reservationService.getAllDataByCondominium(params),
+    enabled: !!params,
+  });
 
   const reservationQuery = useQuery({
     queryKey: ["reservations", id],
@@ -223,8 +223,9 @@ export const useReserve = ({ id, params }: Props = {}) => {
   // });
 
   return {
-    reservationsQuery,
+    reservationsHousingQuery,
     //reservationsDayQuery,
+    reservationsCondominiumQuery,
     reservationQuery,
     reservationCreateMutation,
     reservationUpdateMutation,
