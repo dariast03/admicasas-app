@@ -22,6 +22,7 @@ import DefaultLayout from "@/layout/DefaultLayout";
 import SubTitle from "@/components/SubTitle";
 import Colors from "@/constants/Colors";
 import { BlurView } from "expo-blur";
+import { TourGuideZone, useTourGuideController } from "rn-tourguide";
 
 type Props = {
   data: IAnnouncement;
@@ -53,7 +54,6 @@ const Home = () => {
               style={{
                 width: "100%",
                 height: 200,
-
                 backgroundColor: "#0553",
               }}
               contentFit="contain"
@@ -116,6 +116,41 @@ const Home = () => {
     if (!selectedHousing) updateHousing(user?.account?.idhousing);
   }, [isLoadingSelectedHousing]);
 
+  const iconProps = { size: 40, color: "#888" };
+
+  // Use Hooks to control!
+  const {
+    canStart, // a boolean indicate if you can start tour guide
+    start, // a function to start the tourguide
+    stop, // a function  to stopping it
+    eventEmitter, // an object for listening some events
+  } = useTourGuideController();
+
+  // Can start at mount 🎉
+  // you need to wait until everything is registered 😁
+  React.useEffect(() => {
+    if (canStart) {
+      // 👈 test if you can start otherwise nothing will happen
+      start();
+    }
+  }, [canStart]); // 👈 don't miss it!
+
+  const handleOnStart = () => console.log("start");
+  const handleOnStop = () => console.log("stop");
+  const handleOnStepChange = () => console.log(`stepChange`);
+
+  React.useEffect(() => {
+    eventEmitter?.on("start", handleOnStart);
+    eventEmitter?.on("stop", handleOnStop);
+    eventEmitter?.on("stepChange", handleOnStepChange);
+
+    return () => {
+      eventEmitter?.off("start", handleOnStart);
+      eventEmitter?.off("stop", handleOnStop);
+      eventEmitter?.off("stepChange", handleOnStepChange);
+    };
+  }, []);
+
   return (
     <DefaultLayout>
       <Text className="bg-primario-600 dark:bg-primario-800 p-6 rounded-b-3xl text-white font-black">
@@ -134,37 +169,50 @@ const Home = () => {
         ListHeaderComponent={
           <>
             <View className="mb-5">
-              <Dropdown
-                placeholder="Seleccionar vivienda"
-                label="Seleccionar Vivienda:"
-                valueField={"id"}
-                value={selectedHousing}
-                labelField={"code"}
-                data={housingsByPropietaryQuery.data || []}
-                onChange={(e) => updateHousing(e.id)}
-                disabled={
-                  isLoadingSelectedHousing ||
-                  housingsByPropietaryQuery.isLoading
-                }
-                disable={housingsByPropietaryQuery.isLoading}
-              />
+              <TourGuideZone
+                zone={1}
+                text={"Selecciona la vivienda con la que deseas interactuar"}
+                borderRadius={16}
+              >
+                <Dropdown
+                  placeholder="Seleccionar vivienda"
+                  label="Seleccionar Vivienda:"
+                  valueField={"id"}
+                  value={selectedHousing}
+                  labelField={"code"}
+                  data={housingsByPropietaryQuery.data || []}
+                  onChange={(e) => updateHousing(e.id)}
+                  disabled={
+                    isLoadingSelectedHousing ||
+                    housingsByPropietaryQuery.isLoading
+                  }
+                  disable={housingsByPropietaryQuery.isLoading}
+                />
+              </TourGuideZone>
             </View>
-
-            <FlatList
-              data={announcementsQuery.data}
-              renderItem={({ item }) => <Card data={item} />}
-              ItemSeparatorComponent={() => <View className="mb-5" />}
-              keyExtractor={(item) => item.id || ""}
-              ListEmptyComponent={() => (
-                <>
-                  {announcementsQuery.isLoading ? (
-                    <Loader name="Anuncios" />
-                  ) : (
-                    <SubTitle text="No hay anuncios" />
-                  )}
-                </>
-              )}
-            />
+            <TourGuideZone
+              zone={2}
+              text={
+                "Desliza para poder ver todas la anuncios y mantenerte al dia"
+              }
+              borderRadius={16}
+            >
+              <FlatList
+                data={announcementsQuery.data}
+                renderItem={({ item }) => <Card data={item} />}
+                ItemSeparatorComponent={() => <View className="mb-5" />}
+                keyExtractor={(item) => item.id || ""}
+                ListEmptyComponent={() => (
+                  <>
+                    {announcementsQuery.isLoading ? (
+                      <Loader name="Anuncios" />
+                    ) : (
+                      <SubTitle text="No hay anuncios" />
+                    )}
+                  </>
+                )}
+              />
+            </TourGuideZone>
           </>
         }
       />

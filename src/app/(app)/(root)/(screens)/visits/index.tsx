@@ -13,6 +13,7 @@ import Colors from "@/constants/Colors";
 import Icon, { IconType } from "@/components/Icon";
 import SubTitle from "@/components/SubTitle";
 import { useHousing } from "@/hooks/useHousing";
+import { useColorScheme } from "nativewind";
 
 const Visits = () => {
   const { selectedHousing } = useAppContext();
@@ -31,6 +32,8 @@ const Visits = () => {
     },
   });
 
+  const isDark = useColorScheme().colorScheme === "dark";
+
   if (visitsQuery.isPending) return <Text>A LA ESPERA.</Text>;
   if (visitsQuery.isLoading) return <Text>CARGANDO..</Text>;
   if (visitsQuery.isError) return <Text>ERROR..</Text>;
@@ -46,7 +49,9 @@ const Visits = () => {
 
           title: "Libro de Visitas",
           headerStyle: {
-            backgroundColor: Colors.primario[600],
+            backgroundColor: isDark
+              ? Colors.primario[800]
+              : Colors.primario[600],
           },
           headerTintColor: "white",
           headerLeft: () => (
@@ -65,7 +70,7 @@ const Visits = () => {
         data={visits}
         ListHeaderComponent={() => (
           <>
-            <Text className="text-center text-primario-600 text-xl p-5">
+            <Text className="text-center text-primario-600 dark:text-white text-lg p-5">
               Mis Visitas
             </Text>
           </>
@@ -85,12 +90,14 @@ const Visits = () => {
                   className={clsx([
                     " p-4 flex-row justify-between",
                     {
-                      "bg-primario-100  dark:bg-primario-500 ": index % 2 == 0,
-                      "bg-primario-50  dark:bg-primario-400 ": index % 2 != 0,
+                      "bg-primario-100  dark:bg-primario-600 ": index % 2 == 0,
+                      "bg-primario-50  dark:bg-primario-500 ": index % 2 != 0,
                     },
                   ])}
                 >
-                  <Text className="dark:text-white">{item.name}</Text>
+                  <Text className="dark:text-white">
+                    {item.name.toLocaleUpperCase()}
+                  </Text>
 
                   <Text className="dark:text-white">
                     {item.datevisit.toLocaleDateString()}
@@ -115,7 +122,7 @@ const Visits = () => {
       <View className="absolute bottom-10 right-10">
         <Link href={"/visits/form/create"} asChild>
           <TouchableOpacity activeOpacity={0.8}>
-            <View className="bg-primario-400 w-16 h-16 rounded-full items-center justify-center">
+            <View className="bg-primario-400 dark:bg-primario-600 w-16 h-16 rounded-full items-center justify-center">
               <FontAwesome name="plus" size={20} color="#fff" />
             </View>
           </TouchableOpacity>

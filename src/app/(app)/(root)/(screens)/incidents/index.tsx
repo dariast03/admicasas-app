@@ -14,11 +14,12 @@ import { statusColorIncident } from "@/data/statusColor";
 import Colors from "@/constants/Colors";
 import Icon, { IconType } from "@/components/Icon";
 import SubTitle from "@/components/SubTitle";
+import { useColorScheme } from "nativewind";
 
 const Incidents = () => {
   const { selectedHousing } = useAppContext();
   const { user } = useSessionContext();
-
+  const isDark = useColorScheme().colorScheme === "dark";
   const { incidentsQuery } = useIncidents({
     params: {
       idhousing: selectedHousing,
@@ -43,7 +44,9 @@ const Incidents = () => {
 
           title: "Incidentes",
           headerStyle: {
-            backgroundColor: Colors.primario[600],
+            backgroundColor: isDark
+              ? Colors.primario[800]
+              : Colors.primario[600],
           },
           headerTintColor: "white",
           headerLeft: () => (
@@ -62,7 +65,7 @@ const Incidents = () => {
         data={incidentsQuery.data}
         ListHeaderComponent={() => (
           <>
-            <Text className="text-center text-primario-600 text-xl p-5">
+            <Text className="text-center text-primario-600 dark:text-white text-lg p-5">
               Historial de Incidentes
             </Text>
           </>
@@ -78,7 +81,7 @@ const Incidents = () => {
           <>
             <Link href={`/incidents/form/${item.id}`} asChild>
               <TouchableOpacity activeOpacity={0.6}>
-                <View className="bg-primario-50 dark:bg-primario-400 p-4 flex-row justify-between px-3">
+                <View className="bg-primario-50 dark:bg-primario-600 p-4 flex-row justify-between px-3">
                   <Text className="dark:text-white">
                     {item.description.length > 40
                       ? `${item.description.substring(0, 40)}...`
@@ -109,7 +112,7 @@ const Incidents = () => {
       <View className="absolute bottom-10 right-10">
         <Link href={"/incidents/form/create"} asChild>
           <TouchableOpacity activeOpacity={0.8}>
-            <View className="bg-primario-400 w-16 h-16 rounded-full items-center justify-center">
+            <View className="bg-primario-400 dark:bg-primario-600 w-16 h-16 rounded-full items-center justify-center">
               <FontAwesome name="plus" size={20} color="#fff" />
             </View>
           </TouchableOpacity>

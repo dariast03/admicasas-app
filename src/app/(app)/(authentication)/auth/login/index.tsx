@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
@@ -25,13 +26,13 @@ import auth from "@react-native-firebase/auth";
 import { Link, Stack } from "expo-router";
 import SvgComponent from "@/components/SvgComponent";
 import { StatusBar } from "expo-status-bar";
+import { Platform } from "react-native";
 
 async function onGoogleButtonPress() {
   // Check if your device supports Google Play
   await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
   // Get the users ID token
 
-  console.log("xddd");
   const { idToken } = await GoogleSignin.signIn();
   console.log(idToken);
 
@@ -62,8 +63,13 @@ const Login = () => {
   };
 
   return (
-    <>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
       <StatusBar style="light" />
+
       <View className="flex-1 bg-white">
         <Stack.Screen
           options={{
@@ -222,7 +228,7 @@ const Login = () => {
           </View>
         </View>
       </View>
-    </>
+    </KeyboardAvoidingView>
   );
 };
 

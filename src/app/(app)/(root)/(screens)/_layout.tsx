@@ -3,13 +3,16 @@ import Colors from "@/constants/Colors";
 import { Stack, router } from "expo-router";
 
 import Icon, { IconType } from "@/components/Icon";
+import { useColorScheme } from "nativewind";
 
 export default function UnprotectedLayout() {
+  const isDark = useColorScheme().colorScheme === "dark";
+  const colorHeader = isDark ? Colors.primario[800] : Colors.primario[600];
   const config: any = {
     headerShadowVisible: false,
     headerTitleAlign: "center",
     headerStyle: {
-      backgroundColor: Colors.primario[600],
+      backgroundColor: colorHeader,
     },
     headerTintColor: "white",
     headerLeft: () => (
@@ -42,7 +45,7 @@ export default function UnprotectedLayout() {
 
             title: "Detalle",
             headerStyle: {
-              backgroundColor: Colors.primario[600],
+              backgroundColor: colorHeader,
             },
             headerTintColor: "white",
             headerLeft: () => (
@@ -64,7 +67,7 @@ export default function UnprotectedLayout() {
             headerTitleAlign: "center",
             title: "Detalle",
             headerStyle: {
-              backgroundColor: Colors.primario[600],
+              backgroundColor: colorHeader,
             },
             headerTintColor: "white",
             headerLeft: () => (
@@ -87,7 +90,7 @@ export default function UnprotectedLayout() {
             headerTitleAlign: "center",
             title: "Detalle",
             headerStyle: {
-              backgroundColor: Colors.primario[600],
+              backgroundColor: colorHeader,
             },
             headerTintColor: "white",
             headerLeft: () => (
@@ -110,7 +113,7 @@ export default function UnprotectedLayout() {
             headerTitleAlign: "center",
             title: "Reuniones",
             headerStyle: {
-              backgroundColor: Colors.primario[600],
+              backgroundColor: colorHeader,
             },
             headerTintColor: "white",
             headerLeft: () => (

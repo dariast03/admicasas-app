@@ -54,12 +54,12 @@ const InputBase: React.FC<React.PropsWithChildren<InputBase>> = ({
   const isDark = useColorScheme().colorScheme === "dark";
   return (
     <View className="">
-      <Text className="mb-1 text-md  font-bold">
+      <Text className="mb-1 text-md  font-bold text-primario-600 dark:text-white">
         {label} {withAsterisk && <Text className="text-red-400">*</Text>}
       </Text>
       <View
         className={clsx([
-          "bg-primario-100 dark:bg-primario-500 flex-row p-3  border-[0.5px]  rounded-lg items-center overflow-hidden",
+          "bg-primario-100 dark:bg-primario-600 flex-row p-3  border-[0.5px]  rounded-lg items-center overflow-hidden",
           {
             "border-red-500": error,
             "border-primario-700 dark:border-primario-950 ":
@@ -171,7 +171,6 @@ export const InputDatePicker = forwardRef<TextInput, Props>(
     };
 
     const hideDateTime = () => {
-      console.log("XDD CLOSE");
       setShowDate(false);
       setShowTime(false);
     };

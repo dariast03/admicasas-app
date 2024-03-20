@@ -1,7 +1,7 @@
 import { useAnnouncement } from "@/hooks/useAnnouncement";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { Image } from "expo-image";
-import { Redirect, useLocalSearchParams } from "expo-router";
+import { Redirect, Stack, useLocalSearchParams } from "expo-router";
 import {
   ActivityIndicator,
   ScrollView,
@@ -14,6 +14,8 @@ import { useSessionContext } from "@/hooks/useSessionContext";
 
 import Icon, { IconType } from "@/components/Icon";
 import Colors from "@/constants/Colors";
+import { useAppContext } from "@/hooks/useAppContext";
+import GlobalStyles from "@/constants/GlobalStyle";
 
 const DetailAnnocenment = () => {
   const { id } = useLocalSearchParams();
@@ -21,13 +23,16 @@ const DetailAnnocenment = () => {
 
   const { width } = useWindowDimensions();
   const { user } = useSessionContext();
+  const { selectedHousing } = useAppContext();
+
+  const shadowStyle = GlobalStyles();
 
   const { announcementQuery } = useAnnouncement({
     id: id + "",
     params: {
       idcondominium: user?.account?.idcondominium,
       iduser: user.id,
-      idhousing: user.account.idhousing,
+      idhousing: selectedHousing,
     },
   });
 
@@ -42,20 +47,30 @@ const DetailAnnocenment = () => {
 
   return (
     <DefaultLayout>
+      <Stack.Screen
+        options={{
+          title: announcementQuery.data?.title,
+        }}
+      />
       <ScrollView>
-        <View className=" p-5">
+        <View className="p-7">
           <View
-            className="bg-white rounded-t-2xl overflow-hidden "
-            style={styles.shadowCard}
+            className="bg-white dark:bg-primario-800 rounded-2xl overflow-hidden "
+            style={shadowStyle}
           >
             <Image
-              style={{ width, height: 200 }}
+              style={{
+                width: "100%",
+                height: 200,
+
+                backgroundColor: "#0553",
+              }}
+              contentFit="contain"
               source={announcementQuery.data?.urlimg}
             />
 
-            <View className="flex-row justify-start px-4 py-3 bg-primario-600">
+            <View className="flex-row justify-start items-center px-4 py-3 bg-primario-600 dark:bg-primario-600">
               <Icon
-                color={"white"}
                 icon={{
                   type: IconType.MaterialIcon,
                   name: "announcement",
@@ -65,15 +80,15 @@ const DetailAnnocenment = () => {
                 ANUNCIO
               </Text>
             </View>
-            <View className="py-4 px-6 ">
-              <Text className="font-semibold text-xl my-2">
+            <View className="p-6">
+              <Text className="font-semibold text-xl my-2 dark:text-white">
                 Detalle del Anuncio
               </Text>
-              <View className="bg-white border border-gray-300 rounded-md p-5">
-                <Text className="text-stone-500 mt-2">
+              <View className="bg-white dark:bg-primario-800 border border-gray-300 rounded-md p-5">
+                <Text className="font-bold text-lg text-stone-500 dark:text-white">
                   {announcementQuery.data?.title}
                 </Text>
-                <Text className="text-stone-400 my-2">
+                <Text className="text-stone-400 dark:text-white  my-2">
                   {announcementQuery.data?.description}
                 </Text>
                 <View className="flex-row items-center">
@@ -83,12 +98,12 @@ const DetailAnnocenment = () => {
                       name: "calendar",
                     }}
                   />
-                  <Text className="text-stone-400 my-2">
+                  <Text className="text-stone-400 dark:text-white my-2">
                     {announcementQuery.data?.start?.toLocaleDateString()}
                   </Text>
                 </View>
 
-                <View className="border-b border-stone-400 my-5"></View>
+                <View className="border-b border-stone-400 dark:border-white my-5"></View>
               </View>
             </View>
           </View>
@@ -98,17 +113,17 @@ const DetailAnnocenment = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  shadowCard: {
-    shadowColor: "#4f46e5",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 5.62,
-    elevation: 7,
-  },
-});
+// const styles = StyleSheet.create({
+//   shadowCard: {
+//     shadowColor: "#4f46e5",
+//     shadowOffset: {
+//       width: 0,
+//       height: 5,
+//     },
+//     shadowOpacity: 0.2,
+//     shadowRadius: 5.62,
+//     elevation: 7,
+//   },
+// });
 
 export default DetailAnnocenment;

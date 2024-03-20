@@ -34,6 +34,7 @@ import { useAppContext } from "@/hooks/useAppContext";
 import AlertCard from "@/components/AlertCard";
 import { statusColorIncident } from "@/data/statusColor";
 import Colors from "@/constants/Colors";
+import { useColorScheme } from "nativewind";
 
 const shadow = {
   shadowColor: "#000",
@@ -47,17 +48,6 @@ const shadow = {
   elevation: 14,
 };
 
-// const housings: Partial<IHousing>[] = [
-//   {
-//     id: "1231",
-//     code: "Casas 1",
-//   },
-//   {
-//     id: "12faw31",
-//     code: "Casa 2",
-//   },
-// ];
-
 const FormIncident = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { user } = useSessionContext();
@@ -65,6 +55,8 @@ const FormIncident = () => {
 
   const isEdit = id !== "create";
   const newId = isEdit ? id : "";
+
+  const isDark = useColorScheme().colorScheme === "dark";
 
   const { incidentCreateMutation, incidentQuery, incidentUpdateMutation } =
     useIncidents({
@@ -178,7 +170,9 @@ const FormIncident = () => {
 
             title: "Nuevo Incidente",
             headerStyle: {
-              backgroundColor: Colors.primario[600],
+              backgroundColor: isDark
+                ? Colors.primario[800]
+                : Colors.primario[600],
             },
             headerTintColor: "white",
             headerLeft: () => (
@@ -206,10 +200,10 @@ const FormIncident = () => {
                   style={shadow}
                 >
                   <View className="items-center mb-4">
-                    <Text className="text-2xl font-bold mb-2 text-primario-600">
+                    <Text className="text-2xl font-bold mb-2 text-primario-600 dark:text-white">
                       Registro de Incidente
                     </Text>
-                    <Text className="text-md text-center text-primario-600 ">
+                    <Text className="text-md text-center text-primario-600 dark:text-white">
                       Por favor, completa el formulario para reportar un
                       incidente.
                     </Text>
@@ -265,7 +259,7 @@ const FormIncident = () => {
                           )}
                         />
                       </View>
-
+                      {/* 
                       <View>
                         <Controller
                           name="idhousing"
@@ -304,7 +298,7 @@ const FormIncident = () => {
                             );
                           }}
                         />
-                      </View>
+                      </View> */}
 
                       <View>
                         <Controller
@@ -410,7 +404,7 @@ const FormIncident = () => {
                                 : 1,
                           }}
                         >
-                          <View className="rounded-xl bg-primario-800 p-3">
+                          <View className="rounded-xl bg-primario-600 p-3">
                             <Text className="text-center text-xl text-white ">
                               {isEdit ? "ACTUALIZAR" : "REGISTRAR"}
                             </Text>

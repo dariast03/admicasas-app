@@ -5,6 +5,7 @@ import MeetingDisplay from "@/components/meeting/meeting-display";
 import useAuth from "@/hooks/useAuth";
 
 import { useMeetings } from "@/hooks/useMeetings";
+import DefaultLayout from "@/layout/DefaultLayout";
 
 import { View, FlatList, Text, RefreshControl } from "react-native";
 
@@ -24,7 +25,7 @@ const Meeting = () => {
   const meetings = meetingsQuery.data;
 
   return (
-    <View>
+    <DefaultLayout>
       <FlatList
         contentContainerClassName="p-5"
         data={meetings}
@@ -40,7 +41,7 @@ const Meeting = () => {
           <SubTitle text="No hay reuniones registradas hasta el momento." />
         )}
       />
-    </View>
+    </DefaultLayout>
   );
 };
 

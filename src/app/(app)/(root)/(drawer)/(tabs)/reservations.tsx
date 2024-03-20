@@ -32,11 +32,15 @@ import { startOfDay } from "date-fns";
 import { DateData } from "react-native-calendars";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useColorScheme } from "nativewind";
+import { AppContext } from "@/context/AppContext";
+import { useAppContext } from "@/hooks/useAppContext";
+import SubTitle from "@/components/SubTitle";
 LocaleConfig.defaultLocale = "es";
 
 const Reservations = () => {
   const router = useRouter();
   const { user } = useSessionContext();
+  const { selectedHousing } = useAppContext();
 
   const isDark = useColorScheme().colorScheme === "dark";
 
@@ -47,17 +51,18 @@ const Reservations = () => {
     {
       params: {
         idcondominium: user.account.idcondominium,
-        idhousing: user.account.idhousing,
+        idhousing: selectedHousing,
         selectedDate: selectedMonth,
       },
     }
   );
 
   const dataReservations =
-    reservationsHousingQuery.data?.pages?.flatMap((page) => page.data) ?? [];
+    reservationsHousingQuery.data?.pages?.flatMap((page: any) => page.data) ??
+    [];
 
   const filteredReservationsByMe = dataReservations.filter(
-    (r) => r.idhousing === user.account.idhousing
+    (r) => r.idhousing === selectedHousing
   );
 
   const visible = useRef<BottomSheetContentRef>(null);
@@ -341,6 +346,11 @@ const Reservations = () => {
                 renderItem={renderReservation}
                 keyExtractor={(item) => item.id || ""}
                 ItemSeparatorComponent={() => itemSeparator()}
+                ListEmptyComponent={() => (
+                  <SubTitle
+                    text={"No se han registrado reservas durante el mes actual"}
+                  />
+                )}
               />
             )}
           </>

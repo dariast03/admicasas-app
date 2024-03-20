@@ -17,7 +17,7 @@ import Icon, { IconType } from "@/components/Icon";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import RNFetchBlob from "rn-fetch-blob";
 import { usePayments } from "@/hooks/usePayments";
@@ -27,6 +27,8 @@ import { ButtonLoader } from "@/components/ButtonLoader";
 import { useCharges } from "@/hooks/useCharges";
 import { useAppContext } from "@/hooks/useAppContext";
 import Colors from "@/constants/Colors";
+import GlobalStyles from "@/constants/GlobalStyle";
+import { TourGuideZone, useTourGuideController } from "rn-tourguide";
 
 const DetailAnnocenment = () => {
   const { id } = useLocalSearchParams();
@@ -40,13 +42,50 @@ const DetailAnnocenment = () => {
     id: id + "",
     params: { idhousing: selectedHousing },
   });
-
+  const shadowStyle = GlobalStyles();
   const { announcementDetailQuery } = useAnnouncement({
     params: {
       idcharge: id + "" || "",
       idcondominium: user.account.idcondominium,
     },
   });
+
+  const ref = useRef<any>();
+
+  const {
+    canStart, // a boolean indicate if you can start tour guide
+    start, // a function to start the tourguide
+    stop, // a function  to stopping it
+    eventEmitter, // an object for listening some events
+    tourKey,
+  } = useTourGuideController("prueba");
+
+  // Can start at mount 🎉
+  // you need to wait until everything is registered 😁
+  useEffect(() => {
+    if (canStart) {
+      start();
+    }
+  }, [canStart]); // 👈 don't miss it!
+
+  const handleOnStart = () => console.log("start");
+  const handleOnStop = () => console.log("stop");
+  const handleOnStepChange = (num: any) => {
+    console.log(num);
+    if (num.order === 2) ref.current.scrollToEnd({ animated: true });
+  };
+
+  useEffect(() => {
+    eventEmitter?.on("start", handleOnStart);
+    eventEmitter?.on("stop", handleOnStop);
+    eventEmitter?.on("stepChange", handleOnStepChange);
+
+    return () => {
+      eventEmitter?.off("start", handleOnStart);
+      eventEmitter?.off("stop", handleOnStop);
+      eventEmitter?.off("stepChange", handleOnStepChange);
+    };
+  }, []);
 
   const { paymentCreateMutation, paymentQuery, paymentUpdateMutation } =
     usePayments({
@@ -198,11 +237,15 @@ const DetailAnnocenment = () => {
           title: chargeQuery.data?.name,
         }}
       />
-      <ScrollView>
+      <ScrollView
+        ref={(r) => {
+          ref.current = r;
+        }}
+      >
         <View className=" p-5">
           <View
-            className="bg-white rounded-t-2xl overflow-hidden "
-            style={styles.shadowCard}
+            className="bg-white dark:bg-primario-800 rounded-2xl overflow-hidden "
+            style={shadowStyle}
           >
             <Image
               style={{ width, height: 200 }}
@@ -238,24 +281,26 @@ const DetailAnnocenment = () => {
                     <Text>{paymentQuery.data?.message}</Text>
                   </View>
                 )}
-              <Text className="font-semibold text-xl my-2">
+              <Text className="font-semibold text-xl my-2 dark:text-white">
                 Detalle del Cobro
               </Text>
-              <View className="bg-white border border-gray-300 rounded-md p-5">
-                <Text className="text-6xl text-primario-600 mt-2">
+              <View className="bg-white dark:bg-primario-800 border border-gray-300 rounded-md p-5">
+                <Text className="text-6xl text-primario-600 dark:text-white mt-2">
                   Bs {chargeQuery.data?.amount}
                 </Text>
-                <Text className="text-stone-500 mt-2">
+                <Text className="text-stone-500 dark:text-white mt-2">
                   {chargeQuery.data?.name}
                 </Text>
-                <Text className="text-stone-400 my-2">
+                <Text className="text-stone-400 dark:text-white my-2">
                   {chargeQuery.data?.description}
                 </Text>
-                <View className="border-b border-stone-400 my-5"></View>
+                <View className="border-b border-stone-400 dark:text-white my-5"></View>
                 <View className="items-center">
                   {paymentQuery.data?.urlimg && !image && (
                     <>
-                      <Text className="font-bold">Comprobante</Text>
+                      <Text className="font-bold dark:text-white">
+                        Comprobante
+                      </Text>
                       <Image
                         style={{ width: 200, height: 200 }}
                         source={paymentQuery.data?.urlimg}
@@ -274,27 +319,36 @@ const DetailAnnocenment = () => {
                   {(!paymentQuery.data?.state ||
                     paymentQuery.data?.state === "Rechazado") && (
                     <View className="w-full">
-                      <InputCustom
-                        icon={{
-                          type: IconType.MaterialCommunityIcons,
-                          name: "clock-outline",
-                        }}
-                        label="Cargar Comprobante:"
-                        value={image ? "Comprobante Seleccionado" : ""}
-                        placeholder="Selecciona una imagen"
-                        editable={false}
-                        rightContent={
-                          <View className="flex-row">
-                            <Icon
-                              onPress={() => pickImage()}
-                              icon={{
-                                type: IconType.MaterialCommunityIcons,
-                                name: "folder-multiple-image",
-                              }}
-                            />
-                          </View>
+                      <TourGuideZone
+                        tourKey={tourKey}
+                        zone={2}
+                        text={
+                          "Selecciona una imagen del comprobante de pago desde tu galería y súbelo."
                         }
-                      />
+                        borderRadius={16}
+                      >
+                        <InputCustom
+                          icon={{
+                            type: IconType.MaterialCommunityIcons,
+                            name: "clock-outline",
+                          }}
+                          label="Cargar Comprobante:"
+                          value={image ? "Comprobante Seleccionado" : ""}
+                          placeholder="Selecciona una imagen"
+                          editable={false}
+                          rightContent={
+                            <View className="flex-row">
+                              <Icon
+                                onPress={() => pickImage()}
+                                icon={{
+                                  type: IconType.MaterialCommunityIcons,
+                                  name: "folder-multiple-image",
+                                }}
+                              />
+                            </View>
+                          }
+                        />
+                      </TourGuideZone>
                       {!image && imageError && (
                         <Text className="text-red-600 p-2">{imageError}</Text>
                       )}
@@ -302,41 +356,59 @@ const DetailAnnocenment = () => {
                   )}
                 </View>
               </View>
-              <Text className="font-semibold text-xl my-2">Medio de pago</Text>
+              <Text className="font-semibold dark:text-white text-xl my-2">
+                Medio de pago
+              </Text>
               <TouchableOpacity
                 onPress={() => downloadFile(chargeQuery.data?.urlimg || "")}
               >
                 <View className="border border-gray-300 mt-2 items-center rounded-md p-5">
-                  <Image
-                    style={{ width: 200, height: 200 }}
-                    source={chargeQuery.data?.urlimg}
-                  />
+                  <TourGuideZone
+                    tourKey={tourKey}
+                    zone={1}
+                    text={
+                      "Descarga el código QR para pagar con un clic sobre la imagen."
+                    }
+                    borderRadius={16}
+                  >
+                    <Image
+                      style={{ width: 200, height: 200 }}
+                      source={chargeQuery.data?.urlimg}
+                    />
+                  </TourGuideZone>
                 </View>
               </TouchableOpacity>
             </View>
 
             <View className="px-5 pb-5">
-              <ButtonLoader
-                className="items-center"
-                disabled={paymentQuery.data?.state === "Pendiente"}
-                onPress={() => {
-                  if (!paymentCreateMutation.isPending) {
-                    onSubmit({} as IPayments);
-                  }
-                }}
-                style={{
-                  opacity:
-                    paymentQuery.data?.state === "Pendiente" ||
-                    paymentQuery.data?.state === "Aprobado"
-                      ? 0.5
-                      : 1,
-                }}
-                loading={paymentCreateMutation.isPending}
+              <TourGuideZone
+                tourKey={tourKey}
+                zone={3}
+                text={"Haz clic en el botón para completar el pago."}
+                borderRadius={16}
               >
-                <Text className="text-white text-center text-xl font-bold">
-                  {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"}
-                </Text>
-              </ButtonLoader>
+                <ButtonLoader
+                  className="items-center"
+                  disabled={paymentQuery.data?.state === "Pendiente"}
+                  onPress={() => {
+                    if (!paymentCreateMutation.isPending) {
+                      onSubmit({} as IPayments);
+                    }
+                  }}
+                  style={{
+                    opacity:
+                      paymentQuery.data?.state === "Pendiente" ||
+                      paymentQuery.data?.state === "Aprobado"
+                        ? 0.5
+                        : 1,
+                  }}
+                  loading={paymentCreateMutation.isPending}
+                >
+                  <Text className="text-white text-center text-xl font-bold">
+                    {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"}
+                  </Text>
+                </ButtonLoader>
+              </TourGuideZone>
             </View>
           </View>
         </View>

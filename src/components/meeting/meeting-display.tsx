@@ -24,7 +24,7 @@ const MeetingDisplay: React.FC<Props> = ({ meeting, detail }) => {
   return (
     <Link href={`/meeting/${id}`} asChild>
       <TouchableOpacity activeOpacity={0.8}>
-        <View className="bg-primario-500 p-5 rounded-xl ">
+        <View className="bg-primario-500 dark:bg-primario-600 p-5 rounded-xl ">
           <Text
             className={cn(["text-gray-200 mb-2 text-xs", detail && "text-sm"])}
           >

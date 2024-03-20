@@ -213,20 +213,6 @@ const FormReservation = () => {
   //   }
   // }, [watch("state")]);
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleOptionClick = (option: any) => {
-    console.log(`Option clicked: ${option}`);
-    // Aquí puedes realizar la acción correspondiente para cada opción
-    // Por ejemplo, si una de las opciones es "Eliminar", puedes llamar a una función para eliminar algo
-    // También puedes cerrar el menú después de hacer clic en una opción
-    setIsOpen(false);
-  };
-
   const [open, setOpen] = React.useState(false);
   const [openSub, setOpenSub] = React.useState(false);
 

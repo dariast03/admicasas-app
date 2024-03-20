@@ -5,6 +5,7 @@ import { useColorScheme } from "nativewind";
 import { Platform, Pressable, Text, View } from "react-native";
 import { cn, isTextChildren } from "@/lib/utils";
 import * as Slot from "@/lib/rn-primitives/slot/slot-native";
+import Colors from "@/constants/Colors";
 
 const buttonVariants = cva(
   "flex-row items-center justify-center rounded-md web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2",
@@ -54,7 +55,7 @@ const buttonTextVariants = cva("font-medium", {
 });
 
 const rippleColor = (isThemeDark: boolean) => {
-  const secondary = isThemeDark ? "hsl(240 4% 16%)" : "hsl(240 5% 96%)";
+  const secondary = isThemeDark ? Colors.primario[800] : "hsl(240 5% 96%)";
   return {
     default: isThemeDark ? "#d4d4d8" : "#3f3f46",
     destructive: isThemeDark ? "#b91c1c" : "#f87171",

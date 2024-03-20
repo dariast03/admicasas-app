@@ -12,6 +12,10 @@ import { router } from "expo-router";
 import { useRootNavigationState } from "expo-router";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  TourGuideProvider, // Main provider
+} from "rn-tourguide";
+import Constants from "expo-constants";
 
 const queryClient = new QueryClient();
 
@@ -157,11 +161,24 @@ const Layout = () => {
     <>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <QueryClientProvider client={queryClient}>
-          <AppProvider>
-            <BottomSheetModalProvider>
-              <Slot />
-            </BottomSheetModalProvider>
-          </AppProvider>
+          <TourGuideProvider
+            {...{
+              labels: {
+                previous: "Anterior",
+                next: "Siguiente",
+                skip: "Saltar",
+                finish: "Finalizar",
+              },
+            }}
+            {...{ borderRadius: 16 }}
+            verticalOffset={Constants.statusBarHeight}
+          >
+            <AppProvider>
+              <BottomSheetModalProvider>
+                <Slot />
+              </BottomSheetModalProvider>
+            </AppProvider>
+          </TourGuideProvider>
         </QueryClientProvider>
       </GestureHandlerRootView>
     </>

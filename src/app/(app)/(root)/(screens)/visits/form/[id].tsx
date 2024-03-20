@@ -24,6 +24,7 @@ import Icon, { IconType } from "@/components/Icon";
 import { IVisit } from "@/types/visits/visits";
 import Colors from "@/constants/Colors";
 import { is } from "date-fns/locale";
+import { useColorScheme } from "nativewind";
 
 const shadow = {
   shadowColor: "#000",
@@ -91,6 +92,8 @@ const FormVisit = () => {
     },
   });
 
+  const isDark = useColorScheme().colorScheme === "dark";
+
   const ref = useRef<IDropdownRef>(null);
 
   const isAllowedEdit = visitQuery.data?.datevisit
@@ -137,7 +140,9 @@ const FormVisit = () => {
 
             title: "Nuevo Registro",
             headerStyle: {
-              backgroundColor: Colors.primario[600],
+              backgroundColor: isDark
+                ? Colors.primario[800]
+                : Colors.primario[600],
             },
             headerTintColor: "white",
             headerLeft: () => (
@@ -165,10 +170,10 @@ const FormVisit = () => {
                   style={shadow}
                 >
                   <View className="items-center mb-4">
-                    <Text className="text-xl font-bold mb-2 text-primario-600 ">
+                    <Text className="text-xl font-semibold mb-2 text-primario-600 dark:text-white">
                       Registro de Visita
                     </Text>
-                    <Text className="text-sm  text-center text-primario-600">
+                    <Text className="text-sm  text-center text-primario-600 dark:text-white">
                       Por favor, completa el formulario para registrar una
                       visita
                     </Text>
@@ -339,7 +344,7 @@ const FormVisit = () => {
                                 : 1,
                           }}
                         >
-                          <View className="rounded-xl bg-primario-800 p-3">
+                          <View className="rounded-xl bg-primario-800 dark:bg-primario-600 p-3 mt-5">
                             <Text className="text-center text-xl text-white ">
                               {isEdit ? "ACTUALIZAR" : "REGISTRAR"}
                             </Text>

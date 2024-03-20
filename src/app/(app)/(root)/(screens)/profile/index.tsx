@@ -1,8 +1,14 @@
 import React from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { Avatar } from "react-native-elements";
 import useAuth from "@/hooks/useAuth";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import Colors from "@/constants/Colors";
 import Icon, { IconType } from "@/components/Icon";
 
@@ -49,17 +55,30 @@ const Profile = () => {
           }}
         />
 
-        <View className="flex-row  bg-primario-600  w-full pt-14 pb-8 items-center px-5">
-          <Avatar
-            rounded
-            size="large"
-            source={{
-              uri: "https://th.bing.com/th/id/OIP.l0brqMrdiKjD2t5Ab4ZkCAHaHa?rs=1&pid=ImgDetMain",
-            }}
-          />
-          <View className="p-2 gap-2">
-            <Text className="text-xl  text-white">{user.account.name}</Text>
-            <Text className="text-white">{user.email}</Text>
+        <View className="flex-row bg-primario-600 w-full mt-6">
+          <TouchableOpacity onPress={() => router.back()} activeOpacity={0.6}>
+            <View className="h-10 w-10 justify-center items-center rounded-full mt-2 ml-2">
+              <Icon
+                color={"#fff"}
+                icon={{
+                  type: IconType.Ionicon,
+                  name: "arrow-back",
+                }}
+              />
+            </View>
+          </TouchableOpacity>
+          <View className="flex-row items-center h-full  py-7">
+            <Avatar
+              rounded
+              size="large"
+              source={{
+                uri: "https://th.bing.com/th/id/OIP.l0brqMrdiKjD2t5Ab4ZkCAHaHa?rs=1&pid=ImgDetMain",
+              }}
+            />
+            <View className="p-2 gap-2">
+              <Text className="text-xl  text-white">{user.account.name}</Text>
+              <Text className="text-white">{user.email}</Text>
+            </View>
           </View>
         </View>
         <View>
@@ -75,7 +94,7 @@ const Profile = () => {
               {condominiumQuery.isLoading ? (
                 <Skeleton className="h-4 w-full bg-white dark:bg-primario-600" />
               ) : (
-                <Text className="text-white">
+                <Text className="dark:text-white">
                   {condominiumQuery.data?.name}
                 </Text>
               )}
