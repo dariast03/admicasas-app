@@ -317,6 +317,17 @@ const Reservations = () => {
                 ></View>
               </Text>
             </View>
+            <View className="px-6">
+              <Text className="dark:text-white text-xs">
+                Reservas{" "}
+                <View
+                  className="w-2 h-2 rounded-full"
+                  style={{
+                    backgroundColor: "blue",
+                  }}
+                ></View>
+              </Text>
+            </View>
             <Calendar
               style={{
                 borderRadius: 10,

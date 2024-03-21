@@ -6,6 +6,7 @@ import housingService from "./housingService";
 
 type GetDataQueryParams = {
   idhousing: string;
+  idreservation?:string;
   q?: string;
   limitResults?: number;
 };
@@ -122,7 +123,27 @@ const getAllData = async ({
 //   }
 // };
 
-const getData = async (id: string, { idhousing }: GetDataQueryParams) => {
+const getDataByReservation = async ( { idhousing , idreservation}: GetDataQueryParams) => {
+  try {
+    let docRef = firestore().collection(FirestoreKey).where("idhousing","==" idhousing).where("idreservation","==",idreservation)
+    const docSnap = await docRef.get();
+
+ 
+    const data = docSnap.docs.map((doc) => ({
+      ...(doc.data() as ICharge),
+      id: doc.id,
+    }));
+
+  
+    return {
+      ...data,
+      id: data.id,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+const getData = async (id:string, { idhousing }: GetDataQueryParams) => {
   try {
     const docRef = firestore().collection(FirestoreKey).doc(id);
     const docSnap = await docRef.get();
@@ -175,4 +196,5 @@ const getData = async (id: string, { idhousing }: GetDataQueryParams) => {
 export default {
   getData,
   getAllData,
+  getDataByReservation
 };

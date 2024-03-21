@@ -26,13 +26,13 @@ const NotificationDisplay: React.FC<Props> = ({ notification }) => {
       <TouchableOpacity activeOpacity={0.7} onPress={handlePress}>
         <View
           className={cn([
-            "flex flex-row gap-2 justify-between p-4 bg-gray-200 ",
+            "flex flex-row gap-2 justify-between p-4 bg-gray-200 dark:bg-primario-700 ",
             isRead && "bg-white",
           ])}
         >
           <View className="flex-1">
-            <Text className="font-bold">{title}</Text>
-            <Text>{body}</Text>
+            <Text className="font-bold dark:text-white">{title}</Text>
+            <Text className="dark:text-white">{body}</Text>
           </View>
 
           <View className="  items-center justify-center">

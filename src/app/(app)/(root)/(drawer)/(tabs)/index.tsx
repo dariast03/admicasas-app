@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   RefreshControl,
+  Button,
+
   // Image,
 } from "react-native";
 import { Image } from "expo-image";
@@ -21,7 +23,6 @@ import Loader from "@/components/Loader";
 import DefaultLayout from "@/layout/DefaultLayout";
 import SubTitle from "@/components/SubTitle";
 import Colors from "@/constants/Colors";
-import { BlurView } from "expo-blur";
 import { TourGuideZone, useTourGuideController } from "rn-tourguide";
 
 type Props = {
@@ -128,7 +129,7 @@ const Home = () => {
 
   // Can start at mount 🎉
   // you need to wait until everything is registered 😁
-  React.useEffect(() => {
+  useEffect(() => {
     if (canStart) {
       // 👈 test if you can start otherwise nothing will happen
       start();
@@ -139,7 +140,7 @@ const Home = () => {
   const handleOnStop = () => console.log("stop");
   const handleOnStepChange = () => console.log(`stepChange`);
 
-  React.useEffect(() => {
+  useEffect(() => {
     eventEmitter?.on("start", handleOnStart);
     eventEmitter?.on("stop", handleOnStop);
     eventEmitter?.on("stepChange", handleOnStepChange);
@@ -168,10 +169,10 @@ const Home = () => {
         }
         ListHeaderComponent={
           <>
-            <View className="mb-5">
+            <View className="flex-1 mb-5">
               <TourGuideZone
                 zone={1}
-                text={"Selecciona la vivienda con la que deseas interactuar"}
+                text={"Seleccione una vivienda con la que desea interactuar"}
                 borderRadius={16}
               >
                 <Dropdown
@@ -193,7 +194,7 @@ const Home = () => {
             <TourGuideZone
               zone={2}
               text={
-                "Desliza para poder ver todas la anuncios y mantenerte al dia"
+                "Dezliza para poder ver todos los anuncios y asi mantenerte al día"
               }
               borderRadius={16}
             >

@@ -4,6 +4,7 @@ import { useNotifications } from "@/hooks/useNotifications";
 import useAuth from "@/hooks/useAuth";
 import Loader from "@/components/Loader";
 import NotificationDisplay from "@/components/notifications/notification-display";
+import DefaultLayout from "@/layout/DefaultLayout";
 
 const Notifications = () => {
   const { user } = useAuth();
@@ -24,7 +25,7 @@ const Notifications = () => {
   const notifications = notificationsQuery.data;
 
   return (
-    <View>
+    <DefaultLayout>
       <FlatList
         //contentContainerClassName="p-2"
         data={notifications}
@@ -34,7 +35,7 @@ const Notifications = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <NotificationDisplay notification={item} />}
       />
-    </View>
+    </DefaultLayout>
   );
 };
 

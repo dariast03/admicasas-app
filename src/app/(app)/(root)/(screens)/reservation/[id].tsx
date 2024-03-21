@@ -61,6 +61,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { useCharges } from "@/hooks/useCharges";
 
 const FormReservation = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -158,6 +159,15 @@ const FormReservation = () => {
   };
 
   const isAllowedDelete = reservationQuery.data?.state === "Pendiente";
+
+  const PushPayment = () => {
+    const { chargeQuery } = useCharges({
+      params: {
+        idhousing: selectedHousing,
+        id,
+      },
+    });
+  };
 
   useEffect(() => {
     if (reservationQuery.data) {
@@ -503,25 +513,36 @@ const FormReservation = () => {
                     />
                   </View> */}
               <View className="mt-2">
-                <ButtonLoader
-                  className="items-center"
-                  onPress={handleSubmit(onSubmit)}
-                  // disabled={paymentQuery.data?.state === "Pendiente"}
+                {reservationQuery.data?.state === "Aprobado" ? (
+                  <ButtonLoader
+                    className="items-center"
+                    onPress={() => router.push(PushPayment())}
+                  >
+                    <Text className="text-white text-center text-xl font-bold">
+                      Ir a Pagar
+                    </Text>
+                  </ButtonLoader>
+                ) : (
+                  <ButtonLoader
+                    className="items-center"
+                    onPress={handleSubmit(onSubmit)}
+                    // disabled={paymentQuery.data?.state === "Pendiente"}
 
-                  // style={{
-                  //   opacity:
-                  //     paymentQuery.data?.state === "Pendiente" ||
-                  //     paymentQuery.data?.state === "Aprobado"
-                  //       ? 0.5
-                  //       : 1,
-                  // }}
-                  // loading={paymentCreateMutation.isPending}
-                >
-                  <Text className="text-white text-center text-xl font-bold">
-                    {/* {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"} */}
-                    Guardar
-                  </Text>
-                </ButtonLoader>
+                    // style={{
+                    //   opacity:
+                    //     paymentQuery.data?.state === "Pendiente" ||
+                    //     paymentQuery.data?.state === "Aprobado"
+                    //       ? 0.5
+                    //       : 1,
+                    // }}
+                    // loading={paymentCreateMutation.isPending}
+                  >
+                    <Text className="text-white text-center text-xl font-bold">
+                      {/* {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"} */}
+                      Guardar
+                    </Text>
+                  </ButtonLoader>
+                )}
 
                 {/* {isAllowedDelete && (
                   <AlertDialog>

@@ -28,7 +28,8 @@ import { useCharges } from "@/hooks/useCharges";
 import { useAppContext } from "@/hooks/useAppContext";
 import Colors from "@/constants/Colors";
 import GlobalStyles from "@/constants/GlobalStyle";
-import { TourGuideZone, useTourGuideController } from "rn-tourguide";
+
+import { Button } from "react-native";
 
 const DetailAnnocenment = () => {
   const { id } = useLocalSearchParams();
@@ -52,40 +53,40 @@ const DetailAnnocenment = () => {
 
   const ref = useRef<any>();
 
-  const {
-    canStart, // a boolean indicate if you can start tour guide
-    start, // a function to start the tourguide
-    stop, // a function  to stopping it
-    eventEmitter, // an object for listening some events
-    tourKey,
-  } = useTourGuideController("prueba");
+  // const {
+  //   canStart, // a boolean indicate if you can start tour guide
+  //   start, // a function to start the tourguide
+  //   stop, // a function  to stopping it
+  //   eventEmitter, // an object for listening some events
+  //   tourKey,
+  // } = useTourGuideController("prueba");
 
-  // Can start at mount 🎉
-  // you need to wait until everything is registered 😁
-  useEffect(() => {
-    if (canStart) {
-      start();
-    }
-  }, [canStart]); // 👈 don't miss it!
+  // // Can start at mount 🎉
+  // // you need to wait until everything is registered 😁
+  // useEffect(() => {
+  //   if (canStart) {
+  //     start();
+  //   }
+  // }, [canStart]); // 👈 don't miss it!
 
-  const handleOnStart = () => console.log("start");
-  const handleOnStop = () => console.log("stop");
-  const handleOnStepChange = (num: any) => {
-    console.log(num);
-    if (num.order === 2) ref.current.scrollToEnd({ animated: true });
-  };
+  // const handleOnStart = () => console.log("start");
+  // const handleOnStop = () => console.log("stop");
+  // const handleOnStepChange = (num: any) => {
+  //   console.log(num);
+  //   if (num.order === 2) ref.current.scrollToEnd({ animated: true });
+  // };
 
-  useEffect(() => {
-    eventEmitter?.on("start", handleOnStart);
-    eventEmitter?.on("stop", handleOnStop);
-    eventEmitter?.on("stepChange", handleOnStepChange);
+  // useEffect(() => {
+  //   eventEmitter?.on("start", handleOnStart);
+  //   eventEmitter?.on("stop", handleOnStop);
+  //   eventEmitter?.on("stepChange", handleOnStepChange);
 
-    return () => {
-      eventEmitter?.off("start", handleOnStart);
-      eventEmitter?.off("stop", handleOnStop);
-      eventEmitter?.off("stepChange", handleOnStepChange);
-    };
-  }, []);
+  //   return () => {
+  //     eventEmitter?.off("start", handleOnStart);
+  //     eventEmitter?.off("stop", handleOnStop);
+  //     eventEmitter?.off("stepChange", handleOnStepChange);
+  //   };
+  // }, []);
 
   const { paymentCreateMutation, paymentQuery, paymentUpdateMutation } =
     usePayments({
@@ -237,11 +238,8 @@ const DetailAnnocenment = () => {
           title: chargeQuery.data?.name,
         }}
       />
-      <ScrollView
-        ref={(r) => {
-          ref.current = r;
-        }}
-      >
+
+      <ScrollView ref={ref}>
         <View className=" p-5">
           <View
             className="bg-white dark:bg-primario-800 rounded-2xl overflow-hidden "
@@ -258,7 +256,7 @@ const DetailAnnocenment = () => {
 
             <View className="flex-row justify-start px-4 py-3 bg-primario-600">
               <Icon
-                color={"white"}
+                color={"red"}
                 icon={{
                   type: IconType.MaterialIcon,
                   name: "payment",
@@ -319,36 +317,28 @@ const DetailAnnocenment = () => {
                   {(!paymentQuery.data?.state ||
                     paymentQuery.data?.state === "Rechazado") && (
                     <View className="w-full">
-                      <TourGuideZone
-                        tourKey={tourKey}
-                        zone={2}
-                        text={
-                          "Selecciona una imagen del comprobante de pago desde tu galería y súbelo."
+                      <InputCustom
+                        icon={{
+                          type: IconType.MaterialCommunityIcons,
+                          name: "clock-outline",
+                        }}
+                        label="Cargar Comprobante:"
+                        value={image ? "Comprobante Seleccionado" : ""}
+                        placeholder="Selecciona una imagen"
+                        editable={false}
+                        rightContent={
+                          <View className="flex-row">
+                            <Icon
+                              onPress={() => pickImage()}
+                              icon={{
+                                type: IconType.MaterialCommunityIcons,
+                                name: "folder-multiple-image",
+                              }}
+                            />
+                          </View>
                         }
-                        borderRadius={16}
-                      >
-                        <InputCustom
-                          icon={{
-                            type: IconType.MaterialCommunityIcons,
-                            name: "clock-outline",
-                          }}
-                          label="Cargar Comprobante:"
-                          value={image ? "Comprobante Seleccionado" : ""}
-                          placeholder="Selecciona una imagen"
-                          editable={false}
-                          rightContent={
-                            <View className="flex-row">
-                              <Icon
-                                onPress={() => pickImage()}
-                                icon={{
-                                  type: IconType.MaterialCommunityIcons,
-                                  name: "folder-multiple-image",
-                                }}
-                              />
-                            </View>
-                          }
-                        />
-                      </TourGuideZone>
+                      />
+
                       {!image && imageError && (
                         <Text className="text-red-600 p-2">{imageError}</Text>
                       )}
@@ -363,52 +353,36 @@ const DetailAnnocenment = () => {
                 onPress={() => downloadFile(chargeQuery.data?.urlimg || "")}
               >
                 <View className="border border-gray-300 mt-2 items-center rounded-md p-5">
-                  <TourGuideZone
-                    tourKey={tourKey}
-                    zone={1}
-                    text={
-                      "Descarga el código QR para pagar con un clic sobre la imagen."
-                    }
-                    borderRadius={16}
-                  >
-                    <Image
-                      style={{ width: 200, height: 200 }}
-                      source={chargeQuery.data?.urlimg}
-                    />
-                  </TourGuideZone>
+                  <Image
+                    style={{ width: 200, height: 200 }}
+                    source={chargeQuery.data?.urlimg}
+                  />
                 </View>
               </TouchableOpacity>
             </View>
 
             <View className="px-5 pb-5">
-              <TourGuideZone
-                tourKey={tourKey}
-                zone={3}
-                text={"Haz clic en el botón para completar el pago."}
-                borderRadius={16}
+              <ButtonLoader
+                className="items-center"
+                disabled={paymentQuery.data?.state === "Pendiente"}
+                onPress={() => {
+                  if (!paymentCreateMutation.isPending) {
+                    onSubmit({} as IPayments);
+                  }
+                }}
+                style={{
+                  opacity:
+                    paymentQuery.data?.state === "Pendiente" ||
+                    paymentQuery.data?.state === "Aprobado"
+                      ? 0.5
+                      : 1,
+                }}
+                loading={paymentCreateMutation.isPending}
               >
-                <ButtonLoader
-                  className="items-center"
-                  disabled={paymentQuery.data?.state === "Pendiente"}
-                  onPress={() => {
-                    if (!paymentCreateMutation.isPending) {
-                      onSubmit({} as IPayments);
-                    }
-                  }}
-                  style={{
-                    opacity:
-                      paymentQuery.data?.state === "Pendiente" ||
-                      paymentQuery.data?.state === "Aprobado"
-                        ? 0.5
-                        : 1,
-                  }}
-                  loading={paymentCreateMutation.isPending}
-                >
-                  <Text className="text-white text-center text-xl font-bold">
-                    {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"}
-                  </Text>
-                </ButtonLoader>
-              </TourGuideZone>
+                <Text className="text-white text-center text-xl font-bold">
+                  {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"}
+                </Text>
+              </ButtonLoader>
             </View>
           </View>
         </View>

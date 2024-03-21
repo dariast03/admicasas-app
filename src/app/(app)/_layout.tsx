@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import { AppProvider } from "@/context/AppContext";
 import messaging from "@react-native-firebase/messaging";
-import { Alert, PermissionsAndroid, Platform } from "react-native";
+import { Alert, PermissionsAndroid, Platform, StyleSheet } from "react-native";
 import * as Notifications from "expo-notifications";
 import { router } from "expo-router";
 import { useRootNavigationState } from "expo-router";
@@ -16,6 +16,8 @@ import {
   TourGuideProvider, // Main provider
 } from "rn-tourguide";
 import Constants from "expo-constants";
+import Colors from "@/constants/Colors";
+import { useColorScheme } from "nativewind";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +26,7 @@ const FIREBASE_NOTIFICATION_TOPIC = "testing"; // TOPIC FOR TESTING USERS
 const Layout = () => {
   const { onLogout, onRefresh, status } = useAuth();
   const navigationState = useRootNavigationState();
-
+  const isDark = useColorScheme().colorScheme === "dark";
   const isIos = Platform.OS === "ios";
 
   function onAuthStateChanged(user: FirebaseAuthTypes.User | null) {
@@ -161,27 +163,28 @@ const Layout = () => {
     <>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <QueryClientProvider client={queryClient}>
-          <TourGuideProvider
-            {...{
-              labels: {
-                previous: "Anterior",
-                next: "Siguiente",
-                skip: "Saltar",
-                finish: "Finalizar",
-              },
-            }}
-            {...{ borderRadius: 16 }}
-            verticalOffset={Constants.statusBarHeight}
-          >
-            <AppProvider>
-              <BottomSheetModalProvider>
+          <AppProvider>
+            <BottomSheetModalProvider>
+              <TourGuideProvider
+                backdropColor={
+                  isDark ? "rgba(0, 87, 91, 0.8)" : "rgba(31, 70, 61, 0.8)"
+                }
+                verticalOffset={Constants.statusBarHeight}
+                labels={{
+                  previous: "Anterior",
+                  next: "Siguiente",
+                  skip: "Saltar",
+                  finish: "Finalizar",
+                }}
+              >
                 <Slot />
-              </BottomSheetModalProvider>
-            </AppProvider>
-          </TourGuideProvider>
+              </TourGuideProvider>
+            </BottomSheetModalProvider>
+          </AppProvider>
         </QueryClientProvider>
       </GestureHandlerRootView>
     </>
   );
 };
+
 export default Layout;

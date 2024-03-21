@@ -5,21 +5,28 @@ import { useSessionContext } from "../../../../hooks/useSessionContext";
 import { Redirect } from "expo-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Colors from "@/constants/Colors";
+import { useColorScheme } from "nativewind";
 
 const LayoutDrawer = () => {
+  const isDark = useColorScheme().colorScheme === "dark";
   return (
     <Drawer
       screenOptions={{
         swipeEnabled: false,
         drawerType: "slide",
-        drawerActiveTintColor: "#000",
-        drawerInactiveTintColor: "#9e9d9d",
+        drawerActiveTintColor: isDark ? "white" : Colors.primario[600],
+        drawerInactiveTintColor: isDark
+          ? Colors.primario[100]
+          : Colors.primario[300],
         drawerLabelStyle: {
           marginLeft: -25,
           fontFamily: "LatoRegular",
           fontSize: 15,
         },
         headerTintColor: Colors.primario[600],
+        drawerContentStyle: {
+          backgroundColor: isDark ? Colors.primario[800] : "white",
+        },
       }}
 
       // drawerContent={(x) => <CustomDrawer {...x} />}
