@@ -167,7 +167,14 @@ const FormReservation = () => {
     router.push("/reservations/");
   };
 
-  const isAllowedDelete = reservationQuery.data?.state === "Pendiente";
+  const isAllowedEdit = reservationQuery.data?.state === "Pendiente" || !isEdit;
+
+  console.log("🚀 ~ FormReservation ~ isAllowedEdit:", isAllowedEdit);
+  console.log(
+    "🚀 ~ FormReservation ~ reservationQuery.data?.state:",
+    reservationQuery.data?.state
+  );
+  console.log("🚀 ~ FormReservation ~ isAllowedEdit:", isAllowedEdit);
 
   const PushPayment = () => {
     console.log(
@@ -290,7 +297,7 @@ const FormReservation = () => {
                     <DropdownMenuTrigger asChild>
                       <Button
                         size={"sm"}
-                        disabled={!isAllowedDelete}
+                        disabled={!isAllowedEdit}
                         className="border-none dark:bg-primario-800 shadow-none"
                         variant={"link"}
                       >
@@ -309,7 +316,7 @@ const FormReservation = () => {
                       className="w-52 native:w-52"
                     >
                       <DropdownMenuLabel>
-                        {isAllowedDelete && (
+                        {isAllowedEdit && (
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <Text>Eliminar</Text>
@@ -385,7 +392,7 @@ const FormReservation = () => {
                         error={error?.message}
                         multiline
                         numberOfLines={3}
-                        disabled={!isAllowedDelete}
+                        disabled={!isAllowedEdit}
                       />
                     </>
                   )}
@@ -412,7 +419,7 @@ const FormReservation = () => {
                         }}
                         label="Fecha Inicio:"
                         error={error?.message}
-                        disabled={!isAllowedDelete}
+                        disabled={!isAllowedEdit}
                       />
                     </>
                   )}
@@ -438,7 +445,7 @@ const FormReservation = () => {
                         }}
                         label="Fecha Fin:"
                         error={error?.message}
-                        disabled={!isAllowedDelete}
+                        disabled={!isAllowedEdit}
                       />
                     </>
                   )}
@@ -480,7 +487,7 @@ const FormReservation = () => {
                             type: IconType.MaterialCommunityIcons,
                             name: "account-group-outline",
                           }}
-                          disabled={!isAllowedDelete}
+                          disabled={!isAllowedEdit}
                         />
                       </>
                     );
@@ -546,7 +553,7 @@ const FormReservation = () => {
                   <ButtonLoader
                     className="items-center"
                     onPress={handleSubmit(onSubmit)}
-                    disabled={true}
+
                     // disabled={paymentQuery.data?.state === "Pendiente"}
 
                     // style={{
