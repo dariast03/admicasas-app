@@ -5,6 +5,7 @@ import { IAccount, IFormLogin, IFormRegister } from "../types/user";
 
 import { IUser } from "../types/user/index";
 import { firebaseError } from "@/helpers/firestoreErrors";
+import messaging from "@react-native-firebase/messaging";
 
 const FirestoreKey = "Users";
 
@@ -99,6 +100,8 @@ const getAccount = async (id: string) => {
       ...(docSnap.data() as IAccount),
       id: docSnap.id,
     } as IAccount;
+
+    await updateDeviceToken(data.id);
     return data;
   } catch (e: any) {
     console.log(e);
@@ -116,6 +119,8 @@ const getAccountEmail = async (email: string) => {
     if (!querySnapshot.empty) {
       const docSnap = querySnapshot.docs[0];
       const data = docSnap.data() as IAccount;
+
+      await updateDeviceToken(docSnap.id);
       return {
         ...data,
         id: docSnap.id,
@@ -125,6 +130,17 @@ const getAccountEmail = async (email: string) => {
   } catch (e) {
     console.error("Error al obtener la cuenta:", e);
     return null;
+  }
+};
+
+const updateDeviceToken = async (id: string) => {
+  try {
+    const tokenDevice = await messaging().getToken();
+    await firestore().collection(FirestoreKey).doc(id).update({ tokenDevice });
+
+    console.log(`--------- TOKEN UPDATE SUCCESSFULLY -------------`);
+  } catch (e) {
+    console.error("Error al actualizar el token del dispositivo:", e);
   }
 };
 const refresh = async (user: FirebaseAuthTypes.User): Promise<IUser> => {
