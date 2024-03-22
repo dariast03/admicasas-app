@@ -166,9 +166,9 @@ const Layout = () => {
           <AppProvider>
             <BottomSheetModalProvider>
               <TourGuideProvider
-                backdropColor={
-                  isDark ? "rgba(0, 87, 91, 0.8)" : "rgba(31, 70, 61, 0.8)"
-                }
+                // backdropColor={
+                //   isDark ? "rgba(0, 87, 91, 0.4)" : "rgba(31, 70, 61, 0.8)"
+                // }
                 verticalOffset={Constants.statusBarHeight}
                 labels={{
                   previous: "Anterior",

@@ -256,7 +256,6 @@ const DetailAnnocenment = () => {
 
             <View className="flex-row justify-start px-4 py-3 bg-primario-600">
               <Icon
-                color={"red"}
                 icon={{
                   type: IconType.MaterialIcon,
                   name: "payment",

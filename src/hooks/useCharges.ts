@@ -6,6 +6,7 @@ type HookProps = {
   params?: {
     idhousing: string;
     idreservation?: string;
+    state?: string;
     // q?: string;
     // limitResults?: number;
   };
@@ -30,18 +31,29 @@ export const useCharges = (props: HookProps) => {
       chargerService.getData(id || "", { idhousing: params?.idhousing || "" }),
     enabled: !!id,
   });
+
   const chargeQueryByReservation = useQuery({
-    queryKey: ["charges", params?.idhousing, params?.idreservation],
+    queryKey: [
+      "charges",
+      params?.idhousing,
+      params?.idreservation,
+      params?.state,
+    ],
     queryFn: () =>
       chargerService.getDataByReservation({
         idhousing: params?.idhousing || "",
         idreservation: params?.idreservation,
       }),
-    enabled: !!id,
+    enabled:
+      (!!params?.idhousing &&
+        !!params?.idreservation &&
+        params?.state === "Aprobado") ||
+      params?.state === "Rechazado",
   });
 
   return {
     chargesQuery,
     chargeQuery,
+    chargeQueryByReservation,
   };
 };

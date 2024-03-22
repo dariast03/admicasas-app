@@ -85,8 +85,13 @@ const Home = () => {
     );
   };
   const { user } = useSessionContext();
-  const { isLoadingSelectedHousing, selectedHousing, updateHousing } =
-    useAppContext();
+  const {
+    isLoadingSelectedHousing,
+    selectedHousing,
+    updateHousing,
+    updateTutorialView,
+    tutorialView,
+  } = useAppContext();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const { announcementsQuery } = useAnnouncement({
@@ -130,14 +135,17 @@ const Home = () => {
   // Can start at mount 🎉
   // you need to wait until everything is registered 😁
   useEffect(() => {
-    if (canStart) {
+    console.log(tutorialView);
+    if (!tutorialView && canStart) {
       // 👈 test if you can start otherwise nothing will happen
       start();
     }
   }, [canStart]); // 👈 don't miss it!
 
   const handleOnStart = () => console.log("start");
-  const handleOnStop = () => console.log("stop");
+  const handleOnStop = () => {
+    updateTutorialView();
+  };
   const handleOnStepChange = () => console.log(`stepChange`);
 
   useEffect(() => {

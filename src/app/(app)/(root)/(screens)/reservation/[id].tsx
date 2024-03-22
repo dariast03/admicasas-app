@@ -62,6 +62,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { useCharges } from "@/hooks/useCharges";
+import { useColorScheme } from "nativewind";
 
 const FormReservation = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -124,6 +125,14 @@ const FormReservation = () => {
     reservationDeleteMutation,
   } = useReserve({ id: newId });
 
+  const { chargeQueryByReservation } = useCharges({
+    params: {
+      idhousing: selectedHousing,
+      idreservation: reservationQuery.data?.id,
+      state: reservationQuery.data?.state,
+    },
+  });
+
   const onSubmit = async (data: IReservation) => {
     delete data.area;
     delete data.reservedBy;
@@ -161,12 +170,12 @@ const FormReservation = () => {
   const isAllowedDelete = reservationQuery.data?.state === "Pendiente";
 
   const PushPayment = () => {
-    const { chargeQuery } = useCharges({
-      params: {
-        idhousing: selectedHousing,
-        id,
-      },
-    });
+    console.log(
+      "🚀 ~ PushPayment ~ chargeQueryByReservation.data:",
+      chargeQueryByReservation.data
+    );
+    const routeView: any = "/payment/" + chargeQueryByReservation.data?.id;
+    return routeView;
   };
 
   useEffect(() => {
@@ -225,7 +234,7 @@ const FormReservation = () => {
 
   const [open, setOpen] = React.useState(false);
   const [openSub, setOpenSub] = React.useState(false);
-
+  const isDark = useColorScheme().colorScheme === "dark";
   const needPay = (watch("area")?.price || 0) > 0;
   return (
     <DefaultLayout>
@@ -236,7 +245,9 @@ const FormReservation = () => {
 
           title: "Reservar Area",
           headerStyle: {
-            backgroundColor: Colors.primario[600],
+            backgroundColor: isDark
+              ? Colors.primario[800]
+              : Colors.primario[600],
           },
           headerTintColor: "white",
           headerLeft: () => (
@@ -258,10 +269,10 @@ const FormReservation = () => {
             className="bg-white dark:bg-primario-800 p-4 rounded-lg mb-4"
             style={shadow}
           >
-            <View className="mb-4">
+            <View>
               <View className="flex-row justify-between items-center">
                 <View className="flex-1 ">
-                  <Text className="text-2xl font-bold mb-2 text-center">
+                  <Text className="text-xl text-primario-600 dark:text-white font-semibold mb-2 text-center">
                     Crear Reserva
                   </Text>
                 </View>
@@ -277,7 +288,12 @@ const FormReservation = () => {
                     }}
                   >
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline">
+                      <Button
+                        size={"sm"}
+                        disabled={!isAllowedDelete}
+                        className="border-none dark:bg-primario-800 shadow-none"
+                        variant={"link"}
+                      >
                         <Icon
                           icon={{
                             type: IconType.Entypo,
@@ -324,35 +340,34 @@ const FormReservation = () => {
                 </View>
               </View>
 
-              <Text className="text-sm text-center">
+              <Text className="text-sm text-primario-600 dark:text-white  text-center my-2">
                 Por favor, completa el formulario para crear una reserva
               </Text>
             </View>
+            {reservationQuery.data &&
+              reservationQuery.data.state === "Pendiente" && (
+                <View className="my-2">
+                  <AlertCard
+                    value={
+                      "Tu solicitud se encuentra en revisión. Aun puedes editar la informacion proporcionada"
+                    }
+                    severity={"warning"}
+                  />
+                </View>
+              )}
 
-            <View className="mb-4">
-              <View className="mb-4">
-                {reservationQuery.data &&
-                  reservationQuery.data.state === "Pendiente" && (
-                    <AlertCard
-                      value={
-                        "Tu solicitud se encuentra en revisión. Aun puedes editar la informacion proporcionada"
-                      }
-                      severity={"warning"}
-                    />
-                  )}
-
-                {reservationQuery.data &&
-                  reservationQuery.data.state !== "Pendiente" &&
-                  reservationQuery.data.state !== "Finalizado" && (
-                    <AlertCard
-                      value={reservationQuery.data.message}
-                      severity={
-                        statusColorReservation[reservationQuery.data.state]
-                      }
-                    />
-                  )}
-              </View>
-            </View>
+            {reservationQuery.data &&
+              reservationQuery.data.state !== "Pendiente" &&
+              reservationQuery.data.state !== "Finalizado" && (
+                <View className="my-2">
+                  <AlertCard
+                    value={reservationQuery.data.message}
+                    severity={
+                      statusColorReservation[reservationQuery.data.state]
+                    }
+                  />
+                </View>
+              )}
 
             <View className="gap-2">
               <View>
@@ -370,6 +385,7 @@ const FormReservation = () => {
                         error={error?.message}
                         multiline
                         numberOfLines={3}
+                        disabled={!isAllowedDelete}
                       />
                     </>
                   )}
@@ -396,6 +412,7 @@ const FormReservation = () => {
                         }}
                         label="Fecha Inicio:"
                         error={error?.message}
+                        disabled={!isAllowedDelete}
                       />
                     </>
                   )}
@@ -421,6 +438,7 @@ const FormReservation = () => {
                         }}
                         label="Fecha Fin:"
                         error={error?.message}
+                        disabled={!isAllowedDelete}
                       />
                     </>
                   )}
@@ -462,6 +480,7 @@ const FormReservation = () => {
                             type: IconType.MaterialCommunityIcons,
                             name: "account-group-outline",
                           }}
+                          disabled={!isAllowedDelete}
                         />
                       </>
                     );
@@ -483,6 +502,7 @@ const FormReservation = () => {
                           label="Precio"
                           placeholder="precio"
                           error={error?.message}
+                          disabled={true}
                         />
                       </>
                     )}
@@ -522,10 +542,11 @@ const FormReservation = () => {
                       Ir a Pagar
                     </Text>
                   </ButtonLoader>
-                ) : (
+                ) : reservationQuery.data?.state === "Finalizado" ? null : (
                   <ButtonLoader
                     className="items-center"
                     onPress={handleSubmit(onSubmit)}
+                    disabled={true}
                     // disabled={paymentQuery.data?.state === "Pendiente"}
 
                     // style={{
@@ -543,34 +564,6 @@ const FormReservation = () => {
                     </Text>
                   </ButtonLoader>
                 )}
-
-                {/* {isAllowedDelete && (
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="destructive" className="w-full">
-                        <Text>Eliminar</Text>
-                      </Button>
-                    </AlertDialogTrigger>
-
-                    <AlertDialogContent className="bg-white">
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Alertas</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Esta accion no puede ser revertidad. Estas seguro de
-                          eliminarlo?
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>
-                          <Text>Cancelar</Text>
-                        </AlertDialogCancel>
-                        <AlertDialogAction onPress={() => onDelete(id)}>
-                          <Text>Continuar</Text>
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                )} */}
               </View>
             </View>
           </View>

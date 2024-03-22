@@ -21,7 +21,7 @@ export const ButtonLoader: React.FC<Props> = ({
   return (
     <TouchableOpacity
       {...props}
-      className={classNameBtn + ` ${disabled ? "opacity-70" : ""}`}
+      className={classNameBtn + ` ${disabled ? "opacity-40" : ""}`}
       disabled={disabled}
       activeOpacity={0.6}
     >

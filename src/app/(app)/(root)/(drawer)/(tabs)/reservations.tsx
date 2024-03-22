@@ -186,28 +186,33 @@ const Reservations = () => {
 
     return (
       <TouchableOpacity onPress={navigateToReservation}>
-        <View className="flex-row justify-between border-b border-primario-600 p-4">
+        <View className="flex-row justify-between border-b items-center border-primario-600 p-2">
           {areaCommonQuery.isLoading ? (
             <Skeleton className="bg-gray-200 dark:bg-primario-600 h-4 w-32" />
           ) : (
-            <Text className="text-black dark:text-white text-sm ">
-              {areaCommonQuery.data?.name.toLocaleUpperCase()}
-            </Text>
+            <View>
+              <Text className="text-black dark:text-white text-sm ">
+                {areaCommonQuery.data?.name.toLocaleUpperCase()}
+              </Text>
+              <Text className="text-black dark:text-white text-sm font-light">
+                {item.start.toLocaleDateString()} -{" "}
+                {item.end.toLocaleDateString()}
+              </Text>
+            </View>
           )}
-          <View className="flex-row">
-            <Tag
-              severity={
-                item.state === "Aprobado"
-                  ? "success"
-                  : item.state === "Pendiente"
-                  ? "warning"
-                  : item.state === "Rechazado"
-                  ? "error"
-                  : "info"
-              }
-              value={item.state}
-            />
-          </View>
+
+          <Tag
+            severity={
+              item.state === "Aprobado"
+                ? "success"
+                : item.state === "Pendiente"
+                ? "warning"
+                : item.state === "Rechazado"
+                ? "error"
+                : "info"
+            }
+            value={item.state}
+          />
         </View>
       </TouchableOpacity>
     );
