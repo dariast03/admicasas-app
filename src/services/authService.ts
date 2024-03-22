@@ -29,6 +29,7 @@ const login = async (data: IFormLogin): Promise<IUser> => {
         };
       } catch (error: any) {
         console.log("🚀 ~ login ~ error:", error);
+        //@ts-expect-error
         return {
           error: firebaseError[error.code],
         };
@@ -47,6 +48,7 @@ const login = async (data: IFormLogin): Promise<IUser> => {
         // }
       }
     } else {
+      //@ts-expect-error
       return {
         error:
           "Lo sentimos, esta cuenta es inválida. Por favor, verifica la información e intenta de nuevo.",
