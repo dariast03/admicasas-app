@@ -4,6 +4,7 @@ import firestore from "@react-native-firebase/firestore";
 const FirestoreKey = "Notifications";
 
 type GetAllDataQueryParams = {
+  idhousing?: string;
   idcondominium?: string;
   iduser?: string;
 };
@@ -29,6 +30,37 @@ const getDataByCondominium = async (
       };
     });
 
+    return data;
+  } catch (e) {
+    console.log(e);
+    throw new Error("No se pudo obtener data por condominio");
+  }
+};
+
+const getDataByHousing = async (idhousing: string) => {
+  console.log("🚀 ~ getDataByHousing ~ idhousing:", idhousing);
+  try {
+    const queryRef = firestore()
+      .collection(FirestoreKey)
+      .where("idhousings", "array-contains", idhousing);
+
+    const querySnapshot = await queryRef.get();
+
+    const data: INotification[] = querySnapshot.docs.map((doc) => {
+      const data = doc.data() as INotification;
+
+      return {
+        ...data,
+        id: doc.id,
+        //@ts-expect-error
+        date: new Date(data.date.toDate()),
+      };
+    });
+
+    console.log(
+      "🚀 ~ constdata:INotification[]=querySnapshot.docs.map ~ data:",
+      data
+    );
     return data;
   } catch (e) {
     console.log(e);
@@ -65,6 +97,7 @@ const getDataByUser = async (
 };
 
 const getAllData = async ({
+  idhousing,
   idcondominium,
   iduser,
 }: GetAllDataQueryParams = {}) => {
@@ -74,11 +107,11 @@ const getAllData = async ({
     }
 
     const data = [
+      ...(await getDataByHousing(idhousing || "")),
       ...(await getDataByCondominium(idcondominium || "")),
       ...(await getDataByUser(iduser || "")),
     ];
 
-    console.log("DATATATAT", data, "");
     return data.sort((a, b) => b.date.getTime() - a.date.getTime());
   } catch (e) {
     console.log(e);

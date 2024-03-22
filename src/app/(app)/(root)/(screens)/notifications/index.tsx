@@ -5,14 +5,18 @@ import useAuth from "@/hooks/useAuth";
 import Loader from "@/components/Loader";
 import NotificationDisplay from "@/components/notifications/notification-display";
 import DefaultLayout from "@/layout/DefaultLayout";
+import { useAppContext } from "@/hooks/useAppContext";
 
 const Notifications = () => {
   const { user } = useAuth();
+
+  const { selectedHousing } = useAppContext();
 
   const { notificationsQuery } = useNotifications({
     params: {
       idcondominium: user.account.idcondominium,
       iduser: user?.account.id || "",
+      idhousing: selectedHousing,
     },
     query: ["notificationsQuery"],
   });

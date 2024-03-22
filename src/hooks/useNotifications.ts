@@ -8,6 +8,7 @@ type HookProps = {
   params?: {
     idcondominium: string;
     iduser: string;
+    idhousing: string;
   };
   query?: QueryType[];
 };
