@@ -13,9 +13,9 @@ import { auth } from "firebase-admin";
 
 const WelcomeScreen = () => {
   const { handleShowWelcomeScreen } = useSessionContext();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   return (
-    <>
+    <View className="justify-center items-center">
       <OnboardFlow
         pages={[
           {
@@ -23,12 +23,12 @@ const WelcomeScreen = () => {
             subtitle:
               " Explora, descubre y disfruta de todas las funcionalidades que hemos preparado para ti.",
             imageComponent: (
-              <View className="justify-center items-center p-20">
+              <View className="justify-center items-center p-5">
                 <Image
                   resizeMode="contain"
                   style={{
                     padding: 10,
-                    height: 250,
+                    height: height * 0.3,
                     width: width,
                     justifyContent: "center",
                     alignItems: "center",
@@ -48,11 +48,11 @@ const WelcomeScreen = () => {
             // ).uri,
             primaryButtonTitle: "Siguiente",
             imageComponent: (
-              <View className="justify-center items-center p-10">
+              <View className="justify-center items-center p-5">
                 <Image
                   resizeMode="contain"
                   style={{
-                    height: 300,
+                    height: height * 0.3,
                     width: width,
                     justifyContent: "center",
                     alignItems: "center",
@@ -63,16 +63,22 @@ const WelcomeScreen = () => {
             ),
           },
           {
+            style: {
+              backgroundColor: "red",
+              justifyContent: "center",
+              alignItems: "center",
+            },
+
             title: "Reversas",
             subtitle:
               "Haz tus reservas de forma sencilla y rápida con nuestra aplicación. Elige fechas y servicios, y confirma con solo unos pocos pasos.",
             primaryButtonTitle: "Iniciemos",
             imageComponent: (
-              <View className="justify-center items-center p-20">
+              <View className="justify-center items-center p-5">
                 <Image
                   resizeMode="contain"
                   style={{
-                    height: 250,
+                    height: height * 0.3,
                     width: width,
                     justifyContent: "center",
                     alignItems: "center",
@@ -94,8 +100,14 @@ const WelcomeScreen = () => {
           backgroundColor: Colors.primario[600],
         }}
         onDone={() => handleShowWelcomeScreen("true")}
+        pageStyle={{
+          flex: 1,
+          backgroundColor: "red",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       />
-    </>
+    </View>
   );
 };
 export default WelcomeScreen;

@@ -61,6 +61,8 @@ const Reservations = () => {
     reservationsHousingQuery.data?.pages?.flatMap((page: any) => page.data) ??
     [];
 
+  console.log(reservationsHousingQuery.data?.pages.length);
+
   const filteredReservationsByMe = dataReservations.filter(
     (r) => r.idhousing === selectedHousing
   );
@@ -93,7 +95,8 @@ const Reservations = () => {
 
   const markedDates: { [key: string]: any } = {};
 
-  dataReservations.forEach((reservation, index) => {
+  reservationsCondominiumQuery.data?.forEach((reservation, index) => {
+    //dataReservations.forEach((reservation, index) => {
     const dateString = new Date(reservation.start).toISOString().split("T")[0];
 
     if (!markedDates[dateString]) {
@@ -101,8 +104,7 @@ const Reservations = () => {
         dots: [
           {
             key: dateString,
-            color:
-              reservation.idhousing === user.account.idhousing ? "red" : "blue",
+            color: reservation.idhousing === selectedHousing ? "red" : "blue",
           },
         ],
       };
@@ -110,8 +112,7 @@ const Reservations = () => {
     } else {
       markedDates[dateString].dots.push({
         key: `${dateString}-${index}`,
-        color:
-          reservation.idhousing === user.account.idhousing ? "red" : "blue",
+        color: reservation.idhousing === selectedHousing ? "red" : "blue",
       });
     }
   });
@@ -229,6 +230,7 @@ const Reservations = () => {
   const onRefresh = () => {
     setIsRefreshing(true);
     reservationsHousingQuery.refetch();
+    reservationsCondominiumQuery.refetch();
   };
 
   useEffect(() => {
@@ -268,10 +270,9 @@ const Reservations = () => {
       </BottomSheet>
 
       <FlatList
-        className="mb-5"
-        data={null}
-        renderItem={null}
+        className="p-2"
         onEndReached={() => {
+          console.log("Flatlist");
           reservationsHousingQuery.fetchNextPage();
         }}
         refreshControl={
@@ -280,7 +281,7 @@ const Reservations = () => {
             onRefresh={onRefresh}
           />
         }
-        onEndReachedThreshold={1}
+        onEndReachedThreshold={0.1}
         ListFooterComponent={
           reservationsHousingQuery.isFetchingNextPage ? (
             <Text className="text-center text-primario-600">Cargado...</Text>
@@ -322,6 +323,7 @@ const Reservations = () => {
                 ></View>
               </Text>
             </View>
+
             <View className="px-6">
               <Text className="dark:text-white text-xs">
                 Reservas{" "}
@@ -333,6 +335,7 @@ const Reservations = () => {
                 ></View>
               </Text>
             </View>
+
             <Calendar
               style={{
                 borderRadius: 10,
@@ -347,30 +350,20 @@ const Reservations = () => {
                 setSelectedMonth(new Date(date.dateString));
               }}
             />
-
-            {reservationsHousingQuery.isLoading ? (
+            {reservationsHousingQuery.isLoading && (
               <SkeletonFlatList title="Mis Reservas" />
-            ) : (
-              <FlatList
-                className="p-1 m-4"
-                ListHeaderComponent={
-                  <Text className="text-center text-lg text-primario-600 dark:text-white rounded-t-md font-semibold ">
-                    Mis Reservas
-                  </Text>
-                }
-                data={filteredReservationsByMe}
-                renderItem={renderReservation}
-                keyExtractor={(item) => item.id || ""}
-                ItemSeparatorComponent={() => itemSeparator()}
-                ListEmptyComponent={() => (
-                  <SubTitle
-                    text={"No se han registrado reservas durante el mes actual"}
-                  />
-                )}
-              />
             )}
           </>
         }
+        data={filteredReservationsByMe}
+        renderItem={renderReservation}
+        keyExtractor={(item) => item.id || ""}
+        ItemSeparatorComponent={() => itemSeparator()}
+        ListEmptyComponent={() => (
+          <SubTitle
+            text={"No se han registrado reservas durante el mes actual"}
+          />
+        )}
       />
 
       {/* </View> */}

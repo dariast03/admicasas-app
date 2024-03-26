@@ -6,7 +6,7 @@
       "script": "start:ide",
       "problemMatcher": [],
       "label": "npm: start:ide",
-      "detail": "git fetch && expo start --localhost --dev-client",
+     // "detail": "git fetch && expo start --localhost --dev-client",
       "runOptions": {
         "runOn": "folderOpen"
       }

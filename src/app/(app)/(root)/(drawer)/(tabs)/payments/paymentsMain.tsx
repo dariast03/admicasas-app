@@ -25,7 +25,8 @@ const PaymentCard = () => {
   const { user } = useSessionContext();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const { selectedHousing } = useAppContext();
+  const { selectedHousing, updateTutorialView, tutorialPayment } =
+    useAppContext();
   const { chargesQuery } = useCharges({
     params: { idhousing: selectedHousing },
   });
@@ -40,7 +41,11 @@ const PaymentCard = () => {
   }, [chargesQuery.isRefetching]);
 
   const Card = ({ data }: Props) => {
-    const routeView: any = "/payment/" + data.id;
+    let routeView: any = "/payment/" + data.id;
+    if (!tutorialPayment) {
+      routeView = "/tutorialpayment/" + data.id;
+    }
+
     return (
       <View
         className="p-5 m-3 rounded-lg bg-white dark:bg-primario-800"

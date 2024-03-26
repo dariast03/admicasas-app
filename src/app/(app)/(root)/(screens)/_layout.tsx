@@ -82,6 +82,28 @@ export default function UnprotectedLayout() {
             ),
           }}
         />
+        <Stack.Screen
+          name="tutorialpayment/[id]"
+          options={{
+            headerShadowVisible: false,
+            headerTitleAlign: "center",
+            title: "Detalle Pago",
+            headerStyle: {
+              backgroundColor: colorHeader,
+            },
+            headerTintColor: "white",
+            headerLeft: () => (
+              <Icon
+                color={"white"}
+                icon={{
+                  type: IconType.Ionicon,
+                  name: "chevron-back-outline",
+                }}
+                onPress={() => router.back()}
+              />
+            ),
+          }}
+        />
 
         <Stack.Screen
           name="meeting/[id]"

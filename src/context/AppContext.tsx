@@ -10,7 +10,9 @@ type TAppContext = {
   isLoadingSelectedHousing: boolean;
   updateHousing: (id: string) => void;
   updateTutorialView: () => void;
-  tutorialView: boolean;
+  updateTutorialPayment: () => void;
+  tutorialAnnouncement: boolean;
+  tutorialPayment: boolean;
 };
 
 export const AppContext = createContext<TAppContext>({} as TAppContext);
@@ -20,9 +22,12 @@ export function AppProvider(props: PropsWithChildren) {
   const { acountUpdateMutation } = useUsers();
   const [[isLoadingSelectedHousing, selectedHousing], setSelectedHousing] =
     useStorageState(keysStorage.SELECTER_HOUSING);
-  const [[isTutorialView, tutorialView], setTutorialView] = useStorageState(
-    keysStorage.TUTORIALVIEW
-  );
+  const [
+    [isTutorialAnnouncement, tutorialAnnouncement],
+    setTutorialAnnouncement,
+  ] = useStorageState(keysStorage.TUTORIALANNOUNCEMENT);
+  const [[isTutorialPayment, tutorialPayment], setTutorialPayment] =
+    useStorageState(keysStorage.TUTORIALPAYMENT);
 
   const updateHousing = (id: string) => {
     if (id) {
@@ -34,7 +39,14 @@ export function AppProvider(props: PropsWithChildren) {
   };
 
   const updateTutorialView = () => {
-    setTutorialView("true");
+    setTutorialAnnouncement("true");
+    console.log(
+      "🚀 ~ updateTutorialView ~ setTutorialAnnouncement:",
+      setTutorialAnnouncement
+    );
+  };
+  const updateTutorialPayment = () => {
+    setTutorialPayment("true");
   };
 
   return (
@@ -44,7 +56,9 @@ export function AppProvider(props: PropsWithChildren) {
         isLoadingSelectedHousing,
         updateHousing,
         updateTutorialView,
-        tutorialView: tutorialView === "true",
+        updateTutorialPayment,
+        tutorialAnnouncement: tutorialAnnouncement === "true",
+        tutorialPayment: tutorialPayment === "true",
       }}
     >
       {props.children}

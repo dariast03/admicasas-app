@@ -90,7 +90,7 @@ const Home = () => {
     selectedHousing,
     updateHousing,
     updateTutorialView,
-    tutorialView,
+    tutorialAnnouncement,
   } = useAppContext();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -135,8 +135,8 @@ const Home = () => {
   // Can start at mount 🎉
   // you need to wait until everything is registered 😁
   useEffect(() => {
-    console.log(tutorialView);
-    if (!tutorialView && canStart) {
+    console.log(tutorialAnnouncement);
+    if (!tutorialAnnouncement && canStart) {
       // 👈 test if you can start otherwise nothing will happen
       start();
     }
@@ -144,6 +144,7 @@ const Home = () => {
 
   const handleOnStart = () => console.log("start");
   const handleOnStop = () => {
+    console.log("stop");
     updateTutorialView();
   };
   const handleOnStepChange = () => console.log(`stepChange`);

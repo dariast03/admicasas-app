@@ -98,12 +98,13 @@ const Login = () => {
               <View className="justify-center items-center ">
                 <Image
                   style={{
-                    height: 150,
-                    width: 150,
+                    height: 100,
+                    width: 100,
                     justifyContent: "center",
                     alignItems: "center",
                   }}
                   source={require("../../../../../assets/images/logoblanco.png")}
+                  resizeMode="contain"
                 />
               </View>
               <Text className="text-lg font-bold text-white">

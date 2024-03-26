@@ -31,12 +31,14 @@ import GlobalStyles from "@/constants/GlobalStyle";
 
 import { Button } from "react-native";
 
+import TutorialPayment from "@/components/TutorialPayment";
+
 const DetailAnnocenment = () => {
   const { id } = useLocalSearchParams();
 
   if (!id) return <Redirect href={"/404"} />;
 
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const { user } = useSessionContext();
   const { selectedHousing } = useAppContext();
   const { chargeQuery } = useCharges({
@@ -52,41 +54,6 @@ const DetailAnnocenment = () => {
   });
 
   const ref = useRef<any>();
-
-  // const {
-  //   canStart, // a boolean indicate if you can start tour guide
-  //   start, // a function to start the tourguide
-  //   stop, // a function  to stopping it
-  //   eventEmitter, // an object for listening some events
-  //   tourKey,
-  // } = useTourGuideController("prueba");
-
-  // // Can start at mount 🎉
-  // // you need to wait until everything is registered 😁
-  // useEffect(() => {
-  //   if (canStart) {
-  //     start();
-  //   }
-  // }, [canStart]); // 👈 don't miss it!
-
-  // const handleOnStart = () => console.log("start");
-  // const handleOnStop = () => console.log("stop");
-  // const handleOnStepChange = (num: any) => {
-  //   console.log(num);
-  //   if (num.order === 2) ref.current.scrollToEnd({ animated: true });
-  // };
-
-  // useEffect(() => {
-  //   eventEmitter?.on("start", handleOnStart);
-  //   eventEmitter?.on("stop", handleOnStop);
-  //   eventEmitter?.on("stepChange", handleOnStepChange);
-
-  //   return () => {
-  //     eventEmitter?.off("start", handleOnStart);
-  //     eventEmitter?.off("stop", handleOnStop);
-  //     eventEmitter?.off("stepChange", handleOnStepChange);
-  //   };
-  // }, []);
 
   const { paymentCreateMutation, paymentQuery, paymentUpdateMutation } =
     usePayments({
@@ -238,7 +205,7 @@ const DetailAnnocenment = () => {
           title: chargeQuery.data?.name,
         }}
       />
-
+      {/* <TutorialPayment /> */}
       <ScrollView ref={ref}>
         <View className=" p-5">
           <View
@@ -246,12 +213,13 @@ const DetailAnnocenment = () => {
             style={shadowStyle}
           >
             <Image
-              style={{ width, height: 200 }}
+              style={{ width, height: height * 0.2 }}
               source={
                 announcementDetailQuery.data?.urlimg === undefined
-                  ? "https://th.bing.com/th/id/OIP.FD_DKax9RQv_s7tizNOL_wHaDo?rs=1&pid=ImgDetMain"
+                  ? require("../../../../../assets/images/resource/payment.png")
                   : announcementDetailQuery.data.urlimg
               }
+              contentFit="contain"
             />
 
             <View className="flex-row justify-start px-4 py-3 bg-primario-600">
@@ -353,8 +321,9 @@ const DetailAnnocenment = () => {
               >
                 <View className="border border-gray-300 mt-2 items-center rounded-md p-5">
                   <Image
-                    style={{ width: 200, height: 200 }}
+                    style={{ width: 200, height: height * 0.2 }}
                     source={chargeQuery.data?.urlimg}
+                    contentFit="contain"
                   />
                 </View>
               </TouchableOpacity>
@@ -387,20 +356,105 @@ const DetailAnnocenment = () => {
         </View>
       </ScrollView>
     </DefaultLayout>
+
+    // <DefaultLayout>
+    //   <Stack.Screen
+    //     options={{
+    //       title: chargeQuery.data?.name,
+    //     }}
+    //   />
+    //   <ScrollView>
+    //     <View className=" p-5">
+    //       <View
+    //         className="bg-white dark:bg-primario-800 rounded-2xl overflow-hidden "
+    //         style={shadowStyle}
+    //       >
+    //         <View className="justify-center, items-center p-2">
+    //           <Image
+    //             style={{ width: 200, height: height * 0.15 }}
+    //             source={require("../../../../../assets/images/resource/payment.png")}
+    //             contentFit="contain"
+    //           />
+    //         </View>
+
+    //         <View className="flex-row justify-start px-2 py-2 bg-primario-600 items-center">
+    //           <Icon
+    //             icon={{
+    //               type: IconType.MaterialIcon,
+    //               name: "payment",
+    //             }}
+    //           />
+    //           <Text className="mx-3 text-white font-semibold ">COBRO</Text>
+    //         </View>
+    //         <View className="py-2 px-6 ">
+    //           <Text className="font-semibold text-xl my-2 dark:text-white">
+    //             Detalle del Cobro
+    //           </Text>
+    //           <View className="bg-white dark:bg-primario-800 border border-gray-300 rounded-md p-2">
+    //             <Text className="text-4xl text-primario-600 dark:text-white mt-2">
+    //               Bs 999
+    //             </Text>
+    //             <Text className="text-stone-500 dark:text-white mt-2">
+    //               Expensas
+    //             </Text>
+    //             <Text className="text-stone-400 dark:text-white my-2">
+    //               Pago de expensas mes de Diciembre.
+    //             </Text>
+    //             <View className="border-b border-stone-400 dark:text-white my-2"></View>
+    //             <View className="items-center">
+    //               <View className="w-full">
+    //                 <InputCustom
+    //                   icon={{
+    //                     type: IconType.MaterialCommunityIcons,
+    //                     name: "clock-outline",
+    //                   }}
+    //                   label="Cargar Comprobante:"
+    //                   value={image ? "Comprobante Seleccionado" : ""}
+    //                   placeholder="Selecciona una imagen"
+    //                   editable={false}
+    //                   rightContent={
+    //                     <View className="flex-row">
+    //                       <Icon
+    //                         onPress={() => pickImage()}
+    //                         icon={{
+    //                           type: IconType.MaterialCommunityIcons,
+    //                           name: "folder-multiple-image",
+    //                         }}
+    //                       />
+    //                     </View>
+    //                   }
+    //                 />
+    //               </View>
+    //             </View>
+    //           </View>
+    //           <Text className="font-semibold dark:text-white text-xl my-2">
+    //             Medio de pago
+    //           </Text>
+    //           <TouchableOpacity
+    //             onPress={() => downloadFile(chargeQuery.data?.urlimg || "")}
+    //           >
+    //             <View className="border border-gray-300 mt-2 items-center rounded-md ">
+    //               <Image
+    //                 style={{ width: 200, height: height * 0.15 }}
+    //                 source={require("../../../../../assets/images/resource/Barcode.png")}
+    //                 contentFit="contain"
+    //               />
+    //             </View>
+    //           </TouchableOpacity>
+    //         </View>
+
+    //         <View className="px-5 pb-5">
+    //           <ButtonLoader>
+    //             <Text className="text-white text-center text-xl font-bold">
+    //               {"Pagar"}
+    //             </Text>
+    //           </ButtonLoader>
+    //         </View>
+    //       </View>
+    //     </View>
+    //   </ScrollView>
+    // </DefaultLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  shadowCard: {
-    shadowColor: "#4f46e5",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 5.62,
-    elevation: 7,
-  },
-});
 
 export default DetailAnnocenment;
