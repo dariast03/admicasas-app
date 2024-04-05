@@ -1,5 +1,9 @@
 import Colors from "@/constants/Colors";
-import { ActivityIndicatorProps, DimensionValue } from "react-native";
+import {
+  ActivityIndicatorProps,
+  DimensionValue,
+  useColorScheme,
+} from "react-native";
 import { View, Text, ActivityIndicator, ViewProps } from "react-native";
 
 interface Props {
@@ -8,12 +12,14 @@ interface Props {
   activityIndicator?: ActivityIndicatorProps;
   name?: string;
 }
+
 const Loader: React.FC<Props> = ({
   activityIndicator,
   containerProps,
   height = "auto",
   name = "",
 }) => {
+  const isDark = useColorScheme() === "dark";
   return (
     <View
       className="flex-1 items-center justify-center"
@@ -21,14 +27,18 @@ const Loader: React.FC<Props> = ({
       {...containerProps}
     >
       <ActivityIndicator
-        color={Colors.primario[600]}
+        color={isDark ? "white" : Colors.primario[600]}
         size={40}
         {...activityIndicator}
       />
       {name !== "" ? (
-        <Text className="text-sm text-primario-600">Cargando {name}...</Text>
+        <Text className="text-sm  text-primario-600 dark:text-white">
+          Cargando {name}...
+        </Text>
       ) : (
-        <Text className="text-sm text-primario-600">Cargando...</Text>
+        <Text className="text-sm text-primario-600 dark:text-white">
+          Cargando...
+        </Text>
       )}
     </View>
   );

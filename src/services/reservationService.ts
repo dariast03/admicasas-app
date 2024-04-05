@@ -163,7 +163,7 @@ const getAllDataByCondominium = async (
     let queryRef = firestore()
       .collection(FirestoreKey)
       .where("idcondominium", "==", idcondominium)
-      .where("state", "!=", "Rechazado");
+      .where("state", "==", "Aprobado");
     const querySnapshot = await queryRef.get();
 
     const dataPromises: Promise<IReservation>[] = querySnapshot.docs.map(

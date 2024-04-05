@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useWindowDimensions, Platform } from "react-native";
+import Constants from "expo-constants";
 
 export default function useDeviceSize() {
   const { width, height } = useWindowDimensions();

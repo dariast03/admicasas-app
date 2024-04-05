@@ -12,6 +12,7 @@ type GetDataQueryParams = {
 };
 
 const FirestoreKey = "Charges";
+
 const getAllData = async ({
   idhousing,
   q,
@@ -20,7 +21,8 @@ const getAllData = async ({
   try {
     let queryRef = firestore()
       .collection(FirestoreKey)
-      .where("idhousings", "array-contains", idhousing);
+      .where("idhousings", "array-contains", idhousing)
+      .orderBy("end", "desc");
 
     // if (q) {
     //   queryRef = queryRef
@@ -81,66 +83,92 @@ const getAllData = async ({
     console.log(e);
   }
 };
-// const getAllDataChargesPayments = async ({
-//   idhousing,
-//   q,
-//   limitResults,
-// }: GetDataQueryParams) => {
-//   try {
-//     let queryRef = firestore()
-//       .collection(FirestoreKey)
-//       .where("idhousings", "array-contains", idhousing);
-//     // .where("idcondominium", "==", idcondominium);
-//     if (q) {
-//       queryRef = queryRef
-//         .orderBy("name")
-//         .startAt(q)
-//         .endAt(q + "\uf8ff");
-//     }
 
-//     if (limitResults) {
-//       queryRef = queryRef.limit(limitResults);
-//     }
+export const getAllDataByPage = async (context: any) => {
+  try {
+    const { pageParam = undefined, queryKey } = context;
+    const [, , args] = queryKey;
+    const { limitResults, idhousing = "" } = args as GetDataQueryParams;
 
-//     const querySnapshot = await queryRef.get();
-//     const data: ICharge[] = querySnapshot.docs.map((doc) => {
-//       const data = doc.data() as ICharge;
-//       const payment = paymentService.getData(data.id || "");
-//       return {
-//         ...data,
-//         payment,
-//         //@ts-ignore
-//         start: new Date(data.start.toDate()),
-//         //@ts-ignore
-//         end: new Date(data.end.toDate()),
-//         id: doc.id,
-//       };
-//     });
+    if (!idhousing) throw new Error("idcondominium is required");
 
-//     return data;
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
+    let queryRef = firestore()
+      .collection(FirestoreKey)
+      .where("idhousings", "array-contains", idhousing)
+      .orderBy("end", "desc");
 
-// const getDataByReservation = async ( { idhousing , idreservation}: GetDataQueryParams) => {
-//   try {
-//     let docRef = firestore().collection(FirestoreKey).where("idhousing","==" idhousing).where("idreservation","==",idreservation)
-//     const docSnap = await docRef.get();
+    if (pageParam) {
+      queryRef = queryRef.startAfter(pageParam);
+    }
 
-//     const data = docSnap.docs.map((doc) => ({
-//       ...(doc.data() as ICharge),
-//       id: doc.id,
-//     }));
+    queryRef = queryRef.limit(limitResults || 2);
 
-//     return {
-//       ...data,
-//       id: data.id,
-//     };
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+    const querySnapshot = await queryRef.get();
+
+    const dataPromises: Promise<ICharge | null>[] = querySnapshot.docs.map(
+      async (doc) => {
+        const chargeData = doc.data() as ICharge;
+
+        const paymentTypes = await paymentTypeService.getData(
+          chargeData.idpaymenttypes
+        );
+        if (paymentTypes?.type === "expensa") {
+          const housing = await housingService.getData(idhousing);
+          chargeData.amount = housing?.amount;
+        }
+
+        const paymentQuerySnapshot = await firestore()
+          .collection("Payments")
+          .where("idcharge", "==", doc.id)
+          .where("idhousing", "==", idhousing)
+          .get();
+
+        const paymentExists = paymentQuerySnapshot.docs.some((paymentDoc) => {
+          if (
+            paymentDoc.data().state === "Aprobado" ||
+            paymentDoc.data().state === "Pendiente"
+          ) {
+            const paymentData = paymentDoc.data();
+            return paymentData;
+          }
+        });
+
+        if (!paymentExists) {
+          // data.push({
+          //   ...chargeData,
+          //   //@ts-ignore
+          //   //start: new Date(chargeData.start.toDate()),
+          //   //@ts-ignore
+          //   end: new Date(chargeData.end.toDate()),
+          //   id: doc.id,
+          // });
+          return {
+            ...chargeData,
+            //@ts-ignore
+            //start: new Date(chargeData.start.toDate()),
+            //@ts-ignore
+            end: new Date(chargeData.end.toDate()),
+            id: doc.id,
+          };
+        }
+        return null;
+      }
+    );
+
+    const data = await Promise.all(dataPromises);
+
+    const datafilter = data.filter((item) => item != null);
+
+    const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+
+    return {
+      data: datafilter,
+      lastDoc,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const getDataByReservation = async ({
   idhousing,
@@ -218,4 +246,5 @@ export default {
   getData,
   getAllData,
   getDataByReservation,
+  getAllDataByPage,
 };

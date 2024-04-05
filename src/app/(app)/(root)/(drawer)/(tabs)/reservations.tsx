@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Calendar, LocaleConfig } from "@/components/ui/calendar";
 import DefaultLayout from "@/layout/DefaultLayout";
 import { useSessionContext } from "@/hooks/useSessionContext";
@@ -18,6 +18,7 @@ import {
   BottomSheetContent,
   BottomSheetContentRef,
   BottomSheetHeader,
+  BottomSheetOpenTrigger,
   BottomSheetView,
 } from "@/components/ui/bottom-sheet";
 import Icon, { IconType } from "@/components/Icon";
@@ -45,7 +46,7 @@ const Reservations = () => {
   const isDark = useColorScheme().colorScheme === "dark";
 
   const [selectedDate, setSelectedDate] = useState<Date>();
-  const [selectedMonth, setSelectedMonth] = useState<Date>();
+  const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
 
   const { reservationsHousingQuery, reservationsCondominiumQuery } = useReserve(
     {
@@ -61,24 +62,24 @@ const Reservations = () => {
     reservationsHousingQuery.data?.pages?.flatMap((page: any) => page.data) ??
     [];
 
-  console.log(reservationsHousingQuery.data?.pages.length);
+  // console.log(reservationsHousingQuery.data?.pages.length);
 
-  const filteredReservationsByMe = dataReservations.filter(
-    (r) => r.idhousing === selectedHousing
-  );
+  const filteredReservationsByMe =
+    reservationsHousingQuery.data?.pages?.flatMap((page: any) => page.data) ??
+    [];
 
   const visible = useRef<BottomSheetContentRef>(null);
-  const [reservationsData, setReservationsData] = useState<IReservation[]>([]);
+
+  //const [reservationsData, setReservationsData] = useState<IReservation[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleDayPress = (date: DateData) => {
     const { year, month, day } = date;
     setSelectedDate(new Date(year, month - 1, day));
-
     visible.current?.present();
   };
 
-  const filterReservation = dataReservations.filter((x) => {
+  const filterReservation = reservationsCondominiumQuery.data?.filter((x) => {
     if (!selectedDate) return [];
 
     const { start, end } = x;
@@ -93,29 +94,33 @@ const Reservations = () => {
     return isSameDayStart || isSameDayEnd;
   });
 
-  const markedDates: { [key: string]: any } = {};
+  const reservationCalendar = useMemo(() => {
+    const markedDates: { [key: string]: any } = {};
+    reservationsCondominiumQuery.data?.forEach((reservation, index) => {
+      //dataReservations.forEach((reservation, index) => {
+      const dateString = new Date(reservation.start)
+        .toISOString()
+        .split("T")[0];
 
-  reservationsCondominiumQuery.data?.forEach((reservation, index) => {
-    //dataReservations.forEach((reservation, index) => {
-    const dateString = new Date(reservation.start).toISOString().split("T")[0];
-
-    if (!markedDates[dateString]) {
-      markedDates[dateString] = {
-        dots: [
-          {
-            key: dateString,
-            color: reservation.idhousing === selectedHousing ? "red" : "blue",
-          },
-        ],
-      };
-      //E4EA60 E4EA60
-    } else {
-      markedDates[dateString].dots.push({
-        key: `${dateString}-${index}`,
-        color: reservation.idhousing === selectedHousing ? "red" : "blue",
-      });
-    }
-  });
+      if (!markedDates[dateString]) {
+        markedDates[dateString] = {
+          dots: [
+            {
+              key: dateString,
+              color: reservation.idhousing === selectedHousing ? "red" : "blue",
+            },
+          ],
+        };
+        //E4EA60 E4EA60
+      } else {
+        markedDates[dateString].dots.push({
+          key: `${dateString}-${index}`,
+          color: reservation.idhousing === selectedHousing ? "red" : "blue",
+        });
+      }
+    });
+    return markedDates;
+  }, [selectedMonth, selectedHousing, reservationsCondominiumQuery.data]);
 
   const renderItem = ({ item }: { item: IReservation }) => (
     <View className="flex-1 pb-2 gap-6">
@@ -241,29 +246,32 @@ const Reservations = () => {
   return (
     <DefaultLayout>
       <BottomSheet>
+        <BottomSheetOpenTrigger>
+          <View></View>
+        </BottomSheetOpenTrigger>
         <BottomSheetContent ref={visible}>
           <BottomSheetHeader>
             <Text className="text-foreground text-xl font-bold text-center pb-1 text-primario-600 dark:text-white">
               Reservas
             </Text>
           </BottomSheetHeader>
-
           <BottomSheetView className="gap-5 pt-6">
-            <FlatList
-              data={filterReservation}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id || ""}
-              ItemSeparatorComponent={() => (
-                <View className="border-primario-600 dark:border-white border-b" />
-              )}
-            />
-
-            <View className={cn(Platform.OS === "android" && "pb-2 pr-2")}>
-              <BottomSheetCloseTrigger>
-                <Text className="text-red-500 text-right font-bold">
-                  Cerrar
-                </Text>
-              </BottomSheetCloseTrigger>
+            <View className="pb-2 gap-6">
+              <FlatList
+                data={filterReservation}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id || ""}
+                ItemSeparatorComponent={() => (
+                  <View className="border-primario-600 dark:border-white border-b" />
+                )}
+              />
+              <View className={cn(Platform.OS === "android" && "pb-2 pr-2")}>
+                <BottomSheetCloseTrigger>
+                  <Text className="text-red-500 text-right font-bold">
+                    Cerrar
+                  </Text>
+                </BottomSheetCloseTrigger>
+              </View>
             </View>
           </BottomSheetView>
         </BottomSheetContent>
@@ -272,7 +280,6 @@ const Reservations = () => {
       <FlatList
         className="p-2"
         onEndReached={() => {
-          console.log("Flatlist");
           reservationsHousingQuery.fetchNextPage();
         }}
         refreshControl={
@@ -344,14 +351,18 @@ const Reservations = () => {
               }}
               onDayPress={handleDayPress}
               markingType="multi-dot"
-              markedDates={markedDates}
+              markedDates={reservationCalendar}
               displayLoadingIndicator={reservationsCondominiumQuery.isLoading}
               onMonthChange={(date) => {
                 setSelectedMonth(new Date(date.dateString));
               }}
             />
-            {reservationsHousingQuery.isLoading && (
+            {reservationsHousingQuery.isLoading ? (
               <SkeletonFlatList title="Mis Reservas" />
+            ) : (
+              <Text className="text-center text-primario-600 dark:text-white mb-2">
+                MIS RESERVAS
+              </Text>
             )}
           </>
         }

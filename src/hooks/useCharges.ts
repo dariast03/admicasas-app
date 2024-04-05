@@ -1,5 +1,9 @@
 import chargerService from "@/services/chargerService";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 type HookProps = {
   id?: string;
@@ -25,6 +29,18 @@ export const useCharges = (props: HookProps) => {
         idhousing: params?.idhousing || "",
       }),
   });
+
+  const chargesPaginatedQuery = useInfiniteQuery({
+    queryKey: ["charges", "infinite", params],
+    queryFn: chargerService.getAllDataByPage,
+    initialPageParam: null,
+    getNextPageParam: (lastPage, pages) => {
+      if (!lastPage?.lastDoc?.id) return;
+
+      return lastPage.lastDoc;
+    },
+  });
+
   const chargeQuery = useQuery({
     queryKey: ["charges", id, params?.idhousing],
     queryFn: () =>
@@ -55,5 +71,6 @@ export const useCharges = (props: HookProps) => {
     chargesQuery,
     chargeQuery,
     chargeQueryByReservation,
+    chargesPaginatedQuery,
   };
 };

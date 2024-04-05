@@ -17,33 +17,39 @@ import Colors from "@/constants/Colors";
 import { useColorScheme } from "nativewind";
 import GlobalStyles from "@/constants/GlobalStyle";
 
-type Props = {
-  data: ICharge;
-};
-
 const PaymentCard = () => {
   const { user } = useSessionContext();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const { selectedHousing, updateTutorialView, tutorialPayment } =
     useAppContext();
-  const { chargesQuery } = useCharges({
+  // const { chargesQuery } = useCharges({
+  //   params: { idhousing: selectedHousing },
+  // });
+
+  const { chargesPaginatedQuery } = useCharges({
     params: { idhousing: selectedHousing },
   });
 
+  const dataChargesPaginated =
+    chargesPaginatedQuery.data?.pages?.flatMap((page: any) => page.data) ?? [];
+
   const onRefresh = () => {
     setIsRefreshing(true);
-    chargesQuery.refetch();
+    chargesPaginatedQuery.refetch();
   };
 
   useEffect(() => {
-    if (isRefreshing && !chargesQuery.isRefetching) setIsRefreshing(false);
-  }, [chargesQuery.isRefetching]);
+    if (isRefreshing && !chargesPaginatedQuery.isRefetching)
+      setIsRefreshing(false);
+  }, [chargesPaginatedQuery.isRefetching]);
 
-  const Card = ({ data }: Props) => {
-    let routeView: any = "/payment/" + data.id;
+  const RenderCardItem = ({ item }: { item: ICharge }) => {
+    if (!item) return null;
+
+    let routeView: any = "/payment/" + item.id;
     if (!tutorialPayment) {
-      routeView = "/tutorialpayment/" + data.id;
+      routeView = "/tutorialpayment/" + item.id;
     }
 
     return (
@@ -52,10 +58,10 @@ const PaymentCard = () => {
         style={GlobalStyles()}
       >
         <Text className="text-xl font-bold text-primario-600 dark:text-white">
-          {data.name}
+          {item.name}
         </Text>
         <Text className="text-base text-gray-600 dark:text-white">
-          {data.description}
+          {item.description}
         </Text>
         <View className="border-b border-stone-400 dark:border-white my-5"></View>
         <Text className="text-base text-gray-600 dark:text-white">
@@ -69,12 +75,12 @@ const PaymentCard = () => {
             }}
           />
           <Text className="text-stone-400 dark:text-white my-2">
-            {data?.end?.toLocaleDateString()}
+            {item?.end?.toLocaleDateString()}
           </Text>
         </View>
 
         <Text className="text-lg text-gray-700 dark:text-white my-3">
-          Monto a pagar: {data.amount}
+          Monto a pagar: {item.amount}
         </Text>
         <ButtonLoader onPress={() => router.push(routeView)}>
           <Text className="text-center font-bold text-white">PAGAR</Text>
@@ -83,36 +89,60 @@ const PaymentCard = () => {
     );
   };
 
+  const renderCharge = ({ item }: { item: ICharge }) => (
+    <RenderCardItem item={item} />
+  );
+
   return (
     <DefaultLayout>
-      <FlatList
+      {/* <FlatList
         data={null}
         renderItem={() => null}
-        contentContainerClassName="p-5"
+       
+        // refreshControl={
+        //   <RefreshControl
+        //     refreshing={isRefreshing && chargesQuery.isRefetching}
+        //     onRefresh={onRefresh}
+        //   />
+        // }
+        ListHeaderComponent={
+          <>
+           
+          </>
+        }
+      /> */}
+
+      <FlatList
+        onEndReached={() => {
+          chargesPaginatedQuery.fetchNextPage();
+        }}
         refreshControl={
           <RefreshControl
-            refreshing={isRefreshing && chargesQuery.isRefetching}
+            refreshing={isRefreshing && chargesPaginatedQuery.isRefetching}
             onRefresh={onRefresh}
           />
         }
-        ListHeaderComponent={
-          <>
-            <FlatList
-              data={chargesQuery.data}
-              renderItem={({ item }) => <Card data={item} />}
-              keyExtractor={(item) => item.id || ""}
-              ListEmptyComponent={() => (
-                <>
-                  {chargesQuery.isLoading ? (
-                    <Loader name="Pagos" />
-                  ) : (
-                    <SubTitle text="No hay pagos pendientes en este momento." />
-                  )}
-                </>
-              )}
-            />
-          </>
+        onEndReachedThreshold={0.1}
+        ListFooterComponent={
+          chargesPaginatedQuery.isFetchingNextPage ? (
+            <Text className="text-center text-primario-600">Cargado...</Text>
+          ) : null
         }
+        contentContainerClassName="p-5"
+        data={dataChargesPaginated}
+        // renderItem={({ item }) => <Card data={item} />}
+
+        renderItem={renderCharge}
+        keyExtractor={(item, index) => `${item.id}-${index}`}
+        ListEmptyComponent={() => (
+          <>
+            {chargesPaginatedQuery.isLoading ? (
+              <Loader name="Pagos" />
+            ) : (
+              <SubTitle text="No hay pagos pendientes en este momento." />
+            )}
+          </>
+        )}
       />
     </DefaultLayout>
 

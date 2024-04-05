@@ -12,6 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "notification":{
+      "icon":"./src/assets/images/icon.png"
+   },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,

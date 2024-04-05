@@ -8,10 +8,11 @@ import {
   StyleSheet,
   RefreshControl,
   Button,
-
-  // Image,
+  Image,
+  Dimensions,
+  PixelRatio,
 } from "react-native";
-import { Image } from "expo-image";
+//import { Image } from "expo-image";
 import { useSessionContext } from "@/hooks/useSessionContext";
 import { useAnnouncement } from "@/hooks/useAnnouncement";
 import { IAnnouncement } from "@/types/announcement/announcement";
@@ -24,6 +25,7 @@ import DefaultLayout from "@/layout/DefaultLayout";
 import SubTitle from "@/components/SubTitle";
 import Colors from "@/constants/Colors";
 import { TourGuideZone, useTourGuideController } from "rn-tourguide";
+import Constants from "expo-constants";
 
 type Props = {
   data: IAnnouncement;
@@ -31,7 +33,6 @@ type Props = {
 
 const Home = () => {
   const Card = ({ data }: Props) => {
-    const { width } = useWindowDimensions();
     let routeView: any;
     if (data.type === "charge") {
       routeView = "/payment/" + data.idcharge;
@@ -57,7 +58,7 @@ const Home = () => {
                 height: 200,
                 backgroundColor: "#0553",
               }}
-              contentFit="contain"
+              resizeMode="contain"
             />
 
             {/* <Image

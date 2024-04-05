@@ -313,13 +313,15 @@ const FormReservation = () => {
                       insets={{
                         right: 20,
                       }}
-                      className="w-52 native:w-52"
+                      className="w-52 native:w-52 bg-white dark:bg-primario-600 "
                     >
                       <DropdownMenuLabel>
                         {isAllowedEdit && (
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
-                              <Text>Eliminar</Text>
+                              <Text className="text-primario-600 dark:text-white font-semibold">
+                                Eliminar
+                              </Text>
                             </AlertDialogTrigger>
 
                             <AlertDialogContent className="bg-white">
