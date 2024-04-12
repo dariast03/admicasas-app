@@ -21,8 +21,7 @@ const PaymentCard = () => {
   const { user } = useSessionContext();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const { selectedHousing, updateTutorialView, tutorialPayment } =
-    useAppContext();
+  const { selectedHousing, tutorialPayment } = useAppContext();
   // const { chargesQuery } = useCharges({
   //   params: { idhousing: selectedHousing },
   // });
@@ -48,13 +47,18 @@ const PaymentCard = () => {
     if (!item) return null;
 
     let routeView: any = "/payment/" + item.id;
+
     if (!tutorialPayment) {
       routeView = "/tutorialpayment/" + item.id;
     }
 
     return (
       <View
-        className="p-5 m-3 rounded-lg bg-white dark:bg-primario-800"
+        className={`p-5 m-3 rounded-lg bg-white   dark:bg-primario-800 ${
+          new Date(item.end) > new Date()
+            ? "border-2 border-red-600"
+            : "border border-primario-600 dark:border-primario-800"
+        }`}
         style={GlobalStyles()}
       >
         <Text className="text-xl font-bold text-primario-600 dark:text-white">

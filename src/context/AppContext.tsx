@@ -10,7 +10,7 @@ type TAppContext = {
   isLoadingSelectedHousing: boolean;
   updateHousing: (id: string) => void;
   updateTutorialView: () => void;
-  updateTutorialPayment: () => void;
+  updateTutorialPayment: (state: string) => void;
   tutorialAnnouncement: boolean;
   tutorialPayment: boolean;
 };
@@ -40,13 +40,9 @@ export function AppProvider(props: PropsWithChildren) {
 
   const updateTutorialView = () => {
     setTutorialAnnouncement("true");
-    console.log(
-      "🚀 ~ updateTutorialView ~ setTutorialAnnouncement:",
-      setTutorialAnnouncement
-    );
   };
-  const updateTutorialPayment = () => {
-    setTutorialPayment("true");
+  const updateTutorialPayment = (state: string) => {
+    setTutorialPayment(state);
   };
 
   return (

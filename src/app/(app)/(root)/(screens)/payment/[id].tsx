@@ -263,8 +263,8 @@ const DetailAnnocenment = () => {
                 <View className="items-center">
                   {paymentQuery.data?.urlimg && !image && (
                     <>
-                      <Text className="font-bold dark:text-white">
-                        Comprobante
+                      <Text className="font-bold text-primario-600 dark:text-white">
+                        COMPROBANTE
                       </Text>
                       <Image
                         style={{ width: 200, height: 200 }}
@@ -274,7 +274,9 @@ const DetailAnnocenment = () => {
                   )}
                   {image && (
                     <>
-                      <Text className="font-bold">Comprobante</Text>
+                      <Text className="font-bold text-primario-600 dark:text-white">
+                        COMPROBANTE
+                      </Text>
                       <Image
                         style={{ width: 200, height: 200 }}
                         source={image}

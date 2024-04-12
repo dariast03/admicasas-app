@@ -12,7 +12,7 @@ type HookProps = {
     idreservation?: string;
     state?: string;
     // q?: string;
-    // limitResults?: number;
+    limitResults?: number;
   };
 };
 export const useCharges = (props: HookProps) => {
@@ -22,13 +22,13 @@ export const useCharges = (props: HookProps) => {
 
   const { params, id } = props;
 
-  const chargesQuery = useQuery({
-    queryKey: ["charges", params?.idhousing],
-    queryFn: () =>
-      chargerService.getAllData({
-        idhousing: params?.idhousing || "",
-      }),
-  });
+  // const chargesQuery = useQuery({
+  //   queryKey: ["charges", params?.idhousing],
+  //   queryFn: () =>
+  //     chargerService.getAllData({
+  //       idhousing: params?.idhousing || "",
+  //     }),
+  // });
 
   const chargesPaginatedQuery = useInfiniteQuery({
     queryKey: ["charges", "infinite", params],
@@ -68,7 +68,7 @@ export const useCharges = (props: HookProps) => {
   });
 
   return {
-    chargesQuery,
+    // chargesQuery,
     chargeQuery,
     chargeQueryByReservation,
     chargesPaginatedQuery,

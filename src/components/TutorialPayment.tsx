@@ -8,9 +8,12 @@ import { ButtonLoader } from "@/components/ButtonLoader";
 import GlobalStyles from "@/constants/GlobalStyle";
 import { TourGuideZone, useTourGuideController } from "rn-tourguide";
 import { router } from "expo-router";
+import { useAppContext } from "@/hooks/useAppContext";
 
 const TutorialPayment = () => {
   const { width, height } = useWindowDimensions();
+
+  const { updateTutorialPayment, tutorialPayment } = useAppContext();
 
   const {
     canStart, // a boolean indicate if you can start tour guide
@@ -23,13 +26,15 @@ const TutorialPayment = () => {
   // Can start at mount 🎉
   // you need to wait until everything is registered 😁
   useEffect(() => {
-    if (canStart) {
+    console.log("🚀 ~ useEffect ~ tutorialPayment:", tutorialPayment);
+    if (!tutorialPayment && canStart) {
       start();
     }
   }, [canStart]); // 👈 don't miss it!
 
   const handleOnStart = () => console.log("start");
   const handleOnStop = () => {
+    updateTutorialPayment("true");
     router.back();
   };
   const handleOnStepChange = (num: any) => {

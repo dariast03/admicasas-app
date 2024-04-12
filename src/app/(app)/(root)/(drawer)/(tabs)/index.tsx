@@ -136,7 +136,6 @@ const Home = () => {
   // Can start at mount 🎉
   // you need to wait until everything is registered 😁
   useEffect(() => {
-    console.log(tutorialAnnouncement);
     if (!tutorialAnnouncement && canStart) {
       // 👈 test if you can start otherwise nothing will happen
       start();

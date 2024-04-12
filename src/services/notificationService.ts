@@ -57,10 +57,6 @@ const getDataByHousing = async (idhousing: string) => {
       };
     });
 
-    console.log(
-      "🚀 ~ constdata:INotification[]=querySnapshot.docs.map ~ data:",
-      data
-    );
     return data;
   } catch (e) {
     console.log(e);

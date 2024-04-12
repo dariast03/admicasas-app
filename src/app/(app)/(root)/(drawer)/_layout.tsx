@@ -6,6 +6,7 @@ import { Redirect } from "expo-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "nativewind";
+import CustomDrawer from "@/components/CustomDrawer";
 
 const LayoutDrawer = () => {
   const isDark = useColorScheme().colorScheme === "dark";
@@ -17,19 +18,21 @@ const LayoutDrawer = () => {
         drawerActiveTintColor: isDark ? "white" : Colors.primario[600],
         drawerInactiveTintColor: isDark
           ? Colors.primario[100]
-          : Colors.primario[300],
+          : Colors.primario[600],
         drawerLabelStyle: {
           marginLeft: -25,
           fontFamily: "LatoRegular",
           fontSize: 15,
         },
-        headerTintColor: Colors.primario[600],
+        headerStyle: {
+          backgroundColor: isDark ? Colors.primario[800] : "white",
+        },
+        headerTintColor: isDark ? "white" : Colors.primario[600],
         drawerContentStyle: {
           backgroundColor: isDark ? Colors.primario[800] : "white",
         },
       }}
-
-      // drawerContent={(x) => <CustomDrawer {...x} />}
+      drawerContent={(x) => <CustomDrawer {...x} />}
     >
       <Drawer.Screen
         name="(tabs)"
@@ -41,38 +44,49 @@ const LayoutDrawer = () => {
           ),
         }}
       />
-
-      {/* <Drawer.Screen
-        name="perfil"
-
-        options={{
-
-          title: 'Perfil',
-          headerStyle: { backgroundColor: "red" },
-          drawerIcon: ({ color }) => (
-            <Ionicons name='person-outline' size={20} color={color} />
-          ),
-        }}
-      /> */}
       <Drawer.Screen
         name="settings"
-        //@ts-ignore
         options={{
           title: "Ajustes",
           headerShown: true,
-          /* headerStyle: {
-            backgroundColor: isDark
-              ? COLORS.dark.secondary
-              : COLORS.light.background,
-
-          }, */
-          headerTintColor: "red",
           headerTitleStyle: {
             textTransform: "uppercase",
           },
 
           drawerIcon: ({ color }) => (
             <Ionicons name="settings-outline" size={20} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="question"
+        options={{
+          title: "Preguntas Frecuentes",
+          headerShown: true,
+          headerTitleStyle: {
+            textTransform: "uppercase",
+          },
+
+          drawerIcon: ({ color }) => (
+            <Ionicons name="help-circle-outline" size={22} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="about"
+        options={{
+          title: "Acerca de",
+          headerShown: true,
+          headerTitleStyle: {
+            textTransform: "uppercase",
+          },
+
+          drawerIcon: ({ color }) => (
+            <Ionicons
+              name="information-circle-outline"
+              size={22}
+              color={color}
+            />
           ),
         }}
       />

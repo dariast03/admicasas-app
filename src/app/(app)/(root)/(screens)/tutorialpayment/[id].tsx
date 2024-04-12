@@ -39,7 +39,7 @@ const TutorialPayment = () => {
   const handleOnStart = () => console.log("start");
   const handleOnStop = () => {
     //const routerView="/payment/"+id
-    updateTutorialPayment();
+    updateTutorialPayment("true");
     router.replace(`/payment/${id}`);
   };
   const handleOnStepChange = () => {

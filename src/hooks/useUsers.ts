@@ -57,7 +57,7 @@ export const useUsers = ({ id = undefined, params, params1 }: Props = {}) => {
       Toast.show({
         type: "success",
         text1: "Exito",
-        text2: "Se ha registrado con exito",
+        text2: "¡Vivienda actualizada correctamente!",
       });
       client.invalidateQueries({
         queryKey: ["user"],

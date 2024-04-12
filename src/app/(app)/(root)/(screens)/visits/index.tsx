@@ -34,7 +34,12 @@ const Visits = () => {
 
   const isDark = useColorScheme().colorScheme === "dark";
 
-  if (visitsQuery.isPending) return <Text>A LA ESPERA.</Text>;
+  if (visitsQuery.isPending) return;
+  {
+    <DefaultLayout>
+      <Text className="dark:text-white">A LA ESPERA.</Text>;
+    </DefaultLayout>;
+  }
   if (visitsQuery.isLoading) return <Text>CARGANDO..</Text>;
   if (visitsQuery.isError) return <Text>ERROR..</Text>;
 

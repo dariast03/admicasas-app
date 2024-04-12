@@ -26,8 +26,8 @@ const NotificationDisplay: React.FC<Props> = ({ notification }) => {
       <TouchableOpacity activeOpacity={0.7} onPress={handlePress}>
         <View
           className={cn([
-            "flex flex-row gap-2 justify-between p-4 bg-gray-200 dark:bg-primario-700 ",
-            isRead && "bg-white",
+            "flex flex-row gap-2 justify-between p-4 bg-gray-200 dark:bg-primario-800 ",
+            isRead && "bg-white dark:bg-primario-600",
           ])}
         >
           <View className="flex-1">
@@ -36,7 +36,9 @@ const NotificationDisplay: React.FC<Props> = ({ notification }) => {
           </View>
 
           <View className="  items-center justify-center">
-            <Text className="text-sm">{formatDateForDisplay(date)}</Text>
+            <Text className="text-sm dark:text-white">
+              {formatDateForDisplay(date)}
+            </Text>
           </View>
         </View>
       </TouchableOpacity>

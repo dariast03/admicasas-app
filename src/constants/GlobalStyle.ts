@@ -6,7 +6,7 @@ const GlobalStyles = () => {
   const isDark = useColorScheme().colorScheme == "dark";
   const styles = StyleSheet.create({
     shadowCard: {
-      shadowColor: isDark ? "#000" : Colors.primario[800],
+      shadowColor: isDark ? Colors.primario[600] : Colors.primario[800],
       shadowOffset: {
         width: 0,
         height: 2,

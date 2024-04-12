@@ -29,126 +29,135 @@ export default function UnprotectedLayout() {
 
   return (
     <>
-      <Stack>
-        <Stack.Screen
+      <Stack screenOptions={config}>
+        {/* <Stack.Screen
           name="areas/[id]"
-          options={{
-            headerShown: false,
-          }}
-        />
+          // options={{
+          //   headerShown: false,
+          // }}
+        /> */}
 
         <Stack.Screen
           name="annoucement/[id]"
-          options={{
-            headerShadowVisible: false,
-            headerTitleAlign: "center",
+          // options={{
+          //   headerShadowVisible: false,
+          //   headerTitleAlign: "center",
 
-            title: "Detalle",
-            headerStyle: {
-              backgroundColor: colorHeader,
-            },
-            headerTintColor: "white",
-            headerLeft: () => (
-              <Icon
-                color={"white"}
-                icon={{
-                  type: IconType.Ionicon,
-                  name: "chevron-back-outline",
-                }}
-                onPress={() => router.back()}
-              />
-            ),
-          }}
+          //   title: "Detalle",
+          //   headerStyle: {
+          //     backgroundColor: colorHeader,
+          //   },
+          //   headerTintColor: "white",
+          //   headerLeft: () => (
+          //     <Icon
+          //       color={"white"}
+          //       icon={{
+          //         type: IconType.Ionicon,
+          //         name: "chevron-back-outline",
+          //       }}
+          //       onPress={() => router.back()}
+          //     />
+          //   ),
+          // }}
         />
         <Stack.Screen
           name="payment/[id]"
           options={{
-            headerShadowVisible: false,
-            headerTitleAlign: "center",
-            title: "Detalle",
-            headerStyle: {
-              backgroundColor: colorHeader,
-            },
-            headerTintColor: "white",
-            headerLeft: () => (
-              <Icon
-                color={"white"}
-                icon={{
-                  type: IconType.Ionicon,
-                  name: "chevron-back-outline",
-                }}
-                onPress={() => router.back()}
-              />
-            ),
+            title: "Detalle Pago",
           }}
+          // options={{
+          //   headerShadowVisible: false,
+          //   headerTitleAlign: "center",
+          //   title: "Detalle",
+          //   headerStyle: {
+          //     backgroundColor: colorHeader,
+          //   },
+          //   headerTintColor: "white",
+          //   headerLeft: () => (
+          //     <Icon
+          //       color={"white"}
+          //       icon={{
+          //         type: IconType.Ionicon,
+          //         name: "chevron-back-outline",
+          //       }}
+          //       onPress={() => router.back()}
+          //     />
+          //   ),
+          // }}
         />
         <Stack.Screen
           name="tutorialpayment/[id]"
           options={{
-            headerShadowVisible: false,
-            headerTitleAlign: "center",
             title: "Detalle Pago",
-            headerStyle: {
-              backgroundColor: colorHeader,
-            },
-            headerTintColor: "white",
-            headerLeft: () => (
-              <Icon
-                color={"white"}
-                icon={{
-                  type: IconType.Ionicon,
-                  name: "chevron-back-outline",
-                }}
-                onPress={() => router.back()}
-              />
-            ),
           }}
+          // options={{
+          //   headerShadowVisible: false,
+          //   headerTitleAlign: "center",
+          //   title: "Detalle Pago",
+          //   headerStyle: {
+          //     backgroundColor: colorHeader,
+          //   },
+          //   headerTintColor: "white",
+          //   headerLeft: () => (
+          //     <Icon
+          //       color={"white"}
+          //       icon={{
+          //         type: IconType.Ionicon,
+          //         name: "chevron-back-outline",
+          //       }}
+          //       onPress={() => router.back()}
+          //     />
+          //   ),
+          // }}
         />
 
         <Stack.Screen
           name="meeting/[id]"
-          options={{
-            headerShadowVisible: false,
-            headerTitleAlign: "center",
-            title: "Detalle",
-            headerStyle: {
-              backgroundColor: colorHeader,
-            },
-            headerTintColor: "white",
-            headerLeft: () => (
-              <Icon
-                color={"white"}
-                icon={{
-                  type: IconType.Ionicon,
-                  name: "chevron-back-outline",
-                }}
-                onPress={() => router.back()}
-              />
-            ),
-          }}
+          options={{ title: "Detalle Reunion" }}
+
+          // options={{
+          //   headerShadowVisible: false,
+          //   headerTitleAlign: "center",
+          //   title: "Detalle",
+          //   headerStyle: {
+          //     backgroundColor: colorHeader,
+          //   },
+          //   headerTintColor: "white",
+          //   headerLeft: () => (
+          //     <Icon
+          //       color={"white"}
+          //       icon={{
+          //         type: IconType.Ionicon,
+          //         name: "chevron-back-outline",
+          //       }}
+          //       onPress={() => router.back()}
+          //     />
+          //   ),
+          // }}
         />
 
         <Stack.Screen
           name="meeting/index"
-          options={{
-            headerShadowVisible: false,
-            headerTitleAlign: "center",
-            title: "Reuniones",
-            headerStyle: {
-              backgroundColor: colorHeader,
-            },
-            headerTintColor: "white",
-            headerLeft: () => (
-              <Icon
-                color={"white"}
-                icon={{
-                  type: IconType.Ionicon,
-                  name: "chevron-back-outline",
-                }}
-                onPress={() => router.back()}
-              />
-            ),
-          }}
+          options={{ title: "Reuniones" }}
+          // options={{
+          //   headerShadowVisible: false,
+          //   headerTitleAlign: "center",
+          //   title: "Reuniones",
+          //   headerStyle: {
+          //     backgroundColor: colorHeader,
+          //   },
+          //   headerTintColor: "white",
+          //   headerLeft: () => (
+          //     <Icon
+          //       color={"white"}
+          //       icon={{
+          //         type: IconType.Ionicon,
+          //         name: "chevron-back-outline",
+          //       }}
+          //       onPress={() => router.back()}
+          //     />
+          //   ),
+          // }}
         />
 
         <Stack.Screen

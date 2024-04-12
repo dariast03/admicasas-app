@@ -13,8 +13,10 @@ export interface ICharge {
   paymenttype: IPaymentTypes;
   start: Date;
   end: Date;
+  date: Date;
   amount: number;
   idhousings: string[];
   housings?: IHousing[];
   isPublished: boolean;
+  paymentstatus: "Pendiente" | "Aprobado" | "Rechazado";
 }

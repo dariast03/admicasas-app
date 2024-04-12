@@ -15,6 +15,7 @@ import Colors from "@/constants/Colors";
 import Icon, { IconType } from "@/components/Icon";
 import SubTitle from "@/components/SubTitle";
 import { useColorScheme } from "nativewind";
+import Loader from "@/components/Loader";
 
 const Incidents = () => {
   const { selectedHousing } = useAppContext();
@@ -33,7 +34,12 @@ const Incidents = () => {
     },
   });
 
-  if (incidentsQuery.isLoading) return <Text>CARGANDO..</Text>;
+  if (incidentsQuery.isLoading)
+    return (
+      <DefaultLayout>
+        <Loader />
+      </DefaultLayout>
+    );
 
   return (
     <DefaultLayout>

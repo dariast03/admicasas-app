@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
-  Modal,
   TouchableOpacity,
   FlatList,
   Platform,
@@ -32,6 +30,7 @@ import Icon, { IconType } from "@/components/Icon";
 import { Skeleton } from "@/components/ui/skeleton";
 import SkeletonFlatList from "@/components/SkeletonFlatList";
 import { cn } from "@/lib/utils";
+import { ICharge } from "@/types/charges/charges";
 
 interface typePayments {
   id?: string | undefined;
@@ -47,13 +46,20 @@ const PaymentsHistory = () => {
     params: { idhousing: selectedHousing },
   });
 
-  const PaymentItem = ({ item }: { item: IPayments }) => {
-    const { selectedHousing } = useAppContext();
+  const { chargesPaginatedQuery } = useCharges({
+    params: { idhousing: selectedHousing, limitResults: 10 },
+  });
 
-    const { chargeQuery } = useCharges({
-      id: item.idcharge || "",
-      params: { idhousing: selectedHousing },
-    });
+  const dataChargesPaginated =
+    chargesPaginatedQuery.data?.pages?.flatMap((page: any) => page.data) ?? [];
+
+  const PaymentItem = ({ item }: { item: ICharge }) => {
+    // const { selectedHousing } = useAppContext();
+
+    // const { chargeQuery } = useCharges({
+    //   id: item.idcharge || "",
+    //   params: { idhousing: selectedHousing },
+    // });
 
     return (
       <View className="p-4">
@@ -62,25 +68,27 @@ const PaymentsHistory = () => {
             <BottomSheetOpenTrigger asChild>
               <TouchableOpacity>
                 <View className="flex-row justify-between items-center">
-                  {chargeQuery.isLoading ? (
+                  {/* {item.isLoading ? (
                     <Skeleton className="bg-gray-200 dark:bg-primario-600 h-4 w-32" />
                   ) : (
-                    <Text className="text-black dark:text-white text-sm">
-                      {chargeQuery.data?.name.toLocaleUpperCase()}
-                    </Text>
-                  )}
+                   
+                  )} */}
+
+                  <Text className="text-black dark:text-white text-sm">
+                    {item.name.toLocaleUpperCase()}
+                  </Text>
                   <View className="flex-row">
                     <Tag
                       severity={
-                        item.state === "Aprobado"
+                        item.paymentstatus === "Aprobado"
                           ? "success"
-                          : item.state === "Pendiente"
+                          : item.paymentstatus === "Pendiente"
                           ? "warning"
-                          : item.state === "Rechazado"
+                          : item.paymentstatus === "Rechazado"
                           ? "error"
                           : "info"
                       }
-                      value={item.state}
+                      value={item.paymentstatus}
                     />
                   </View>
                 </View>
@@ -105,7 +113,7 @@ const PaymentsHistory = () => {
                       <Text className={"pb-2.5 dark:text-white"}>Monto</Text>
                     </View>
                     <Text className={"pb-2.5 dark:text-white"}>
-                      Bs. {chargeQuery.data?.amount}
+                      Bs. {item.amount}
                     </Text>
                   </View>
                   <View className="flex-row justify-around">
@@ -138,7 +146,7 @@ const PaymentsHistory = () => {
       </View>
     );
   };
-  const renderItem = ({ item }: { item: IPayments }) => (
+  const renderItem = ({ item }: { item: ICharge }) => (
     <PaymentItem item={item} />
   );
   const itemSeparator = () => {
@@ -149,34 +157,61 @@ const PaymentsHistory = () => {
 
   const onRefresh = () => {
     setIsRefreshing(true);
-    paymentsQuery.refetch();
+    chargesPaginatedQuery.refetch();
   };
 
   useEffect(() => {
-    if (isRefreshing && !paymentsQuery.isRefetching) setIsRefreshing(false);
-  }, [paymentsQuery.isRefetching]);
+    if (isRefreshing && !chargesPaginatedQuery.isRefetching)
+      setIsRefreshing(false);
+  }, [chargesPaginatedQuery.isRefetching]);
 
   return (
     <DefaultLayout>
-      {paymentsQuery.isLoading ? (
+      {chargesPaginatedQuery.isLoading ? (
         <SkeletonFlatList />
       ) : (
+        // <FlatList
+        //   ListHeaderComponent={() => (
+        //     <Text className="text-center text-primario-600 dark:text-white mt-6">
+        //       Mis Pagos
+        //     </Text>
+        //   )}
+        //   data={paymentsQuery.data}
+        //   renderItem={renderItem}
+        //   keyExtractor={(item) => item.id || ""}
+        //   ItemSeparatorComponent={itemSeparator}
+        //   refreshControl={
+        //     <RefreshControl
+        //       refreshing={isRefreshing && paymentsQuery.isRefetching}
+        //       onRefresh={onRefresh}
+        //     />
+        //   }
+        // />
         <FlatList
+          onEndReached={() => {
+            chargesPaginatedQuery.fetchNextPage();
+          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing && chargesPaginatedQuery.isRefetching}
+              onRefresh={onRefresh}
+            />
+          }
+          onEndReachedThreshold={0.1}
+          ListFooterComponent={
+            chargesPaginatedQuery.isFetchingNextPage ? (
+              <Text className="text-center text-primario-600">Cargado...</Text>
+            ) : null
+          }
           ListHeaderComponent={() => (
             <Text className="text-center text-primario-600 dark:text-white mt-6">
               Mis Pagos
             </Text>
           )}
-          data={paymentsQuery.data}
+          data={dataChargesPaginated}
           renderItem={renderItem}
           keyExtractor={(item) => item.id || ""}
           ItemSeparatorComponent={itemSeparator}
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefreshing && paymentsQuery.isRefetching}
-              onRefresh={onRefresh}
-            />
-          }
         />
       )}
     </DefaultLayout>
