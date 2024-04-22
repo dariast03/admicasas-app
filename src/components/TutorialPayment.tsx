@@ -26,7 +26,6 @@ const TutorialPayment = () => {
   // Can start at mount 🎉
   // you need to wait until everything is registered 😁
   useEffect(() => {
-    console.log("🚀 ~ useEffect ~ tutorialPayment:", tutorialPayment);
     if (!tutorialPayment && canStart) {
       start();
     }

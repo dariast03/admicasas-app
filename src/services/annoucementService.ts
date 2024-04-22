@@ -86,7 +86,7 @@ const getAllData = async (
 
     const querySnapshot = await queryRef.get();
     const data: IAnnouncement[] = querySnapshot.docs.map((doc) => {
-      const dataFilter = doc.data() as IAnnouncement;
+      // const dataFilter = doc.data() as IAnnouncement;
       //const datf = dataFilter(announcement => announcement.idhousings.includes(idhousing));
       return {
         ...(doc.data() as IAnnouncement),
@@ -96,8 +96,9 @@ const getAllData = async (
     const dataFilter = data.filter(
       (announcement) =>
         (announcement.idcondominiums && !announcement.idhousings) ||
-        announcement.idhousings.includes(idhousing || "")
+        announcement.idhousings.some((item) => item.idhousing === idhousing)
     );
+
     return dataFilter;
   } catch (e) {
     console.log(e);

@@ -110,7 +110,6 @@ const getAccount = async (id: string) => {
   }
 };
 const getAccountEmail = async (email: string) => {
-  console.log("🚀 ~ getAccountEmail ~ email:", email);
   try {
     const querySnapshot = await firestore()
       .collection(FirestoreKey)

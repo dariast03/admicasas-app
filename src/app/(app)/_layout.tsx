@@ -64,8 +64,6 @@ const Layout = () => {
     const notification = await messaging().getInitialNotification();
     if (!notification) return;
 
-    console.log("🚀 ~ getInitialNotification ~ notification:", notification);
-
     if (notification?.data && notification?.data.to) {
       router.push(notification.data.to as any);
     }
@@ -140,8 +138,6 @@ const Layout = () => {
   // ON OPENED APP NOTIFICATION
   useEffect(() => {
     messaging().onNotificationOpenedApp((data) => {
-      console.log("🚀 ~ onNotificationOpenedApp ~ data:", data);
-
       if (data && data?.data && data?.data.to && data.data.to !== "") {
         router.push(data.data.to as any);
       }

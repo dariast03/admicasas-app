@@ -27,7 +27,7 @@ const PaymentCard = () => {
   // });
 
   const { chargesPaginatedQuery } = useCharges({
-    params: { idhousing: selectedHousing },
+    params: { idhousing: selectedHousing, type: "Payments" },
   });
 
   const dataChargesPaginated =

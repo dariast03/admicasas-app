@@ -9,6 +9,7 @@ type GetDataQueryParams = {
   idreservation?: string;
   q?: string;
   limitResults?: number;
+  type?: "History" | "Payments";
 };
 
 const FirestoreKey = "Chargesx";
@@ -175,16 +176,26 @@ const FirestoreKey = "Chargesx";
 const getAllDataByPage = async (context: any) => {
   try {
     const { pageParam = undefined, queryKey } = context;
+
     const [, , args] = queryKey;
-    const { limitResults, idhousing = "" } = args as GetDataQueryParams;
+    const { limitResults, idhousing = "", type } = args as GetDataQueryParams;
+    console.log("🚀 ~ getAllDataByPage ~ type:", type);
 
     if (!idhousing) throw new Error("idcondominium is required");
-
     let queryRef = firestore()
       .collection(FirestoreKey)
       .where("idhousing", "==", idhousing)
-      .where("paymentstatus", "==", "Pendiente")
+      .where("paymentstatus", "in", ["Pendiente", "Rechazado"])
       .orderBy("end", "desc");
+
+    if (type === "Payments") {
+      queryRef = firestore()
+        .collection(FirestoreKey)
+        .where("idhousing", "==", idhousing)
+        .where("paymentstatus", "in", ["Aprobado", "Pendiente"])
+        .orderBy("end", "desc");
+    }
+    console.log("🚀 ~ getAllDataByPage ~ queryRef:", queryRef);
 
     if (pageParam) {
       queryRef = queryRef.startAfter(pageParam);
@@ -215,7 +226,7 @@ const getAllDataByPage = async (context: any) => {
           //@ts-ignore
           end: new Date(chargeData.end.toDate()),
           //@ts-ignore
-          date: new Date(chargeData.date.toDate()),
+          // date: new Date(chargeData.date.toDate()),
         };
       }
     );

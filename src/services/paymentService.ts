@@ -1,7 +1,7 @@
 import { IPayments } from "@/types/payments/payments";
 import firestore from "@react-native-firebase/firestore";
 
-const FirestoreKey = "Payments";
+const FirestoreKey = "Paymentsx";
 
 const getData = async (id: string) => {
   try {

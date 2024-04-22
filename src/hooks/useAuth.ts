@@ -32,7 +32,6 @@ const useAuth = () => {
 
       const response = await authService.login(data);
 
-      // return console.log("🚀 ~ onLogin ~ response:", response);
       if (response && !response.error) {
         signIn(response);
         Toast.show({

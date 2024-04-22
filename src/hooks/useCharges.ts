@@ -13,6 +13,7 @@ type HookProps = {
     state?: string;
     // q?: string;
     limitResults?: number;
+    type?: "History" | "Payments";
   };
 };
 export const useCharges = (props: HookProps) => {

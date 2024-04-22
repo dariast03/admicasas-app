@@ -32,10 +32,36 @@ type Props = {
 };
 
 const Home = () => {
+  const { user } = useSessionContext();
+  const {
+    isLoadingSelectedHousing,
+    selectedHousing,
+    updateHousing,
+    updateTutorialView,
+    tutorialAnnouncement,
+  } = useAppContext();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const { announcementsQuery } = useAnnouncement({
+    query: ["announcementsQuery"],
+    params: {
+      idcondominium: user?.account?.idcondominium,
+      idhousing: selectedHousing ? selectedHousing : user?.account?.idhousing,
+    },
+  });
+
+  const { housingsByPropietaryQuery } = useHousing({
+    params: {
+      idproprietary: user.id,
+    },
+  });
   const Card = ({ data }: Props) => {
     let routeView: any;
     if (data.type === "charge") {
-      routeView = "/payment/" + data.idcharge;
+      const item = data.idhousings.find(
+        (item) => item.idhousing === selectedHousing
+      );
+      routeView = "/payment/" + item?.idcharge;
     } else if (data.type === "meeting") {
       routeView = "/meeting/" + data.id;
     } else {
@@ -85,30 +111,6 @@ const Home = () => {
       </View>
     );
   };
-  const { user } = useSessionContext();
-  const {
-    isLoadingSelectedHousing,
-    selectedHousing,
-    updateHousing,
-    updateTutorialView,
-    tutorialAnnouncement,
-  } = useAppContext();
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
-  const { announcementsQuery } = useAnnouncement({
-    query: ["announcementsQuery"],
-    params: {
-      idcondominium: user?.account?.idcondominium,
-      idhousing: selectedHousing ? selectedHousing : user?.account?.idhousing,
-    },
-  });
-
-  const { housingsByPropietaryQuery } = useHousing({
-    params: {
-      idproprietary: user.id,
-    },
-  });
-
   const onRefresh = () => {
     setIsRefreshing(true);
     announcementsQuery.refetch();

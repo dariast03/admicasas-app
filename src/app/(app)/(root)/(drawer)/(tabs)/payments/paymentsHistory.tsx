@@ -47,7 +47,7 @@ const PaymentsHistory = () => {
   });
 
   const { chargesPaginatedQuery } = useCharges({
-    params: { idhousing: selectedHousing, limitResults: 10 },
+    params: { idhousing: selectedHousing, limitResults: 10, type: "History" },
   });
 
   const dataChargesPaginated =
@@ -128,7 +128,7 @@ const PaymentsHistory = () => {
                     </View>
 
                     <Text className="dark:text-white">
-                      {item.date.toLocaleDateString()}
+                      {Date.now().toString()}
                     </Text>
                   </View>
                 </View>

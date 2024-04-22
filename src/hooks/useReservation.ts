@@ -139,7 +139,6 @@ export const useReserve = ({ id, params }: Props = {}) => {
       });
     },
     onError: (e: any) => {
-      console.log("🚀 ~ useReserve ~ e:", e);
       Toast.show({
         type: "error",
         text1: "Error",

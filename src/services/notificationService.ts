@@ -38,7 +38,6 @@ const getDataByCondominium = async (
 };
 
 const getDataByHousing = async (idhousing: string) => {
-  console.log("🚀 ~ getDataByHousing ~ idhousing:", idhousing);
   try {
     const queryRef = firestore()
       .collection(FirestoreKey)
