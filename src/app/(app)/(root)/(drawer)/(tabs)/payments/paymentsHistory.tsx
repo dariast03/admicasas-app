@@ -54,6 +54,7 @@ const PaymentsHistory = () => {
     chargesPaginatedQuery.data?.pages?.flatMap((page: any) => page.data) ?? [];
 
   const PaymentItem = ({ item }: { item: ICharge }) => {
+    console.log("🚀 ~ PaymentItem ~ item:", item);
     // const { selectedHousing } = useAppContext();
 
     // const { chargeQuery } = useCharges({

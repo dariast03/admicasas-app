@@ -3,6 +3,7 @@ import { ICharge } from "@/types/charges/charges";
 import paymentService from "./paymentService";
 import paymentTypeService from "./paymentTypeService";
 import housingService from "./housingService";
+import { IPayments } from "../types/payments/payments";
 
 type GetDataQueryParams = {
   idhousing: string;
@@ -185,14 +186,14 @@ const getAllDataByPage = async (context: any) => {
     let queryRef = firestore()
       .collection(FirestoreKey)
       .where("idhousing", "==", idhousing)
-      .where("paymentstatus", "in", ["Pendiente", "Rechazado"])
+      .where("paymentstatus", "in", ["Aprobado", "Pendiente"])
       .orderBy("end", "desc");
 
     if (type === "Payments") {
       queryRef = firestore()
         .collection(FirestoreKey)
         .where("idhousing", "==", idhousing)
-        .where("paymentstatus", "in", ["Aprobado", "Pendiente"])
+        .where("paymentstatus", "in", ["Pendiente", "Rechazado"])
         .orderBy("end", "desc");
     }
     console.log("🚀 ~ getAllDataByPage ~ queryRef:", queryRef);
@@ -217,6 +218,14 @@ const getAllDataByPage = async (context: any) => {
           const housing = await housingService.getData(idhousing);
           chargeData.amount = housing?.amount;
         }
+        let payment: IPayments | undefined;
+        if (chargeData.paymentstatus === "Aprobado") {
+          payment =
+            (await paymentService.getDataPayment({
+              idhousing,
+              idcharge: chargeData.id,
+            })) || undefined;
+        }
 
         return {
           id: doc.id,
@@ -226,7 +235,7 @@ const getAllDataByPage = async (context: any) => {
           //@ts-ignore
           end: new Date(chargeData.end.toDate()),
           //@ts-ignore
-          // date: new Date(chargeData.date.toDate()),
+          date: new Date(payment?.date),
         };
       }
     );

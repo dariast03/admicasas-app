@@ -3,6 +3,11 @@ import firestore from "@react-native-firebase/firestore";
 
 const FirestoreKey = "Paymentsx";
 
+type GetDataQueryParams = {
+  idhousing: string;
+  idcharge?: string;
+};
+
 const getData = async (id: string) => {
   try {
     const docRef = firestore().collection(FirestoreKey).doc(id);
@@ -20,6 +25,35 @@ const getData = async (id: string) => {
     console.log(e);
   }
 };
+
+const getDataPayment = async ({ idhousing, idcharge }: GetDataQueryParams) => {
+  try {
+    const docRef = firestore()
+      .collection(FirestoreKey)
+      .where("idhousing", "==", idhousing)
+      .where("idcharge", "==", idcharge)
+      .limit(1);
+    const querySnapshot = await docRef.get();
+
+    if (querySnapshot.empty) {
+      return null;
+    }
+
+    const docSnap = querySnapshot.docs[0];
+    const data = docSnap.data() as IPayments;
+
+    return {
+      ...data,
+      id: docSnap.id,
+      //@ts-ignore
+      date: new Date(data.date.toDate()),
+    } as IPayments;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
+
 const getAllData = async (idhousing: string) => {
   try {
     let queryRef = firestore()
@@ -99,4 +133,5 @@ export default {
   getDataAnnouncement,
   insertData,
   updateData,
+  getDataPayment,
 };
