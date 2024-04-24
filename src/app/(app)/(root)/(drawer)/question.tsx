@@ -21,10 +21,11 @@ const Question = () => {
             <Text className="text-foreground text-xl pb-1.5">
               {item.question}
             </Text>
-            <Text className="text-foreground opacity-90">Subtext example</Text>
           </AccordionTrigger>
           <AccordionContent>
-            <View className="p-20 bg-blue-500"></View>
+            <View className="p-10 bg-primario-800">
+              <Text className="text-white">{item.answer}</Text>
+            </View>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
@@ -45,7 +46,7 @@ const Question = () => {
         }
         ListHeaderComponent={() => (
           <Text className="text-center text-primario-600 dark:text-white mt-6">
-            Mis Pagos
+            ¡Podemos resolverla juntos!
           </Text>
         )}
         data={questionsQuery.data}
