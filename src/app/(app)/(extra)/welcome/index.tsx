@@ -23,7 +23,7 @@ const WelcomeScreen = () => {
             subtitle:
               " Explora, descubre y disfruta de todas las funcionalidades que hemos preparado para ti.",
             imageComponent: (
-              <View className="justify-center items-center p-5">
+              <View className="justify-center items-center p-5 mt-16">
                 <Image
                   resizeMode="contain"
                   style={{
@@ -48,7 +48,7 @@ const WelcomeScreen = () => {
             // ).uri,
             primaryButtonTitle: "Siguiente",
             imageComponent: (
-              <View className="justify-center items-center p-5">
+              <View className="justify-center items-center p-5 mt-10">
                 <Image
                   resizeMode="contain"
                   style={{
@@ -64,7 +64,7 @@ const WelcomeScreen = () => {
           },
           {
             style: {
-              backgroundColor: "red",
+              backgroundColor: "white",
               justifyContent: "center",
               alignItems: "center",
             },
@@ -74,7 +74,7 @@ const WelcomeScreen = () => {
               "Haz tus reservas de forma sencilla y rápida con nuestra aplicación. Elige fechas y servicios, y confirma con solo unos pocos pasos.",
             primaryButtonTitle: "Iniciemos",
             imageComponent: (
-              <View className="justify-center items-center p-5">
+              <View className="justify-center items-center p-5 mt-16">
                 <Image
                   resizeMode="contain"
                   style={{
@@ -102,7 +102,7 @@ const WelcomeScreen = () => {
         onDone={() => handleShowWelcomeScreen("true")}
         pageStyle={{
           flex: 1,
-          backgroundColor: "red",
+          backgroundColor: "white",
           justifyContent: "center",
           alignItems: "center",
         }}

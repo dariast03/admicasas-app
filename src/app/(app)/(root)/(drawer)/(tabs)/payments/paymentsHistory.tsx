@@ -147,6 +147,7 @@ const PaymentsHistory = () => {
       </View>
     );
   };
+
   const renderItem = ({ item }: { item: ICharge }) => (
     <PaymentItem item={item} />
   );

@@ -215,6 +215,8 @@ const Reservations = () => {
                 ? "warning"
                 : item.state === "Rechazado"
                 ? "error"
+                : item.state === "PorPagar"
+                ? "primary"
                 : "info"
             }
             value={item.state}

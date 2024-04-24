@@ -36,7 +36,12 @@ export interface IDetailDate {
 
 interface IStatusReservation2 {
   id: number;
-  name: "Rechazado" | "Aprobado" | "Pendiente";
+  name: "Rechazado" | "Aprobado" | "Pendiente" | "PorPagar";
 }
 
-type IStatusReservation = "Rechazado" | "Aprobado" | "Pendiente" | "Finalizado";
+type IStatusReservation =
+  | "Rechazado"
+  | "Aprobado"
+  | "Pendiente"
+  | "Finalizado"
+  | "PorPagar";
