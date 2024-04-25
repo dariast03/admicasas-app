@@ -54,7 +54,6 @@ const PaymentsHistory = () => {
     chargesPaginatedQuery.data?.pages?.flatMap((page: any) => page.data) ?? [];
 
   const PaymentItem = ({ item }: { item: ICharge }) => {
-    console.log("🚀 ~ PaymentItem ~ item:", item);
     // const { selectedHousing } = useAppContext();
 
     // const { chargeQuery } = useCharges({
@@ -129,7 +128,7 @@ const PaymentsHistory = () => {
                     </View>
 
                     <Text className="dark:text-white">
-                      {Date.now().toString()}
+                      {item.date.toLocaleDateString("es-ES")}
                     </Text>
                   </View>
                 </View>

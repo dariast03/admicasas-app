@@ -54,9 +54,9 @@ const PaymentCard = () => {
 
     return (
       <View
-        className={`p-5 m-3 rounded-lg bg-white   dark:bg-primario-800 ${
-          new Date(item.end) > new Date()
-            ? "border-2 border-red-600"
+        className={`p-5 m-3 rounded-lg bg-white dark:bg-primario-800 ${
+          new Date(item.end) < new Date()
+            ? "border-2 border-primario-600 dark:border-primario-600"
             : "border border-primario-600 dark:border-primario-800"
         }`}
         style={GlobalStyles()}
@@ -64,26 +64,44 @@ const PaymentCard = () => {
         <Text className="text-xl font-bold text-primario-600 dark:text-white">
           {item.name}
         </Text>
+
         <Text className="text-base text-gray-600 dark:text-white">
           {item.description}
         </Text>
         <View className="border-b border-stone-400 dark:border-white my-5"></View>
-        <Text className="text-base text-gray-600 dark:text-white">
+        <Text className="text-base text-gray-600 dark:text-white font-semibold">
           Fecha limite
         </Text>
-        <View className="flex-row items-center">
-          <Icon
-            icon={{
-              type: IconType.AntDesign,
-              name: "calendar",
-            }}
-          />
-          <Text className="text-stone-400 dark:text-white my-2">
-            {item?.end?.toLocaleDateString()}
+        <View className="flex-row items-center mt-2">
+          {new Date(item.end) < new Date() ? (
+            <Icon
+              icon={{
+                type: IconType.FontAweomseIcon,
+                name: "calendar-times-o",
+              }}
+              color={"red"}
+            />
+          ) : (
+            <Icon
+              icon={{
+                type: IconType.FontAweomseIcon,
+                name: "calendar",
+              }}
+            />
+          )}
+          {/* <Text className="text-red-600 text-stone-400 dark:text-white my-2"> */}
+          <Text
+            className={`text-red-600 font-black ${
+              new Date(item.end) < new Date()
+                ? "text-red-600 font-black"
+                : "text-stone-400 dark:text-white"
+            }`}
+          >
+            {item?.end?.toLocaleDateString("es-ES")}
           </Text>
         </View>
 
-        <Text className="text-lg text-gray-700 dark:text-white my-3">
+        <Text className="text-lg text-gray-700 dark:text-white mt-2 mb-4">
           Monto a pagar: {item.amount}
         </Text>
         <ButtonLoader onPress={() => router.push(routeView)}>

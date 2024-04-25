@@ -180,7 +180,6 @@ const getAllDataByPage = async (context: any) => {
 
     const [, , args] = queryKey;
     const { limitResults, idhousing = "", type } = args as GetDataQueryParams;
-    console.log("🚀 ~ getAllDataByPage ~ type:", type);
 
     if (!idhousing) throw new Error("idcondominium is required");
     let queryRef = firestore()
@@ -194,9 +193,8 @@ const getAllDataByPage = async (context: any) => {
         .collection(FirestoreKey)
         .where("idhousing", "==", idhousing)
         .where("paymentstatus", "in", ["Pendiente", "Rechazado"])
-        .orderBy("end", "desc");
+        .orderBy("end", "asc");
     }
-    console.log("🚀 ~ getAllDataByPage ~ queryRef:", queryRef);
 
     if (pageParam) {
       queryRef = queryRef.startAfter(pageParam);
@@ -223,7 +221,7 @@ const getAllDataByPage = async (context: any) => {
           payment =
             (await paymentService.getDataPayment({
               idhousing,
-              idcharge: chargeData.id,
+              idcharge: doc.id,
             })) || undefined;
         }
 

@@ -74,25 +74,23 @@ const Icon = ({ icon, ...props }: TIcon) => {
       )}
       {icon.type === IconType.MaterialIcon && (
         <MaterialIcons
-          {...props}
           name={icon.name}
           size={20}
+          color={color}
+          {...props}
           style={{
-            fontSize: 22,
             marginRight: 10,
           }}
-          color={color}
         />
       )}
 
       {icon.type === IconType.Ionicon && (
         <Ionicons
-          {...props}
           name={icon.name}
           size={20}
           color={color}
+          {...props}
           style={{
-            fontSize: 22,
             marginRight: 10,
           }}
         />
@@ -174,12 +172,11 @@ const Icon = ({ icon, ...props }: TIcon) => {
       )}
       {icon.type === IconType.FontAwesome5 && (
         <FontAwesome5
-          {...props}
-          name={icon.name}
           size={20}
+          name={icon.name}
           color={color}
+          {...props}
           style={{
-            fontSize: 22,
             marginRight: 10,
           }}
         />
