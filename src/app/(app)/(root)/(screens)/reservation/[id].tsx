@@ -342,19 +342,50 @@ const FormReservation = () => {
                 Por favor, completa el formulario para crear una reserva
               </Text>
             </View>
-            {reservationQuery.data &&
-              reservationQuery.data.state === "Pendiente" && (
-                <View className="my-2">
-                  <AlertCard
-                    value={
-                      "Tu solicitud se encuentra en revisión. Aun puedes editar la informacion proporcionada"
-                    }
-                    severity={"warning"}
-                  />
-                </View>
-              )}
+            {reservationQuery.data && (
+              <View className="my-2">
+                {(() => {
+                  switch (reservationQuery.data.state) {
+                    case "Pendiente":
+                      return (
+                        <AlertCard
+                          value={
+                            "Tu solicitud se encuentra en revisión. Aun puedes editar la información proporcionada"
+                          }
+                          severity={"warning"}
+                        />
+                      );
+                    case "PorPagar":
+                      return (
+                        <AlertCard
+                          value={
+                            "Tu solicitud está pendiente de pago. Por favor, completa el pago."
+                          }
+                          severity={"primary"}
+                        />
+                      );
+                    case "Rechazado":
+                      return (
+                        <AlertCard
+                          value={reservationQuery.data.message}
+                          severity={"info"}
+                        />
+                      );
+                    case "Aprobado":
+                      return (
+                        <AlertCard
+                          value={"¡Tu reserva ha sido aprobada con éxito!"}
+                          severity={"success"}
+                        />
+                      );
+                    default:
+                      return null; // Manejar otros casos si es necesario
+                  }
+                })()}
+              </View>
+            )}
 
-            {reservationQuery.data &&
+            {/* {reservationQuery.data &&
               reservationQuery.data.state !== "Pendiente" &&
               reservationQuery.data.state !== "Finalizado" && (
                 <View className="my-2">
@@ -365,7 +396,7 @@ const FormReservation = () => {
                     }
                   />
                 </View>
-              )}
+              )} */}
 
             <View className="gap-2">
               <View>
@@ -531,7 +562,7 @@ const FormReservation = () => {
                     />
                   </View> */}
               <View className="mt-2">
-                {reservationQuery.data?.state === "Aprobado" ? (
+                {reservationQuery.data?.state === "PorPagar" ? (
                   <ButtonLoader
                     className="items-center"
                     onPress={() => router.push(PushPayment())}

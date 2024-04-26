@@ -219,7 +219,7 @@ const Reservations = () => {
                 ? "primary"
                 : "info"
             }
-            value={item.state}
+            value={item.state === "PorPagar" ? "Por Pagar" : item.state}
           />
         </View>
       </TouchableOpacity>
