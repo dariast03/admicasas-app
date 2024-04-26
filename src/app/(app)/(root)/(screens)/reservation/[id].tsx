@@ -170,6 +170,10 @@ const FormReservation = () => {
   const isAllowedEdit = reservationQuery.data?.state === "Pendiente" || !isEdit;
 
   const PushPayment = () => {
+    console.log(
+      "🚀 ~ PushPayment ~ chargeQueryByReservation:",
+      chargeQueryByReservation.data
+    );
     const routeView: any = "/payment/" + chargeQueryByReservation.data?.id;
     return routeView;
   };

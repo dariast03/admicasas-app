@@ -64,7 +64,7 @@ export const useCharges = (props: HookProps) => {
     enabled:
       (!!params?.idhousing &&
         !!params?.idreservation &&
-        params?.state === "Aprobado") ||
+        params?.state === "PorPagar") ||
       params?.state === "Rechazado",
   });
 
