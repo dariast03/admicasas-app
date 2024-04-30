@@ -135,6 +135,7 @@ const PaymentCard = () => {
       /> */}
 
       <FlatList
+        className="p-6"
         onEndReached={() => {
           chargesPaginatedQuery.fetchNextPage();
         }}
@@ -144,13 +145,12 @@ const PaymentCard = () => {
             onRefresh={onRefresh}
           />
         }
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.6}
         ListFooterComponent={
           chargesPaginatedQuery.isFetchingNextPage ? (
             <Text className="text-center text-primario-600">Cargado...</Text>
           ) : null
         }
-        contentContainerClassName="p-5"
         data={dataChargesPaginated}
         // renderItem={({ item }) => <Card data={item} />}
 
