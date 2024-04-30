@@ -133,39 +133,38 @@ const PaymentCard = () => {
           </>
         }
       /> */}
-
-      <FlatList
-        className="p-6"
-        onEndReached={() => {
-          chargesPaginatedQuery.fetchNextPage();
-        }}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefreshing && chargesPaginatedQuery.isRefetching}
-            onRefresh={onRefresh}
-          />
-        }
-        onEndReachedThreshold={0.6}
-        ListFooterComponent={
-          chargesPaginatedQuery.isFetchingNextPage ? (
-            <Text className="text-center text-primario-600">Cargado...</Text>
-          ) : null
-        }
-        data={dataChargesPaginated}
-        // renderItem={({ item }) => <Card data={item} />}
-
-        renderItem={renderCharge}
-        keyExtractor={(item, index) => `${item.id}-${index}`}
-        ListEmptyComponent={() => (
-          <>
-            {chargesPaginatedQuery.isLoading ? (
-              <Loader name="Pagos" />
-            ) : (
+      {!chargesPaginatedQuery.isLoading ? (
+        <FlatList
+          className="p-6"
+          onEndReached={() => {
+            chargesPaginatedQuery.fetchNextPage();
+          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing && chargesPaginatedQuery.isRefetching}
+              onRefresh={onRefresh}
+            />
+          }
+          onEndReachedThreshold={0.01}
+          ListFooterComponent={
+            chargesPaginatedQuery.isFetchingNextPage ? (
+              <Text className="text-center text-primario-600">Cargado...</Text>
+            ) : null
+          }
+          data={dataChargesPaginated}
+          // renderItem={({ item }) => <Card data={item} />}
+          // Ajustar el estilo
+          renderItem={renderCharge}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
+          ListEmptyComponent={() => (
+            <>
               <SubTitle text="No hay pagos pendientes en este momento." />
-            )}
-          </>
-        )}
-      />
+            </>
+          )}
+        />
+      ) : (
+        <Loader name="Pagos" />
+      )}
     </DefaultLayout>
 
     // <View
