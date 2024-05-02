@@ -14,6 +14,7 @@ export interface IAccount {
   idhousing: string;
   condominiums: [];
   id: string;
+  email: string;
 }
 
 export interface IUser {

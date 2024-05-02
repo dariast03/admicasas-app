@@ -12,6 +12,7 @@ const useAuth = () => {
   const { signIn, signOut, user, status } = useSessionContext();
   const [isLoading, setIsLoading] = useState(false);
   const { updateHousing } = useAppContext();
+
   const onLogin = async (data: IFormLogin) => {
     setIsLoading(true);
 
@@ -117,6 +118,13 @@ const useAuth = () => {
     await authService.logout();
   };
 
+  const isEmail = async (email: string) => {
+    const user = await authService.isEmailExists(email);
+
+    console.log("🚀 ~ isEmail ~ user:", user);
+    return user;
+  };
+
   return {
     user,
     status,
@@ -127,6 +135,7 @@ const useAuth = () => {
     onLogout,
     onLoginWithEmail,
     // setCondominium,
+    isEmail,
   };
 };
 

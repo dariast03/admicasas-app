@@ -132,6 +132,30 @@ const getAccountEmail = async (email: string) => {
   }
 };
 
+const isEmailExists = async (email: string) => {
+  console.log("🚀 ~ isEmailExists ~ email:", email);
+  try {
+    const querySnapshot = await firestore()
+      .collection(FirestoreKey)
+      .where("email", "==", email)
+      .where("rol", "==", "propietario")
+      .get();
+    if (!querySnapshot.empty) {
+      const docSnap = querySnapshot.docs[0];
+      const data = docSnap.data() as IAccount;
+
+      return {
+        ...data,
+      };
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.error("Error al verificar la cuenta:", e);
+    return null;
+  }
+};
+
 const updateDeviceToken = async (id: string) => {
   try {
     const tokenDevice = await messaging().getToken();
@@ -159,4 +183,12 @@ const logout = async () => {
   }
 };
 
-export default { login, register, getAccount, refresh, logout };
+export default {
+  login,
+  register,
+  getAccount,
+  refresh,
+  logout,
+  getAccountEmail,
+  isEmailExists,
+};

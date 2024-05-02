@@ -23,7 +23,7 @@ GoogleSignin.configure({
 });
 
 import auth from "@react-native-firebase/auth";
-import { Link, Stack } from "expo-router";
+import { Link, router, Stack } from "expo-router";
 import SvgComponent from "@/components/SvgComponent";
 import { StatusBar } from "expo-status-bar";
 import { Platform } from "react-native";
@@ -195,7 +195,11 @@ const Login = () => {
               </TouchableOpacity>
             </View>
             <View className="flex-row items-center justify-end p-4">
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  router.push("/(app)/(authentication)/auth/recover")
+                }
+              >
                 <Text className="font-bold text-white">
                   Olvidaste tu contraseña?
                 </Text>
