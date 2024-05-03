@@ -182,10 +182,11 @@ const getAllDataByPage = async (context: any) => {
     const { limitResults, idhousing = "", type } = args as GetDataQueryParams;
 
     if (!idhousing) throw new Error("idcondominium is required");
+
     let queryRef = firestore()
       .collection(FirestoreKey)
       .where("idhousing", "==", idhousing)
-      .where("paymentstatus", "in", ["Aprobado", "Pendiente"])
+      .where("paymentstatus", "in", ["Aprobado", "Pendiente", "Rechazado"])
       .orderBy("end", "desc");
 
     if (type === "Payments") {

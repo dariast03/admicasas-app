@@ -47,7 +47,7 @@ const PaymentsHistory = () => {
   });
 
   const { chargesPaginatedQuery } = useCharges({
-    params: { idhousing: selectedHousing, limitResults: 10, type: "History" },
+    params: { idhousing: selectedHousing, limitResults: 5, type: "History" },
   });
 
   const dataChargesPaginated =
