@@ -368,7 +368,7 @@ const FormReservation = () => {
                       return (
                         <AlertCard
                           value={reservationQuery.data.message}
-                          severity={"info"}
+                          severity={"error"}
                         />
                       );
                     case "Aprobado":
@@ -562,7 +562,7 @@ const FormReservation = () => {
                     />
                   </View> */}
               <View className="mt-2">
-                {reservationQuery.data?.state === "PorPagar" ? (
+                {reservationQuery.data?.state === "PorPagar" && (
                   <ButtonLoader
                     className="items-center"
                     onPress={() => router.push(PushPayment())}
@@ -571,28 +571,33 @@ const FormReservation = () => {
                       Ir a Pagar
                     </Text>
                   </ButtonLoader>
-                ) : reservationQuery.data?.state === "Finalizado" ? null : (
-                  <ButtonLoader
-                    className="items-center"
-                    onPress={handleSubmit(onSubmit)}
-
-                    // disabled={paymentQuery.data?.state === "Pendiente"}
-
-                    // style={{
-                    //   opacity:
-                    //     paymentQuery.data?.state === "Pendiente" ||
-                    //     paymentQuery.data?.state === "Aprobado"
-                    //       ? 0.5
-                    //       : 1,
-                    // }}
-                    // loading={paymentCreateMutation.isPending}
-                  >
-                    <Text className="text-white text-center text-xl font-bold">
-                      {/* {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"} */}
-                      Guardar
-                    </Text>
-                  </ButtonLoader>
                 )}
+                {reservationQuery.data?.state === "Rechazado" && null}
+                {reservationQuery.data?.state === "Finalizado" && null}
+                {reservationQuery.data?.state === "Aprobado" && null}
+                {reservationQuery.data?.state !== "PorPagar" &&
+                  reservationQuery.data?.state !== "Aprobado" &&
+                  reservationQuery.data?.state !== "Rechazado" &&
+                  reservationQuery.data?.state !== "Finalizado" && (
+                    <ButtonLoader
+                      className="items-center"
+                      onPress={handleSubmit(onSubmit)}
+                      // disabled={paymentQuery.data?.state === "Pendiente"}
+                      // style={{
+                      //   opacity:
+                      //     paymentQuery.data?.state === "Pendiente" ||
+                      //     paymentQuery.data?.state === "Aprobado"
+                      //       ? 0.5
+                      //       : 1,
+                      // }}
+                      // loading={paymentCreateMutation.isPending}
+                    >
+                      <Text className="text-white text-center text-xl font-bold">
+                        {/* {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"} */}
+                        Guardar
+                      </Text>
+                    </ButtonLoader>
+                  )}
               </View>
             </View>
           </View>
