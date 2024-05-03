@@ -98,12 +98,11 @@ const Icon = ({ icon, ...props }: TIcon) => {
 
       {icon.type === IconType.AntDesign && (
         <AntDesign
-          {...props}
           name={icon.name}
           size={20}
           color={color}
+          {...props}
           style={{
-            fontSize: 22,
             marginRight: 10,
           }}
         />

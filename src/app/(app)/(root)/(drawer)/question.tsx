@@ -9,6 +9,7 @@ import {
 import DefaultLayout from "@/layout/DefaultLayout";
 import { useQuestions } from "@/hooks/useQuestions";
 import { IQuestions } from "@/types/questions/questions";
+import Icon, { IconType } from "@/components/Icon";
 
 const Question = () => {
   const { questionsQuery } = useQuestions();
@@ -18,12 +19,21 @@ const Question = () => {
       <Accordion className="w-full max-w-xl">
         <AccordionItem>
           <AccordionTrigger>
-            <Text className="text-foreground text-xl pb-1.5">
-              {item.question}
-            </Text>
+            <View className="w-full flex-row items-center ">
+              <Icon
+                icon={{
+                  type: IconType.AntDesign,
+                  name: "checkcircleo",
+                }}
+                size={15}
+              />
+              <Text className="text-foreground dark:text-white text-lg p-1">
+                {item.question}
+              </Text>
+            </View>
           </AccordionTrigger>
           <AccordionContent>
-            <View className="p-10 bg-primario-800">
+            <View className="p-6 bg-primario-800">
               <Text className="text-white">{item.answer}</Text>
             </View>
           </AccordionContent>
@@ -39,16 +49,12 @@ const Question = () => {
   return (
     <DefaultLayout>
       <FlatList
+        className="mt-4"
         ListFooterComponent={
           questionsQuery.isLoading ? (
             <Text className="text-center text-primario-600">Cargado...</Text>
           ) : null
         }
-        ListHeaderComponent={() => (
-          <Text className="text-center text-primario-600 dark:text-white mt-6">
-            ¡Podemos resolverla juntos!
-          </Text>
-        )}
         data={questionsQuery.data}
         renderItem={renderItem}
         keyExtractor={(item) => item.id || ""}
