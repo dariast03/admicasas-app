@@ -19,4 +19,5 @@ export interface ICharge {
   housings?: IHousing[];
   isPublished: boolean;
   paymentstatus: "Pendiente" | "Aprobado" | "Rechazado";
+  payment?: IPayments;
 }

@@ -187,7 +187,7 @@ const getAllDataByPage = async (context: any) => {
       .collection(FirestoreKey)
       .where("idhousing", "==", idhousing)
       .where("paymentstatus", "in", ["Aprobado", "Pendiente", "Rechazado"])
-      .orderBy("end", "desc");
+      .orderBy("end", "asc");
 
     if (type === "Payments") {
       queryRef = firestore()
@@ -218,7 +218,10 @@ const getAllDataByPage = async (context: any) => {
           chargeData.amount = housing?.amount;
         }
         let payment: IPayments | undefined;
-        if (chargeData.paymentstatus === "Aprobado") {
+        if (
+          chargeData.paymentstatus === "Aprobado" ||
+          chargeData.paymentstatus === "Rechazado"
+        ) {
           payment =
             (await paymentService.getDataPayment({
               idhousing,
@@ -229,6 +232,7 @@ const getAllDataByPage = async (context: any) => {
         return {
           id: doc.id,
           ...chargeData,
+          payment: payment,
           //@ts-ignore
           //start: new Date(chargeData.start.toDate()),
           //@ts-ignore
