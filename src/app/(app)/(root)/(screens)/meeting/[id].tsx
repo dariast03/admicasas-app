@@ -19,7 +19,7 @@ const MeetingDetail = () => {
   });
 
   if (meetingQuery.isLoading || meetingQuery.isPending) return <Loader />;
-  if (meetingQuery.isError) return <Text>HUBO UN ERROR :(</Text>;
+  if (meetingQuery.isError) return <Text>HUBO UN ERROR </Text>;
 
   const meeting = meetingQuery.data;
 

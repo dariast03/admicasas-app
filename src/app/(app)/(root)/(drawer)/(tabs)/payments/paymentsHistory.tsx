@@ -158,7 +158,7 @@ const PaymentsHistory = () => {
                       />
                       <Text className="dark:text-white">Fecha Registro</Text>
                     </View>
-                    <Text>
+                    <Text className="text-foreground dark:text-white">
                       {item.date
                         ? isValid(item.date)
                           ? format(item.date, "dd/MM/yyyy")
@@ -168,8 +168,8 @@ const PaymentsHistory = () => {
                   </View>
                   <View className="flex-row justify-center items-center gap-2">
                     {item.urlimg ? (
-                      <View className="border border-primario-600 justify-center items-center rounded-lg w-52 h-52 ">
-                        <Text className="font-bold uppercase text-primario-600 text-sm">
+                      <View className="border border-primario-600  dark:border-white justify-center items-center rounded-lg w-52 h-52 ">
+                        <Text className="font-bold uppercase text-primario-600 dark:text-white text-sm  ">
                           QR
                         </Text>
 
@@ -183,7 +183,7 @@ const PaymentsHistory = () => {
                           onPress={() => downloadFile(item.urlimg || "")}
                         >
                           <View className="mb-4 rounded-full bg-primario-600 flex-row p-1 justify-center items-center">
-                            <Text className="text-white mx-2 text-center text-sm">
+                            <Text className="text-white mx-2 text-center text-sm ">
                               Descargar
                             </Text>
                             <Icon
@@ -199,8 +199,8 @@ const PaymentsHistory = () => {
                       </View>
                     ) : null}
                     {item.payment?.urlimg ? (
-                      <View className="border  border-primario-600 justify-center items-center rounded-lg w-52 h-52 ">
-                        <Text className="font-bold uppercase text-primario-600 text-sm">
+                      <View className="border border-primario-600 dark:border-white  justify-center items-center rounded-lg w-52 h-52 ">
+                        <Text className="font-bold uppercase text-primario-600 dark:text-white text-sm">
                           Comprobante
                         </Text>
 

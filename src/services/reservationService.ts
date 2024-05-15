@@ -243,11 +243,74 @@ const getData = async (id: string) => {
   }
 };
 
+// const checkSameAreaInDate = async (data: IReservation, isUpdate = false) => {
+//   console.log({
+//     data,
+//     isUpdate,
+//   });
+//   let queryRef = firestore()
+//     .collection(FirestoreKey)
+//     .where("idcondominium", "==", data.idcondominium)
+//     .where("idarea", "==", data.idarea)
+//     .where("startDetail.year", "==", data.startDetail.year)
+//     .where("startDetail.month", "==", data.startDetail.month);
+
+//   const areaReservations = await queryRef.get();
+
+//   //  * Check if there is a reservation with the same area in same date
+//   // const areaReservationQuery = query(
+//   //   reservationsRef,
+//   //   where("idcondominium", '==', data.idcondominium),
+//   //   where("idarea", "==", data.idarea),
+//   //   where("startDetail.year", "==", data.startDetail.year),
+//   //   where("startDetail.month", "==", data.startDetail.month)
+//   // );
+
+//   // const areaReservations = await getDocs(areaReservationQuery);
+
+//   if (areaReservations.size) {
+//     const isDateOverlap = areaReservations.docs.some((doc) => {
+//       if (isUpdate) {
+//         if (data.id === doc.id) return false;
+//       }
+
+//       const dataReserva = doc.data() as IReservation;
+//       console.log(dataReserva, "FECHA");
+//       //@ts-ignore
+//       const reservaInicio = new Date(dataReserva.start.toDate());
+//       //@ts-ignore
+//       const reservaFin = new Date(dataReserva.end.toDate());
+
+//       return (
+//         isWithinInterval(data.start, {
+//           start: reservaInicio,
+//           end: reservaFin,
+//         }) ||
+//         isWithinInterval(data.end, { start: reservaInicio, end: reservaFin })
+//       );
+//     });
+
+//     if (isDateOverlap)
+//       throw new Error(
+//         "El area seleccionada ya cuenta con una reservacion en el misma dia/hora seleccionado"
+//       );
+//   }
+// };
+
 const checkSameAreaInDate = async (data: IReservation, isUpdate = false) => {
   console.log({
     data,
     isUpdate,
   });
+
+  const currentDate = new Date();
+
+  console.log("🚀 ~ checkSameAreaInDate ~ data.start :", data.start);
+  if (data.start < currentDate) {
+    console.log("aquiiiiiiii");
+    throw new Error("La fecha de inicio debe ser mayor a la fecha actual");
+  }
+
   let queryRef = firestore()
     .collection(FirestoreKey)
     .where("idcondominium", "==", data.idcondominium)
@@ -257,17 +320,6 @@ const checkSameAreaInDate = async (data: IReservation, isUpdate = false) => {
 
   const areaReservations = await queryRef.get();
 
-  //  * Check if there is a reservation with the same area in same date
-  // const areaReservationQuery = query(
-  //   reservationsRef,
-  //   where("idcondominium", '==', data.idcondominium),
-  //   where("idarea", "==", data.idarea),
-  //   where("startDetail.year", "==", data.startDetail.year),
-  //   where("startDetail.month", "==", data.startDetail.month)
-  // );
-
-  // const areaReservations = await getDocs(areaReservationQuery);
-
   if (areaReservations.size) {
     const isDateOverlap = areaReservations.docs.some((doc) => {
       if (isUpdate) {
@@ -275,7 +327,6 @@ const checkSameAreaInDate = async (data: IReservation, isUpdate = false) => {
       }
 
       const dataReserva = doc.data() as IReservation;
-      console.log(dataReserva, "FECHA");
       //@ts-ignore
       const reservaInicio = new Date(dataReserva.start.toDate());
       //@ts-ignore

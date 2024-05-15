@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet, RefreshControl } from "react-native";
+import { View, Text, RefreshControl } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import DefaultLayout from "@/layout/DefaultLayout";
@@ -9,22 +9,17 @@ import { useCharges } from "@/hooks/useCharges";
 import { ICharge } from "@/types/charges/charges";
 import { router } from "expo-router";
 import { ButtonLoader } from "@/components/ButtonLoader";
-import { useSessionContext } from "@/hooks/useSessionContext";
+
 import Icon, { IconType } from "@/components/Icon";
 import { useAppContext } from "@/hooks/useAppContext";
 import SubTitle from "@/components/SubTitle";
-import Colors from "@/constants/Colors";
-import { useColorScheme } from "nativewind";
+
 import GlobalStyles from "@/constants/GlobalStyle";
 
 const PaymentCard = () => {
-  const { user } = useSessionContext();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const { selectedHousing, tutorialPayment } = useAppContext();
-  // const { chargesQuery } = useCharges({
-  //   params: { idhousing: selectedHousing },
-  // });
 
   const { chargesPaginatedQuery } = useCharges({
     params: { idhousing: selectedHousing, type: "Payments" },
@@ -54,11 +49,7 @@ const PaymentCard = () => {
 
     return (
       <View
-        className={`p-5 m-3 rounded-lg bg-white dark:bg-primario-800 ${
-          new Date(item.end) < new Date()
-            ? "border-2 border-primario-600 dark:border-primario-600"
-            : "border border-primario-600 dark:border-primario-800"
-        }`}
+        className="p-5 m-3 rounded-lg bg-white dark:bg-primario-800 border border-primario-600 "
         style={GlobalStyles()}
       >
         <Text className="text-xl font-bold text-primario-600 dark:text-white">
@@ -89,7 +80,7 @@ const PaymentCard = () => {
               }}
             />
           )}
-          {/* <Text className="text-red-600 text-stone-400 dark:text-white my-2"> */}
+
           <Text
             className={`text-red-600 font-black ${
               new Date(item.end) < new Date()
@@ -117,25 +108,8 @@ const PaymentCard = () => {
 
   return (
     <DefaultLayout>
-      {/* <FlatList
-        data={null}
-        renderItem={() => null}
-       
-        // refreshControl={
-        //   <RefreshControl
-        //     refreshing={isRefreshing && chargesQuery.isRefetching}
-        //     onRefresh={onRefresh}
-        //   />
-        // }
-        ListHeaderComponent={
-          <>
-           
-          </>
-        }
-      /> */}
       {!chargesPaginatedQuery.isLoading ? (
         <FlatList
-          className="p-6"
           onEndReached={() => {
             chargesPaginatedQuery.fetchNextPage();
           }}
@@ -145,6 +119,7 @@ const PaymentCard = () => {
               onRefresh={onRefresh}
             />
           }
+          contentContainerClassName="p-4"
           onEndReachedThreshold={0.01}
           ListFooterComponent={
             chargesPaginatedQuery.isFetchingNextPage ? (
@@ -152,8 +127,6 @@ const PaymentCard = () => {
             ) : null
           }
           data={dataChargesPaginated}
-          // renderItem={({ item }) => <Card data={item} />}
-          // Ajustar el estilo
           renderItem={renderCharge}
           keyExtractor={(item, index) => `${item.id}-${index}`}
           ListEmptyComponent={() => (
@@ -166,18 +139,6 @@ const PaymentCard = () => {
         <Loader name="Pagos" />
       )}
     </DefaultLayout>
-
-    // <View
-    //   className="p-5 m-3 rounded bg-white shadow-md"
-    //   style={styles.cardShadow}
-    // >
-    //   <Text className="text-xl font-bold">{paymentName}</Text>
-    //   <Text className="text-base text-gray-600">{paymentDetail}</Text>
-    //   <Text className="text-lg text-gray-700 my-3">
-    //     Monto a pagar: {amountToPay}
-    //   </Text>
-    //   <Button title="Pagar" onPress={() => console.log("Pago realizado")} />
-    // </View>
   );
 };
 

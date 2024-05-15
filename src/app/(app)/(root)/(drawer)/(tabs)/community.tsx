@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import DefaultLayout from "@/layout/DefaultLayout";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "nativewind";
@@ -34,8 +34,8 @@ const Community = () => {
     },
     {
       icon: (
-        <FontAwesome
-          name="group"
+        <FontAwesome5
+          name="book"
           size={50}
           color={isDark ? "#fff" : Colors.primario[600]}
         />

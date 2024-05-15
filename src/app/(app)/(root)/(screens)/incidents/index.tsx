@@ -43,7 +43,7 @@ const Incidents = () => {
 
   return (
     <DefaultLayout>
-      <Stack.Screen
+      {/* <Stack.Screen
         options={{
           headerShadowVisible: false,
           headerTitleAlign: "center",
@@ -66,7 +66,7 @@ const Incidents = () => {
             />
           ),
         }}
-      />
+      /> */}
       <FlatList
         data={incidentsQuery.data}
         ListHeaderComponent={() => (

@@ -30,154 +30,69 @@ export default function UnprotectedLayout() {
   return (
     <>
       <Stack screenOptions={config}>
-        {/* <Stack.Screen
-          name="areas/[id]"
-          // options={{
-          //   headerShown: false,
-          // }}
-        /> */}
-
         <Stack.Screen
           name="annoucement/[id]"
-          // options={{
-          //   headerShadowVisible: false,
-          //   headerTitleAlign: "center",
-
-          //   title: "Detalle",
-          //   headerStyle: {
-          //     backgroundColor: colorHeader,
-          //   },
-          //   headerTintColor: "white",
-          //   headerLeft: () => (
-          //     <Icon
-          //       color={"white"}
-          //       icon={{
-          //         type: IconType.Ionicon,
-          //         name: "chevron-back-outline",
-          //       }}
-          //       onPress={() => router.back()}
-          //     />
-          //   ),
-          // }}
+          options={{
+            ...config,
+            title: "Detalle Anuncio".toUpperCase(),
+          }}
         />
         <Stack.Screen
           name="payment/[id]"
           options={{
-            title: "Detalle Pago",
+            ...config,
+            title: "Detalle Pago".toUpperCase(),
           }}
-          // options={{
-          //   headerShadowVisible: false,
-          //   headerTitleAlign: "center",
-          //   title: "Detalle",
-          //   headerStyle: {
-          //     backgroundColor: colorHeader,
-          //   },
-          //   headerTintColor: "white",
-          //   headerLeft: () => (
-          //     <Icon
-          //       color={"white"}
-          //       icon={{
-          //         type: IconType.Ionicon,
-          //         name: "chevron-back-outline",
-          //       }}
-          //       onPress={() => router.back()}
-          //     />
-          //   ),
-          // }}
         />
         <Stack.Screen
           name="tutorialpayment/[id]"
           options={{
-            title: "Detalle Pago",
+            ...config,
+            title: "Detalle Pago".toUpperCase(),
           }}
-          // options={{
-          //   headerShadowVisible: false,
-          //   headerTitleAlign: "center",
-          //   title: "Detalle Pago",
-          //   headerStyle: {
-          //     backgroundColor: colorHeader,
-          //   },
-          //   headerTintColor: "white",
-          //   headerLeft: () => (
-          //     <Icon
-          //       color={"white"}
-          //       icon={{
-          //         type: IconType.Ionicon,
-          //         name: "chevron-back-outline",
-          //       }}
-          //       onPress={() => router.back()}
-          //     />
-          //   ),
-          // }}
         />
 
         <Stack.Screen
           name="meeting/[id]"
-          options={{ title: "Detalle Reunion" }}
-
-          // options={{
-          //   headerShadowVisible: false,
-          //   headerTitleAlign: "center",
-          //   title: "Detalle",
-          //   headerStyle: {
-          //     backgroundColor: colorHeader,
-          //   },
-          //   headerTintColor: "white",
-          //   headerLeft: () => (
-          //     <Icon
-          //       color={"white"}
-          //       icon={{
-          //         type: IconType.Ionicon,
-          //         name: "chevron-back-outline",
-          //       }}
-          //       onPress={() => router.back()}
-          //     />
-          //   ),
-          // }}
+          options={{
+            ...config,
+            title: "Detalle Reunion".toUpperCase(),
+          }}
         />
 
         <Stack.Screen
           name="meeting/index"
-          options={{ title: "Reuniones" }}
-          // options={{
-          //   headerShadowVisible: false,
-          //   headerTitleAlign: "center",
-          //   title: "Reuniones",
-          //   headerStyle: {
-          //     backgroundColor: colorHeader,
-          //   },
-          //   headerTintColor: "white",
-          //   headerLeft: () => (
-          //     <Icon
-          //       color={"white"}
-          //       icon={{
-          //         type: IconType.Ionicon,
-          //         name: "chevron-back-outline",
-          //       }}
-          //       onPress={() => router.back()}
-          //     />
-          //   ),
-          // }}
+          options={{
+            ...config,
+            title: "Reuniones".toUpperCase(),
+          }}
         />
 
         <Stack.Screen
           name="notifications/index"
           options={{
             ...config,
-            title: "Notificaciones",
+            title: "Notificaciones".toUpperCase(),
+          }}
+        />
+        <Stack.Screen
+          name="incidents/index"
+          options={{
+            ...config,
+            title: "Incidentes".toUpperCase(),
+          }}
+        />
+        <Stack.Screen
+          name="visits/index"
+          options={{
+            ...config,
+            title: "Libro de Visitas".toUpperCase(),
           }}
         />
 
         <Stack.Screen name="areas/index" options={{}} />
 
         <Stack.Screen name="profile/index" />
-
-        {/*   <Stack.Screen
-        name="index"
-        options={{
-          headerShown: false
-        }}
-      /> */}
       </Stack>
     </>
   );

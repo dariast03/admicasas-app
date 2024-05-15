@@ -399,7 +399,7 @@ const FormReservation = () => {
               )} */}
 
             <View className="gap-2">
-              <View>
+              {/* <View>
                 <Controller
                   name="title"
                   control={control}
@@ -419,7 +419,7 @@ const FormReservation = () => {
                     </>
                   )}
                 />
-              </View>
+              </View> */}
 
               <View>
                 <Controller
@@ -561,7 +561,7 @@ const FormReservation = () => {
                       }
                     />
                   </View> */}
-              <View className="mt-2">
+              {/* <View className="mt-2">
                 {reservationQuery.data?.state === "PorPagar" && (
                   <ButtonLoader
                     className="items-center"
@@ -582,22 +582,34 @@ const FormReservation = () => {
                     <ButtonLoader
                       className="items-center"
                       onPress={handleSubmit(onSubmit)}
-                      // disabled={paymentQuery.data?.state === "Pendiente"}
-                      // style={{
-                      //   opacity:
-                      //     paymentQuery.data?.state === "Pendiente" ||
-                      //     paymentQuery.data?.state === "Aprobado"
-                      //       ? 0.5
-                      //       : 1,
-                      // }}
-                      // loading={paymentCreateMutation.isPending}
+                    
                     >
                       <Text className="text-white text-center text-xl font-bold">
-                        {/* {paymentCreateMutation.isPending ? "Guardando.." : "Pagar"} */}
+                        
                         Guardar
                       </Text>
                     </ButtonLoader>
                   )}
+              </View> */}
+              <View className="mt-2">
+                {["PorPagar", "Aprobado", "Rechazado", "Finalizado"].includes(
+                  reservationQuery.data?.state ?? ""
+                ) ? null : (
+                  <ButtonLoader
+                    className="items-center"
+                    onPress={
+                      ["PorPagar"].includes(reservationQuery.data?.state ?? "")
+                        ? () => router.push(PushPayment())
+                        : handleSubmit(onSubmit)
+                    }
+                  >
+                    <Text className="text-white text-center text-xl font-bold">
+                      {["PorPagar"].includes(reservationQuery.data?.state ?? "")
+                        ? "Ir a Pagar"
+                        : "Guardar"}
+                    </Text>
+                  </ButtonLoader>
+                )}
               </View>
             </View>
           </View>

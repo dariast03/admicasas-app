@@ -36,6 +36,8 @@ const getAllData = async ({ idcondominium }: GetAllDataQueryParams = {}) => {
 };
 
 const getData = async (id: string): Promise<IMeeting> => {
+  console.log("🚀 ~ getData ~ id:", id);
+
   try {
     const docRef = firestore().collection(FirestoreKey).doc(id);
     const docSnap = await docRef.get();

@@ -63,7 +63,7 @@ const Home = () => {
       );
       routeView = "/payment/" + item?.idcharge;
     } else if (data.type === "meeting") {
-      routeView = "/meeting/" + data.id;
+      routeView = "/meeting/" + data.idmeeting;
     } else {
       routeView = "/annoucement/" + data.id;
     }

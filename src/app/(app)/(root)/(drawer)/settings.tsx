@@ -32,8 +32,12 @@ const Settings = () => {
       <View className="flex-1 items-center mt-4">
         <Card className="w-full max-w-sm bg-white dark:bg-primario-800 border border-primario-600">
           <CardHeader>
-            <CardTitle>Configuración</CardTitle>
-            <CardDescription>Seleccione las opciones que desea</CardDescription>
+            <CardTitle className="text-primario-600 dark:text-white">
+              Configuración
+            </CardTitle>
+            <CardDescription className="dark:text-white">
+              Seleccione las opciones que desea
+            </CardDescription>
           </CardHeader>
           <CardContent className="gap-4">
             <View className="flex-row items-center gap-2">
@@ -44,6 +48,7 @@ const Settings = () => {
                 onPress={updateTutorial}
               />
               <Label
+                className="text-primario-600 dark:text-white"
                 nativeID="notification-mode"
                 onPress={() => {
                   setCheckedAnnoucemet((prev) => !prev);
@@ -61,6 +66,7 @@ const Settings = () => {
                 nativeID="tutorial-mode"
               />
               <Label
+                className="text-primario-600 dark:text-white"
                 nativeID="tutorial-mode"
                 onPress={() => {
                   setCheckedPayment((prev) => !prev);
@@ -79,10 +85,9 @@ const Settings = () => {
                       type: IconType.FontAweomseIcon,
                       name: "trash",
                     }}
+                    color={"white"}
                   />
-                  <Text className="text-stone-400 dark:text-white my-2">
-                    Borrar Datos
-                  </Text>
+                  <Text className="text-white my-2">Borrar Datos</Text>
                 </View>
               </TouchableOpacity>
             </View>

@@ -107,7 +107,9 @@ const getAllData = async ({
       ...(await getDataByUser(iduser || "")),
     ];
 
-    return data.sort((a, b) => b.date.getTime() - a.date.getTime());
+    const sortedData = data.sort((a, b) => b.date.getTime() - a.date.getTime());
+    const lastTenData = sortedData.slice(0, 10);
+    return lastTenData;
   } catch (e) {
     console.log(e);
     throw new Error("No se pudo obtener all");

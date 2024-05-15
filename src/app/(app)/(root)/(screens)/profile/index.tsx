@@ -55,7 +55,7 @@ const Profile = () => {
           }}
         />
 
-        <View className="flex-row bg-primario-600 w-full mt-6">
+        <View className="flex-row bg-primario-600 dark:bg-primario-800 w-full mt-6">
           <TouchableOpacity onPress={() => router.back()} activeOpacity={0.6}>
             <View className="h-10 w-10 justify-center items-center rounded-full mt-2 ml-2">
               <Icon
@@ -71,9 +71,7 @@ const Profile = () => {
             <Avatar
               rounded
               size="large"
-              source={{
-                uri: "https://th.bing.com/th/id/OIP.l0brqMrdiKjD2t5Ab4ZkCAHaHa?rs=1&pid=ImgDetMain",
-              }}
+              source={require("@/assets/images/resource/avatar.png")}
             />
             <View className="p-2 gap-2">
               <Text className="text-xl  text-white">{user.account.name}</Text>
@@ -120,7 +118,6 @@ const Profile = () => {
                 keyExtractor={(item) => item.id || ""}
               />
             )}
-
             <View className="w-full border-b-2 border-b-primario-300"></View>
           </View>
         </View>

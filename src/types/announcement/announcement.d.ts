@@ -15,6 +15,6 @@ interface IAnnouncement {
   title: string;
   type: string;
   idcharge?: string;
-
+  idmeeting?: string;
   charge?: ICharge;
 }

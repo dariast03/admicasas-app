@@ -47,30 +47,6 @@ const Visits = () => {
 
   return (
     <DefaultLayout>
-      <Stack.Screen
-        options={{
-          headerShadowVisible: false,
-          headerTitleAlign: "center",
-
-          title: "Libro de Visitas",
-          headerStyle: {
-            backgroundColor: isDark
-              ? Colors.primario[800]
-              : Colors.primario[600],
-          },
-          headerTintColor: "white",
-          headerLeft: () => (
-            <Icon
-              color={"white"}
-              icon={{
-                type: IconType.Ionicon,
-                name: "chevron-back-outline",
-              }}
-              onPress={() => router.back()}
-            />
-          ),
-        }}
-      />
       <FlatList
         data={visits}
         ListHeaderComponent={() => (
