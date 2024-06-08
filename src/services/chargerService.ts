@@ -13,7 +13,7 @@ type GetDataQueryParams = {
   type?: "History" | "Payments";
 };
 
-const FirestoreKey = "Chargesx";
+const FirestoreKey = "Charges";
 
 // const getAllData = async ({
 //   idhousing,
@@ -265,6 +265,7 @@ const getDataByReservation = async ({
       .collection(FirestoreKey)
       .where("idhousing", "==", idhousing)
       .where("idreserve", "==", idreservation);
+
     const docSnap = await docRef.get();
 
     const data = docSnap.docs.map((doc) => ({

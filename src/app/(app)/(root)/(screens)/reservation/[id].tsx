@@ -592,19 +592,19 @@ const FormReservation = () => {
                   )}
               </View> */}
               <View className="mt-2">
-                {["PorPagar", "Aprobado", "Rechazado", "Finalizado"].includes(
+                {!["Aprobado", "Rechazado", "Finalizado"].includes(
                   reservationQuery.data?.state ?? ""
-                ) ? null : (
+                ) && (
                   <ButtonLoader
                     className="items-center"
                     onPress={
-                      ["PorPagar"].includes(reservationQuery.data?.state ?? "")
+                      reservationQuery.data?.state === "PorPagar"
                         ? () => router.push(PushPayment())
                         : handleSubmit(onSubmit)
                     }
                   >
                     <Text className="text-white text-center text-xl font-bold">
-                      {["PorPagar"].includes(reservationQuery.data?.state ?? "")
+                      {reservationQuery.data?.state === "PorPagar"
                         ? "Ir a Pagar"
                         : "Guardar"}
                     </Text>

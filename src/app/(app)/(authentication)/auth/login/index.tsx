@@ -135,7 +135,7 @@ const Login = () => {
               />
 
               {errors?.email && (
-                <Text style={{ color: "red" }}>{errors.email?.message}</Text>
+                <Text className="text-red-400">{errors.email?.message}</Text>
               )}
             </View>
 
@@ -164,7 +164,7 @@ const Login = () => {
                 )}
               />
               {errors?.password && (
-                <Text style={{ color: "red" }}>{errors.password?.message}</Text>
+                <Text className="text-red-400">{errors.password?.message}</Text>
               )}
             </View>
 

@@ -8,7 +8,7 @@ import {
   Platform,
 } from "react-native";
 import auth from "@react-native-firebase/auth";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import SvgComponent from "@/components/SvgComponent";
 import { TouchableOpacity } from "react-native";
 import { Image } from "react-native";
@@ -110,7 +110,7 @@ const ForgotPasswordScreen = () => {
                 onChangeText={setEmail}
                 className="text-white border border-primario-200 rounded py-2 px-4 mb-2 w-full"
               />
-              {error ? <Text className="text-red-300">{error}</Text> : null}
+              {error ? <Text className="text-red-400">{error}</Text> : null}
             </View>
 
             <View className="p-2">
@@ -139,6 +139,11 @@ const ForgotPasswordScreen = () => {
                   </AlertDialogContent>
                 </AlertDialog>
               )}
+            </View>
+            <View className="flex-row items-center justify-end pt-2 mr-4">
+              <TouchableOpacity onPress={() => router.back()}>
+                <Text className="font-bold text-white">Volver al inicio</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
