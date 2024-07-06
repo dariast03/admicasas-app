@@ -12,7 +12,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/ui/Separator";
 import { cn } from "@/lib/utils";
 
 const Accordion = React.forwardRef<
